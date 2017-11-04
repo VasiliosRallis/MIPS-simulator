@@ -31,10 +31,14 @@ MIPS_LDFLAGS += -Wl,--build-id=none
 ###################################################
 ## Simulator
 
+
+SIM_DEP = src/main.cpp src/setUp.cpp
+G++_FLAGS = -w -Wall -std=c++11
+
 # Build the simulation binary
-bin/mips_simulator : src/simulator.cpp
+bin/mips_simulator : $(SIM_DEP)
 	mkdir -p bin
-	g++ -W -Wall src/simulator.cpp -o bin/mips_simulator
+	g++ $(G++_FLAGS) $(SIM_DEP) -o bin/mips_simulator
 
 
 # In order to comply with spec
