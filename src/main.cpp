@@ -4,7 +4,7 @@
 #include <string>
 #include <bitset>
 #include <stdint.h>
-#include "R_functions.hpp"
+//#include "R_functions.hpp"
 using namespace std;
 
 void i_type(bitset<26>& instr,State& mips_state); //not implemented yet
@@ -18,6 +18,8 @@ int main(int argc, char* argv[]){
 	string fileName = argv[1];
 	State mips_state;
 	setUp(mips_state, fileName);
+	/*
+
 	bitset<32> temp = 0xFFFFFFFF;
 	
 	for(int i=0;i<(mips_state.mem[i]).size();i++) {
@@ -40,6 +42,8 @@ int main(int argc, char* argv[]){
 				j_type(instr,mips_state);
 		}
 	}
+
+	*/
 
 	return 0;
 }
