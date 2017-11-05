@@ -47,6 +47,11 @@ simulator : bin/mips_simulator
 ###################################################
 ## Testbench
 
-testbench :
-	echo "No testbench yet"
-	exit 1
+TEST_DEP = testbench/testbench.cpp
+SG++_FLAGS = -w -Wall -std=c++11
+
+bin/testbench : $(TEST_DEP)
+	mkdir -p bin
+	g++ $(SG++_FLAGS) $(TEST_DEP) -o bin/testbench
+
+testbench : bin/testbench
