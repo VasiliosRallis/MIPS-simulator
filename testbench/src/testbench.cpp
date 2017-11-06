@@ -8,6 +8,10 @@
 
 int main(int argc, char* argv[]){
 
+	if(argc != 2){
+		std::cerr << "Error: Expected the simulator as input." << std::endl;
+		exit(1);
+	}
 	std::string simulator(argv[1]);
 	std::string fileName = "testbench/tests.txt";
 

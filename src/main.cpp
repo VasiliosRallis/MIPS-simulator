@@ -15,6 +15,11 @@ void j_type(bitset<26>& instr,State& mips_state); //not implemented yetd
 
 int main(int argc, char* argv[]){
 
+	if(argc != 2){
+		std::cerr << "Error: Expected a Binary file a input" << std::endl;
+		exit(1);
+	}
+
 	string fileName = argv[1];
 	State mips_state;
 
