@@ -10,6 +10,8 @@ struct State{
 	std::vector<std::bitset<32> > mem;
 	std::bitset<32> pc;
 	std::vector<std::bitset<32> > reg;
+	std::bitset<32> high;
+	std::bitset<32> low;
 };
 
 struct MBlock{
