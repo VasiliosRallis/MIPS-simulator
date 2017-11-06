@@ -8,7 +8,11 @@ void setUp(State& s, const std::string& fileName){
 		std::cout << "E: Could not open file" << std::endl;
 	}
 	else{
-		MBlock m;
+	    for (int i = 0; i<32; i++){
+		s.reg[i] = 0;
+	    }
+
+	    MBlock m;
 
 	    m.size = fileIn.tellg();
 	    m.data = new char [m.size];
@@ -26,14 +30,7 @@ void setUp(State& s, const std::string& fileName){
 	    	}
 	    }
 
-	    std::vector<std::bitset<32> > v;
-	    memToVector(m, v);
-
-
-
-	    for(int i = 0; i < static_cast<int>(v.size()); i++){
-	    	std::cout << v[i] << std::endl;
-	    }
+	    memToVector(m, s.rom);
 
 	}
 }
