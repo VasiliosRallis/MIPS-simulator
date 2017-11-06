@@ -17,7 +17,11 @@ int main(int argc, char* argv[]){
 
 	string fileName = argv[1];
 	State mips_state;
+
+	//Passes the instructions to the
 	setUp(mips_state, fileName);
+
+	std::cout << mips_state.rom.size() << " instructions were loaded into ROM" << std::endl;
 	/*
 
 	bitset<32> temp = 0xFFFFFFFF;

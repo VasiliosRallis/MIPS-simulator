@@ -26,14 +26,7 @@ void setUp(State& s, const std::string& fileName){
 	    	}
 	    }
 
-	    std::vector<std::bitset<32> > v;
-	    memToVector(m, v);
-
-
-
-	    for(int i = 0; i < static_cast<int>(v.size()); i++){
-	    	std::cout << v[i] << std::endl;
-	    }
+	    memToVector(m, s.rom);
 
 	}
 }

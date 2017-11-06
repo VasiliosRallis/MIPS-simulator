@@ -17,7 +17,14 @@
 std::string exec(const char* cmd);
 
 //This function will take the list of test that we have in "tests.txt" and import them to a vector of out class test
-void toVector(const std::string& fileName, std::vector<Test>& v);
+void toVector(std::ifstream& input, std::vector<Test>& v);
+
+
+//This is used to break down a line and return a Temp. It is basically a decomposition of the toVector fucntion
+Test toTest(const std::string& line);
+
+//This functions is used to output the CSV file that will contain the results of the test
+void toCSV(std::ofstream& ouput, const std::vector<Test>& v);
 
 
 #endif

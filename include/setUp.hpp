@@ -8,6 +8,7 @@
 
 struct State{
 	std::vector<std::bitset<32> > mem;
+	std::vector<std::bitset<32> > rom;
 	std::bitset<32> pc;
 	std::vector<std::bitset<32> > reg;
 	std::bitset<32> high;
