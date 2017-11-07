@@ -47,10 +47,8 @@ bool r_type(bitset<32>& instr, State& mips_state, bool overflow) {
 			mult(mips_state,source2_field,source1_field);
 	else if(funct_field == bitset<32>(0x00000019))
 			multu(mips_state,source2_field,source1_field);
-	else if(funct_field == bitset<32>(0x00000003))
+	else if(funct_field == bitset<32>(0x00000003)){
 			mips_state.reg[index] = sra(mips_state,source2_field,shamt_field);
-	else if(opcode_field == bitset<32>(0x00000010) && funct_field == bitset<32>(0x00000000)){
-			mfc0(mips_state,source1_field);
 	}
 			return overflow;
 	}
@@ -69,9 +67,6 @@ bitset<32> add(State& mips_state,bitset<32>& source1_field,bitset<32>& source2_f
 	return  (int)rs.to_ulong() + (int)rt.to_ulong();
 }
 
-void mfc0(State& mips_state,bitset<32> source1_field) {
-	mips_state.epc = mips_state.reg[source1_field.to_ulong()];
-}
 
 bitset<32> addu(State& mips_state,bitset<32>& source1_field,bitset<32>& source2_field){
 	bitset<32>  rs = mips_state.reg[source1_field.to_ulong()];

@@ -31,6 +31,5 @@ void mflo(State& mips_state,bitset<32>& dest_field);
 void mult(State& mips_state,bitset<32>& source2_field,bitset<32>& source1_field);
 void multu(State& mips_state,bitset<32>& source2_field,bitset<32>& source1_field);
 bitset<32> sra(State& mips_state,bitset<32>& source2_field,bitset<32> shamt_field);
-void mfc0(State& mips_state,bitset<32> source1_field);
 
 #endif
