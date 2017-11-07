@@ -3,7 +3,7 @@
 Let's just use this README to write stuff that has to be done.
 
 George
-1. Correct all of the syntax mistakes in the R_functios cpp and hpp 
+1. Correct all of the syntax mistakes in the R_functios cpp and hpp  //DONE
 
 Bill
 1. Fix Makefile so that it also make the testbench

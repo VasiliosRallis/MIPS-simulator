@@ -1,11 +1,11 @@
 ###################################################
 ## MIPS Compilation path
 
-MIPS_CC = mips-linux-gnu-g++
+MIPS_CC = mips-linux-gnu-gcc
 MIPS_OBJCOPY = mips-linux-gnu-objcopy
 
 # Turn on all warnings, and enable optimisations
-MIPS_CPPFLAGS = -W -Wall -O3 -fno-builtin -std=c++11
+MIPS_CPPFLAGS = -W -Wall -O3 -fno-builtin
 
 # Avoid standard libraries etc. being brought in, and link statically
 MIPS_LDFLAGS = -nostdlib -Wl,-melf32btsmip -march=mips1 -nostartfiles -mno-check-zero-division -Wl,--gpsize=0 -static -Wl,-Bstatic
@@ -32,7 +32,7 @@ MIPS_LDFLAGS += -Wl,--build-id=none
 ## Simulator
 
 IDIR = include
-SIM_DEP = src/main.cpp src/setUp.cpp #src/R_functions.cpp
+SIM_DEP = src/main.cpp src/setUp.cpp src/R_functions.cpp
 G++_FLAGS = -w -Wall -std=c++11 -I $(IDIR)
 
 # Build the simulation binary

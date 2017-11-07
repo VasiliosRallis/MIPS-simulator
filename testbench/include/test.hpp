@@ -9,11 +9,12 @@ private:
 	std::string m_instruction;
 	std::string m_result;
 	std::string m_author;
-	std::string m_message;
 	std::string m_bin;
+	std::string m_message;
+	int m_exitCode;
 public:
 	//Note we don't pass the result because we don't know it yet!
-	Test(const std::string& id, const std::string& instruction, const std::string& author, const std::string& message = "No message");
+	Test(const std::string& id, const std::string& instruction, const std::string& author, const std::string& bin, const std::string& message = "No message", int exitCode = 0);
 
 	//getter functions
 	std::string getId() const;
@@ -22,6 +23,12 @@ public:
 	std::string getAuthor() const;
 	std::string getMessage() const;
 	std::string getBin() const;
+	int getExitCode() const;
+
+	//setter functions
+	void setResult(const std::string& result);
+
+	friend std::ostream& operator<<(std::ostream& out, const Test& test);
 };
 
 #endif

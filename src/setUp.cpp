@@ -8,11 +8,7 @@ void setUp(State& s, const std::string& fileName){
 		std::cout << "E: Could not open file" << std::endl;
 	}
 	else{
-	    for (int i = 0; i<32; i++){
-		s.reg[i] = 0;
-	    }
-
-	    MBlock m;
+		MBlock m;
 
 	    m.size = fileIn.tellg();
 	    m.data = new char [m.size];
