@@ -5,12 +5,10 @@
 #include <bitset>
 #include <stdint.h>
 //#include "R_functions.hpp"
+//#include "J_functions.hpp"
 using namespace std;
 
 void i_type(bitset<32>& instr,State& mips_state); //not implemented yet
-void j_type(bitset<32>& instr,State& mips_state); //not implemented yetd
-
-//mfc0 not implemented; weird function field
 
 
 int main(int argc, char* argv[]){
