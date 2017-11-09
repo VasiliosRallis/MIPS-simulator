@@ -3,12 +3,13 @@
 #include <fstream>
 #include <string>
 #include <bitset>
-#include <stdint.h>
-//#include "R_functions.hpp"
-//#include "J_functions.hpp"
+#include <cstdint>
+#include "error.hpp"
+#include "R_functions.hpp"
+
 using namespace std;
 
-void i_type(bitset<32>& instr,State& mips_state); //not implemented yet
+void i_type(int32_t& instr,State& mips_state); //not implemented yet
 
 
 int main(int argc, char* argv[]){
@@ -19,38 +20,47 @@ int main(int argc, char* argv[]){
 	}
 
 	string fileName = argv[1];
+
 	State mips_state;
+
+	//This will allocate memory for the whole RAM
+	//I used hex so that it is easier to relate to the Specification on GitHub
+	mips_state.ram.resize(MEM_SIZE);
+	std::cout << mips_state.ram.capacity() << std::endl;
 
 	//Passes the instructions to the
 	setUp(mips_state, fileName);
 
-	std::cout << mips_state.rom.size() << " instructions were loaded into ROM" << std::endl;
-	/*
 
-	bitset<32> temp = 0xFFFFFFFF;
+	std::cout << mips_state.ram.size() << " instructions were loaded into ROM" << std::endl;
+
+
+	int32_t temp = 0xFFFFFFFF;
+	bool overflow;
 	
-	for(int i=0;i<(mips_state.mem[i]).size();i++) {
+
+	for(int i = 0; i < (mips_state.ram).size(); i++) {
 		switch(temp & 0xFC000000) {
 			
-			case '0x0':
-				bitset<26> instr = (temp & 0xFC000000);
-				r_type(instr,mips_state);
-			
-			case '0x2':
-				bitset<26> instr = (temp & 0xFC000000);
-				i_type(instr,mips_state);
-
-			case '0x3':
-				bitset<26> instr = (temp & 0xFC000000);
-				i_type(instr,mips_state);
-			
-			default:
-				bitset<26> instr = (temp & 0xFC000000);
-				j_type(instr,mips_state);
+			case 0x00000000:{
+				int32_t instr = (temp & 0xFC000000);
+				r_type(instr,mips_state, overflow);
+			}
+			case 0x20000000:{
+				int32_t instr = (temp & 0xFC000000);
+				//i_type(instr,mips_state, overflow);
+			}
+			case 0x30000000:{
+				int32_t instr = (temp & 0xFC000000);
+				//i_type(instr,mips_state, overflow);
+			}
+			default:{
+				int32_t instr = (temp & 0xFC000000);
+				//j_type(instr,mips_state);
+			}
 		}
 	}
 
-	*/
 
 	return 0;
 }

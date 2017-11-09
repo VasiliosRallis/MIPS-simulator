@@ -8,10 +8,10 @@
 #include <stdint.h>
 using namespace std;
 
-void j_type(bitset<32>& instr, State& mips_state);
+void j_type(int32_t& instr, State& mips_state);
 
 
-void j(State& mips_state, bitset<32>& address_field);
-void jal(State& mips_state, bitset<32>& address_field);
+void j(State& mips_state, int32_t& address_field);
+void jal(State& mips_state, int32_t& address_field);
 
 #endif

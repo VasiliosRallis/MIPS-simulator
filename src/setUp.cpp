@@ -16,7 +16,6 @@ void setUp(State& s, const std::string& fileName){
 	    fileIn.read (m.data, m.size);
 	    fileIn.close();
 
-
 	    std::cout << "Bit read: " << std::endl;
 	    for(int i = 0; i < m.size; i++){
 	    	std::bitset<8> temp(m.data[i]);
@@ -26,28 +25,33 @@ void setUp(State& s, const std::string& fileName){
 	    	}
 	    }
 
-	    memToVector(m, s.rom);
+	    memToVector(m, s.ram);
 
 	}
 }
 
 
 
-void memToVector(const MBlock& m, std::vector<std::bitset<32> >& v){
+void memToVector(const MBlock& m, std::vector<int32_t >& v){
+	int32_t addr = ADDR_INSTR;
 	for(int i = 0; i < m.size; i+=4){
-		v.push_back(convTo32B(&m.data[i]));
+		v[addr] = convTo32B(&m.data[i]);
+		//The commented lines are useful for debugging
+		//std::cout << std::hex << v[addr] << std::endl;
+		//std::cout << "ADDR " << addr << std::endl;
+		++addr;
 	}
 }
 
-std::bitset<32> convTo32B(char* in){
-		std::bitset<32> out, temp;
+int32_t convTo32B(char* in){
+		int32_t out, temp;
 
 		for(int i = 0; i < 4; i++){
 			out <<= 8;
 			temp = in[i];
-			temp<<= 24;
-			temp>>= 24;
-			out|= temp;
+			//N.B. This clears the sign extension!
+			temp = temp & 0x000000FF;
+			out = out | temp;
 		}
 
 		return out;
