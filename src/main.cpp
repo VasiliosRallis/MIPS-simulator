@@ -26,13 +26,14 @@ int main(int argc, char* argv[]){
 	//This will allocate memory for the whole RAM
 	//I used hex so that it is easier to relate to the Specification on GitHub
 	mips_state.ram.resize(MEM_SIZE);
-	std::cout << mips_state.ram.capacity() << std::endl;
+	std::cout << mips_state.ram.size() << std::endl;
 
 	//Passes the instructions to the
 	setUp(mips_state, fileName);
 
+	mips_state.ram[ADDR_INSTR] = 0x20420005;
+	mips_state.ram[ADDR_INSTR + 1] = 0x08000000;
 
-	std::cout << mips_state.ram.size() << " instructions were loaded into ROM" << std::endl;
 
 
 	int32_t temp = 0xFFFFFFFF;
