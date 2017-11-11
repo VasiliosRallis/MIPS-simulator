@@ -34,7 +34,8 @@ struct MBlock{
 };
 
 //The "setUp" function is the main function used to pass in the binary instructions.
-//It calls the following functions
+//It calls memToVector and convTo32B
+//It also sets the PC to ADDR_INSTR and the rest of the state elements to 0
 void setUp(State& s, const std::string& fileName);
 
 //This function passes the instructions in the buffer to a vector.

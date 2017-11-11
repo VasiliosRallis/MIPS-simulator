@@ -2,7 +2,7 @@
 #define I_TYPEHPP
 #include <stdint.h>
 
-void i_type(int32_t& instr,State& mips_state);
+bool i_type(State& mips_state);
 
 int32_t addi(State& mips_state,uint32_t source1_field,int32_t SignExtImm,bool& overflow);
 uint32_t addiu(State& mips_state,uint32_t source1_field,int32_t SignExtImm);

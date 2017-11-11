@@ -2,6 +2,13 @@
 
 void setUp(State& s, const std::string& fileName){
 
+	//Set all the state elements to the correct value
+	s.ram.resize(MEM_SIZE);
+	s.pc = ADDR_INSTR;
+	s.reg.resize(32, 5);
+	s.Hi = 0;
+	s.Lo = 0;
+
 	std::ifstream fileIn(fileName, std::ios::binary | std::ios::ate);
 
 	if(!fileIn.is_open()){
@@ -15,6 +22,7 @@ void setUp(State& s, const std::string& fileName){
 	    fileIn.seekg (0, std::ios::beg);
 	    fileIn.read (m.data, m.size);
 	    fileIn.close();
+
 
 	    std::cout << "Bit read: " << std::endl;
 	    for(int i = 0; i < m.size; i++){

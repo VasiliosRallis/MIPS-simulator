@@ -1,13 +1,21 @@
-#include "I_type.hpp"
+#include "I_functions.hpp"
 #include <cmath>
 using namespace std;
 
-bool i_type(int32_t& instr, State& mips_state) {
-	unsigned long index = source2_field >> 16;
+bool i_type(State& mips_state){
+	uint32_t instr = mips_state.pc;
 	uint32_t source2_field = (instr & (0x001F0000)); //rt
+	uint32_t index = source2_field >> 16;
 	uint32_t source1_field = (instr & (0x03E00000)); //rs
 	uint32_t opcode_field = (instr & (0xFC000000)); //op
-	uint32_t SignExtImm = (instr & (0x0000FFFF)); //immediate
+	int32_t SignExtImm = instr & 0x0000FFFF; //immediate
+
+	if(SingExtImm >> 15){
+		SingExtImm = SingExtImm | 0xFFFF0000;
+	}
+	else{
+		//Do nothing
+	}
 
 
 	if(opcode_field == (0x00000008))
@@ -55,7 +63,7 @@ bool i_type(int32_t& instr, State& mips_state) {
 }
 
 
-int32_t addi(State& mips_state,uint32_t source1_field,uint32_t source2_field,int32_t SignExtImm,bool& overflow){
+int32_t addi(State& mips_state, uint32_t source1_field, uint32_t source2_field, int32_t SignExtImm, bool& overflow){
 	int32_t rs = mips_state.reg[source1_field];
 	if((SignExtImm >> 15) == 1) {
 		SignExtImm = SignExtImm | (0xFFFF0000);
@@ -125,8 +133,7 @@ void lbu(State& mips_state,uint32_t source1_field,uint32_t source2_field,int32_t
 	return;
 }
 
-void lb(State& mips_state,uint32_t source1_field,uint32_t source2_field,int32_t SignExtImm){
-	SignExtImm = SignExtImm & (0x0000FFFF);
+void lb(State& mips_state, uint32_t source1_field, uint32_t source2_field, int32_t SignExtImm){
 	uint32_t Addr = SignExtImm + mips_state.reg[source1_field];
 	if(Addr % 4 != 0){
 		uint32_t multiple = abs(Addr) - (abs(Addr) % 4);
