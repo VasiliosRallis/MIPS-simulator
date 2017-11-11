@@ -1,18 +1,24 @@
 #include "R_functions.hpp"
 using namespace std;
 
-bool r_type(int32_t& instr, State& mips_state, bool overflow) {
+bool r_type(int32_t& instr, State& mips_state) {
 	int32_t funct_field = (instr & (0x0000003F));
 	int32_t shamt_field = (instr & (0x000007C0));
 	int32_t dest_field = (instr & (0x0000F800)); //rd
-	unsigned long index = dest_field >> 11;
+	int index = dest_field >> 11;
 	int32_t source2_field = (instr & (0x001F0000)); //rt
 	int32_t source1_field = (instr & (0x03E00000)); //rs
 	int32_t opcode_field = (instr & (0xFC000000)); //op
 	overflow = false;
 	
 	if(funct_field == (0x00000020))
-			mips_state.reg[index] = add(mips_state,source1_field,source2_field,overflow); //can change overflow
+			int32_t temp = add(mips_state,source1_field,source2_field,overflow); //can change overflow
+			if(overflow) {
+				return true; //need to return exception code
+			}
+			else {
+				mips_state.reg[index] = temp;
+			}
 	else if(funct_field == (0x00000021))
 			mips_state.reg[index] = addu(mips_state,source1_field,source2_field);
 	else if(funct_field == (0x00000024))
@@ -32,7 +38,13 @@ bool r_type(int32_t& instr, State& mips_state, bool overflow) {
 	else if(funct_field == (0x00000002))
 			mips_state.reg[index] = srl(mips_state,source2_field,shamt_field);
 	else if(funct_field == (0x00000022))
-			mips_state.reg[index] = sub(mips_state,source1_field,source2_field,overflow); //can change overflow
+			int32_t temp = sub(mips_state,source1_field,source2_field,overflow); //can change overflow
+			if(overflow) {
+				return true; 
+			}
+			else{
+				mips_state.reg[index] = temp;
+			}		
 	else if(funct_field == (0x00000023))
 			mips_state.reg[index] = subu(mips_state,source1_field,source2_field);
 	else if(funct_field == (0x0000001A))
@@ -50,15 +62,13 @@ bool r_type(int32_t& instr, State& mips_state, bool overflow) {
 	else if(funct_field == (0x00000003)){
 			mips_state.reg[index] = sra(mips_state,source2_field,shamt_field);
 	}
-return overflow;
+return false;
 	}
 
 int32_t add(State& mips_state,int32_t& source1_field,int32_t& source2_field, bool& overflow){
 	 int32_t rs = mips_state.reg[source1_field];
 	 int32_t rt = mips_state.reg[source2_field];
-	 int32_t sign1 = (rs >> 31);
-	 int32_t sign2 = (rt >> 31);
-	 if(~(sign1 ^ sign2) & (((rs + rt >> 31) ^ sign1))){
+	 if (((rs<0)&&(rt<0)&&(rs+rt>0)) || ((rs>0)&&(rt>0)&&(rs+rt<0))){
 		overflow = true;
 	}
 	else {
@@ -68,7 +78,7 @@ int32_t add(State& mips_state,int32_t& source1_field,int32_t& source2_field, boo
 }
 
 
-uint32_t addu(State& mips_state,int32_t& source1_field,int32_t& source2_field){
+uint32_t addu(State& mips_state,int32_t source1_field,int32_t source2_field){
 	uint32_t  rs = mips_state.reg[source1_field];
 	uint32_t  rt = mips_state.reg[source2_field];
 	return  rs+rt ;
@@ -121,18 +131,16 @@ uint32_t srl(State& mips_state,int32_t& source2_field,int32_t shamt_field){
 	return (result >> shamt_field);
 }
 
-int32_t sub(State& mips_state,int32_t& source1_field,int32_t& source2_field, bool& overflow){
+int32_t sub(State& mips_state,int32_t source1_field,int32_t source2_field, bool& overflow){
 	int32_t rs = mips_state.reg[source1_field];
 	int32_t rt = mips_state.reg[source2_field];
-	int32_t sign1 = (rs >> 31);
-	int32_t sign2 = (rt >> 31);
-	if(~(sign1 ^ sign2) & (((rs - rt) >> 31) ^ sign1)){
+	if(((rs-rt) < rs) != (rt > 0)){
 		overflow = true;
 	}
 	else {
 		overflow = false;
 	}
-	return  (int)rs - (int)rt;
+	return  rs-rt;
 }
 
 uint32_t subu(State& mips_state,int32_t& source1_field,int32_t& source2_field){
@@ -141,14 +149,14 @@ uint32_t subu(State& mips_state,int32_t& source1_field,int32_t& source2_field){
 	return  rs-rt ;
 }
 
-void div(State& mips_state,int32_t& source2_field,int32_t& source1_field){
+void div(State& mips_state,int32_t source2_field,int32_t source1_field){
 	int32_t rs = mips_state.reg[source1_field];
 	int32_t rt = mips_state.reg[source2_field];
 	mips_state.Hi = rs % rt;
 	mips_state.Lo = rs / rt;
 }
 
-void divu(State& mips_state,int32_t& source2_field,int32_t& source1_field){
+void divu(State& mips_state,int32_t source2_field,int32_t source1_field){
 	uint32_t rs = mips_state.reg[source1_field];
 	uint32_t rt = mips_state.reg[source2_field];
 	mips_state.Hi = rs % rt;
@@ -163,7 +171,7 @@ void mflo(State& mips_state,int32_t& dest_field){
 	mips_state.reg[dest_field] = mips_state.Lo;
 }
 
-void mult(State& mips_state,int32_t& source2_field,int32_t& source1_field){
+void mult(State& mips_state,int32_t source2_field,int32_t source1_field){
 	int32_t rs = mips_state.reg[source1_field];
 	int32_t rt = mips_state.reg[source2_field];
 	int64_t result  = rs * rt;
@@ -171,7 +179,7 @@ void mult(State& mips_state,int32_t& source2_field,int32_t& source1_field){
 	mips_state.Lo = (result << 32) >> 32;
 }
 
-void multu(State& mips_state,int32_t& source2_field,int32_t& source1_field){
+void multu(State& mips_state,int32_t source2_field,int32_t source1_field){
 	uint32_t rs = mips_state.reg[source1_field];
 	uint32_t rt = mips_state.reg[source2_field];
 	uint64_t result = rs * rt;
@@ -179,7 +187,7 @@ void multu(State& mips_state,int32_t& source2_field,int32_t& source1_field){
 	mips_state.Lo = (result << 32) >> 32;
 }
 
-int32_t sra(State& mips_state,int32_t& source2_field,int32_t shamt_field){
+int32_t sra(State& mips_state,int32_t source2_field,int32_t shamt_field){
 	int32_t result = mips_state.reg[source2_field];
 	return (result >> shamt_field);
 }
