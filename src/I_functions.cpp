@@ -1,11 +1,13 @@
 #include "I_type.hpp"
+#include <cmath>
 using namespace std;
 
 bool i_type(int32_t& instr, State& mips_state) {
 	unsigned long index = source2_field >> 16;
-	int32_t source2_field = (instr & (0x001F0000)); //rt
-	int32_t source1_field = (instr & (0x03E00000)); //rs
-	int32_t opcode_field = (instr & (0xFC000000)); //op
+	uint32_t source2_field = (instr & (0x001F0000)); //rt
+	uint32_t source1_field = (instr & (0x03E00000)); //rs
+	uint32_t opcode_field = (instr & (0xFC000000)); //op
+	uint32_t SignExtImm = (instr & (0x0000FFFF)); //immediate
 
 
 	if(opcode_field == (0x00000008))
@@ -55,6 +57,190 @@ bool i_type(int32_t& instr, State& mips_state) {
 
 int32_t addi(State& mips_state,uint32_t source1_field,uint32_t source2_field,int32_t SignExtImm,bool& overflow){
 	int32_t rs = mips_state.reg[source1_field];
-	int32_t rt = mips_state.reg[source2_field];
+	if((SignExtImm >> 15) == 1) {
+		SignExtImm = SignExtImm | (0xFFFF0000);
+	}
+	else {
+		SignExtImm = SignExtImm & (0x0000FFFF);
+	}
+	int32_t temp = rs + SignExtImm;
+	if (((rs<0)&&(SignExtImm<0)&&(rs+SignExtImm>0)) || ((rs>0)&&(SignExtImm>0)&&(rs+SignExtImm<0))){
+		overflow = true;
+	}
+	else {
+		overflow = false;
+		return temp;
+	}
+
+uint32_t addiu(State& mips_state,uint32_t source1_field,uint32_t source2_field,int32_t SignExtImm){
+	int32_t rs = mips_state.reg[source1_field];
+	if((SignExtImm >> 15) == 1) {
+		SignExtImm = SignExtImm | (0xFFFF0000);
+	}
+	else {
+		SignExtImm = SignExtImm & (0x0000FFFF);
+	}
+	return rs + SignExtImm;
 	
+int32_t Andi(State& mips_state,uint32_t source1_field, uint32_t ZeroExtImm){
+	ZeroExtImm = ZeroExtImm & (0x0000FFFF);
+	return mips_state.reg[source1_field] & ZeroExtImm;
+}
+
+void beq(State& mips_state,uint32_t source1_field,uint32_t source2_field,uint32_t offset){
+	int32_t tgt_offset = offset << 2;
+	if(mips_state.reg[source1_field] == mips_state.reg[source2_field]){
+		mips_state.pc += tgt_offset;
+		return;
+	}
+	else{
+		return;
+	}
+}
+
+void bne(State& mips_state,uint32_t source1_field,uint32_t source2_field,uint32_t offset){
+	int32_t tgt_offset = offset << 2; //allign to be multiple of 4
+	if(mips_state.reg[source1_field] != mips_state.reg[source2_field]){
+		mips_state.pc += tgt_offset;
+		return;
+	}
+	else{
+		return;
+	}
+}
+
+void lbu(State& mips_state,uint32_t source1_field,uint32_t source2_field,int32_t SignExtImm){
+	SignExtImm = SignExtImm & (0x0000FFFF);
+	uint32_t Addr = SignExtImm + mips_state.reg[source1_field];
+	if(Addr % 4 != 0){
+		uint32_t multiple = abs(Addr) - (abs(Addr) % 4);
+		uint32_t temp_storage = mips_state.ram[multiple];
+		temp_storage = temp_storage << pow(8,abs(Addr) % 4);
+		temp_storage = temp_storage >> pow(8,4-(abs(Addr) % 4));
+		mips_state.reg[source2_field] =  (0x000000FF) & temp_storage;
+	}
+	else{
+		mips_state.reg[source2_field] = (0x000000FF) & mips_state.ram[multiple] >> 24;
+	}
+	return;
+}
+
+void lb(State& mips_state,uint32_t source1_field,uint32_t source2_field,int32_t SignExtImm){
+	SignExtImm = SignExtImm & (0x0000FFFF);
+	uint32_t Addr = SignExtImm + mips_state.reg[source1_field];
+	if(Addr % 4 != 0){
+		uint32_t multiple = abs(Addr) - (abs(Addr) % 4);
+		uint32_t temp_storage = mips_state.ram[multiple];
+		temp_storage = temp_storage << pow(8,abs(Addr) % 4);
+		temp_storage = temp_storage >> pow(8,4-(abs(Addr) % 4));
+		if(temp_storage & 0x00000080){
+		mips_state.reg[source2_field] =  (0xFFFFFF00) | temp_storage;
+		}
+		else if (!(temp_storage & 0x00000080)){
+		mips_state.reg[source2_field] =  (0x00000000) | temp_storage;
+		}
+	}
+	else{	
+		uint32_t temp_storage = mips_state.ram[Addr] >> 24; 
+		if(temp_storage & 0x00000080){
+		mips_state.reg[source2_field] =  (0xFFFFFF00) | temp_storage;
+		}
+		else if (!(temp_storage & 0x00000080)){
+		mips_state.reg[source2_field] =  (0x000000FF) & temp_storage;
+		}
+	}
+	return;
+}
+
+void lhu(State& mips_state,uint32_t source1_field,uint32_t source2_field,int32_t SignExtImm){
+	SignExtImm = SignExtImm & (0x0000FFFF);
+	uint32_t Addr = SignExtImm + mips_state.reg[source1_field];
+	if(Addr % 2 != 0){
+		uint32_t multiple = abs(Addr) - (abs(Addr) % 2);
+		uint32_t temp_storage = mips_state.ram[multiple];
+		temp_storage = temp_storage << pow(16,abs(Addr) % 2);
+		temp_storage = temp_storage >> pow(16,2-(abs(Addr) % 2));
+		temp_storage = temp_storage & 0x0000FFFF;
+		mips_state.reg[source2_field] = temp_storage;
+		return;
+	}
+	else{	
+		uint32_t temp_storage = mips_state.ram[Addr] >> 16;
+		temp_storage = temp_storage & 0x0000FFFF;
+		mips_state.reg[source2_field] = temp_storage;
+		return;
+	}
+}
+	
+void lh(State& mips_state,uint32_t source1_field,int32_t SignExtImm){
+	SignExtImm = SignExtImm & (0x0000FFFF);
+	uint32_t Addr = SignExtImm + mips_state.reg[source1_field];
+	if(Addr % 2 != 0){
+		uint32_t multiple = abs(Addr) - (abs(Addr) % 2);
+		uint32_t temp_storage = mips_state.ram[multiple];
+		temp_storage = temp_storage << pow(16,abs(Addr) % 2);
+		temp_storage = temp_storage >> pow(16,2-(abs(Addr) % 2));
+		if(temp_storage & 0x00008000){
+		mips_state.reg[source2_field] =  (0xFFFF0000) | temp_storage;
+		}
+		else if (!(temp_storage & 0x00008000)){
+		mips_state.reg[source2_field] =  (0x0000FFFF) & temp_storage;
+		}
+	}
+	else{	
+		uint32_t temp_storage = mips_state.ram[Addr] >> 24; 
+		if(temp_storage & 0x00008000){
+		mips_state.reg[source2_field] =  (0xFFFF0000) | temp_storage;
+		}
+		else if (!(temp_storage & 0x00008000)){
+		mips_state.reg[source2_field] =  (0x0000FFFF) & temp_storage;
+		}
+	}
+	return;
+}
+
+void lui(State& mips_state,uint32_t source2_field,int32_t SignExtImm){
+	SignExtImm = SignExtImm << 16;
+	mips_state.reg[source2_field] = SignExtImm & (0xFFFF0000);
+}
+
+void lw(State& mips_state,uint32_t source1_field,uint32_t source2_field,int32_t SignExtImm){
+	SignExtImm = SignExtImm & (0x0000FFFF);
+	uint32_t Addr = SignExtImm + mips_state.reg[source1_field];
+	if(Addr % 4 != 0){
+		return; //Exception : Address not aligned (we should make an ExceptionHandler() function) which takes input parameter the opcode of
+			//the instruction that went bad and return the appropriate error code
+	}
+	else {
+		mips_state.reg[source2_field] = mips_state.ram[Addr];
+		return;
+	}
+}
+
+void lwl(State& mips_state,uint32_t source1_field,uint32_t source2_field,int32_t SignExtImm){
+	SignExtImm = SignExtImm & (0x0000FFFF);
+	uint32_t Addr = SignExtImm + mips_state.reg[source1_field];
+	if(Addr % 4 != 0){
+		uint32_t multiple = abs(Addr) - (abs(Addr) % 4);
+		uint32_t temp_storage = mips_state.ram[multiple];
+		temp_storage = temp_storage << pow(8,abs(Addr) % 4);
+		temp_storage = temp_storage >> pow(8,4-(abs(Addr) % 4));
+		if(temp_storage & 0x00000080){
+		mips_state.reg[source2_field] =  (0xFFFFFF00) | temp_storage;
+		}
+		else if (!(temp_storage & 0x00000080)){
+		mips_state.reg[source2_field] =  (0x00000000) | temp_storage;
+		}
+	}
+	else{	
+		uint32_t temp_storage = mips_state.ram[Addr] >> 24; 
+		if(temp_storage & 0x00000080){
+		mips_state.reg[source2_field] =  (0xFFFFFF00) | temp_storage;
+		}
+		else if (!(temp_storage & 0x00000080)){
+		mips_state.reg[source2_field] =  (0x000000FF) & temp_storage;
+		}
+	}
+	return;
+}
 	

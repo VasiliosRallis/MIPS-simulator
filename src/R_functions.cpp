@@ -73,8 +73,8 @@ int32_t add(State& mips_state,int32_t& source1_field,int32_t& source2_field, boo
 	}
 	else {
 		overflow = false;
+		return  rs + rt;
 	}
-	return  rs + rt;
 }
 
 
