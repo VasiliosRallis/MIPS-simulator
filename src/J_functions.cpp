@@ -15,11 +15,11 @@ void j_type(int32_t& instr, State& mips_state){
 }
 
 
-void j(State& mips_state, int32_t& address_field){
-	mips_state.pc = address_field.to_ulong();
+void j(State& mips_state, int32_t address_field){
+	mips_state.pc = address_field;
 }
 
-void jal(State& mips_state, int32_t& address_field){
-	mips_state.reg[31] = (mips_state.pc).to_ulong() + 8;
-	mips_state.pc = address_field.to_ulong();
+void jal(State& mips_state, int32_t address_field){
+	mips_state.reg[31] = (mips_state.pc) + 8;
+	mips_state.pc = address_field;
 }

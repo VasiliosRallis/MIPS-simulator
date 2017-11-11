@@ -2,9 +2,6 @@
 #define J_TYPE
 #include <iostream>
 #include "mips.hpp"
-#include <fstream>
-#include <string>
-#include <bitset>
 #include <stdint.h>
 using namespace std;
 
