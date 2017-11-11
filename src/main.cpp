@@ -29,14 +29,9 @@ int main(int argc, char* argv[]){
 	//Passes the instructions to the
 	setUp(mips_state, fileName);
 
-
 	mips_state.ram[ADDR_INSTR] = 0x08000000;
 
-
-
-	int32_t temp = 0xFFFFFFFF;
 	bool overflow;
-	int i = 2;
 	do{
 		checkExec(mips_state.reg, mips_state.pc);
 		mips_state.reg[0] = 0;
@@ -62,8 +57,7 @@ int main(int argc, char* argv[]){
 			std::exit(-12);
 
 		}
-		i--;
-	}while(i);
+	}while(1);
 
 	return 0;
 }

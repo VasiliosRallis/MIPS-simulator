@@ -13,55 +13,55 @@ bool r_type(State& mips_state){
 	if(funct_field == (0x00000020)){
 			int32_t temp = add(mips_state, source1_field, source2_field, overflow); //can change overflow
 			if(overflow) {
-				return true; //need to return exception code
+				std::exit(static_cast<int>(Exception::ARITHMETIC));
 			}
 			else {
 				mips_state.reg[index] = temp;
 			}
 	}
-	else if(funct_field == (0x00000021))
+	else if(funct_field == 0x00000021)
 			mips_state.reg[index] = addu(mips_state, source1_field, source2_field);
-	else if(funct_field == (0x00000024))
+	else if(funct_field == 0x00000024)
 			mips_state.reg[index] = And(mips_state, source1_field, source2_field);
-	else if(funct_field == (0x00000008))
+	else if(funct_field == 0x00000008)
 			jr(mips_state,source1_field);
-	else if(funct_field == (0x00000027))
+	else if(funct_field == 0x00000027)
 			mips_state.reg[index] = nor(mips_state, source1_field, source2_field);
-	else if(funct_field == (0x00000025))
+	else if(funct_field == 0x00000025)
 			mips_state.reg[index] = Or(mips_state, source1_field, source2_field);
-	else if(funct_field == (0x0000002A))
+	else if(funct_field == 0x0000002A)
 			mips_state.reg[index] = slt(mips_state, source1_field, source2_field);
-	else if(funct_field == (0x0000002B))
+	else if(funct_field == 0x0000002B)
 			mips_state.reg[index] = sltu(mips_state, source1_field, source2_field);
-	else if(funct_field == (0x00000000))
+	else if(funct_field == 0x00000000)
 			mips_state.reg[index] = sll(mips_state, source2_field, shamt_field);
-	else if(funct_field == (0x00000002))
-			mips_state.reg[index] = srl(mips_state,source2_field,shamt_field);
-	else if(funct_field == (0x00000022)){
-			int32_t temp = sub(mips_state,source1_field,source2_field,overflow); //can change overflow
+	else if(funct_field == 0x00000002)
+			mips_state.reg[index] = srl(mips_state, source2_field, shamt_field);
+	else if(funct_field == 0x00000022){
+			int32_t temp = sub(mips_state, source1_field, source2_field, overflow); //can change overflow
 			if(overflow) {
-				return true; 
+				std::exit(static_cast<int>(Exception::ARITHMETIC));
 			}
 			else{
 				mips_state.reg[index] = temp;
 			}
 	}
-	else if(funct_field == (0x00000023))
-			mips_state.reg[index] = subu(mips_state,source1_field,source2_field);
-	else if(funct_field == (0x0000001A))
-			div(mips_state,source2_field,source1_field);
-	else if(funct_field == (0x0000001B))
-			divu(mips_state,source2_field,source1_field);
-	else if(funct_field == (0x00000010))
-			mfhi(mips_state,index);
-	else if(funct_field == (0x00000012))
-			mflo(mips_state,index);
-	else if(funct_field == (0x00000018))
-			mult(mips_state,source2_field,source1_field);
-	else if(funct_field == (0x00000019))
-			multu(mips_state,source2_field,source1_field);
+	else if(funct_field == 0x00000023)
+			mips_state.reg[index] = subu(mips_state, source1_field, source2_field);
+	else if(funct_field == 0x0000001A)
+			div(mips_state, source2_field, source1_field);
+	else if(funct_field == 0x0000001B)
+			divu(mips_state, source2_field, source1_field);
+	else if(funct_field == 0x00000010)
+			mfhi(mips_state, index);
+	else if(funct_field == 0x00000012)
+			mflo(mips_state, index);
+	else if(funct_field == 0x00000018)
+			mult(mips_state, source2_field, source1_field);
+	else if(funct_field == 0x00000019)
+			multu(mips_state, source2_field, source1_field);
 	else if(funct_field == (0x00000003)){
-			mips_state.reg[index] = sra(mips_state,source2_field,shamt_field);
+			mips_state.reg[index] = sra(mips_state, source2_field, shamt_field);
 	}
 return false;
 	}

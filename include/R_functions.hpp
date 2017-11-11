@@ -2,6 +2,7 @@
 #define R_TYPE
 #include <iostream>
 #include "mips.hpp"
+#include "error.hpp"
 #include <stdint.h>
 using namespace std;
 

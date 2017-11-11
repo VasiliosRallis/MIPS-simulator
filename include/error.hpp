@@ -28,4 +28,15 @@ void checkDiv4(uint32_t addr);
 char readChar();
 void writeChar(char c);
 
+//This enum will include both Exception and Error codes
+//The Enumerator will add clarity to the simulator code
+enum class Exception{
+	ARITHMETIC = -10,
+	MEMORY = -11,
+	INSTRUCTION = -12,
+	INTERNAL = -20,
+	IO = -21
+};
+
+
 #endif
