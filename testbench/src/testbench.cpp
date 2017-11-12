@@ -4,6 +4,7 @@
 #include <stdexcept>
 #include "test.hpp"
 #include "io.hpp"
+#include <sys/wait.h>
 
 
 int main(int argc, char* argv[]){
@@ -37,6 +38,8 @@ int main(int argc, char* argv[]){
 
 		//This will run a command on the bash and return the exit-code of that command
 		int s = std::system(command.c_str());
+
+		s = WEXITSTATUS(s);
 
 		std::cout << "out " << s << std::endl;
 		if (s == v[i].getExitCode()){

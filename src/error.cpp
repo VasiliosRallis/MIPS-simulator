@@ -6,7 +6,7 @@ void checkExec(const std::vector<int32_t>& reg, uint32_t addr){
 		std::exit(-11);
 	}
 	if(addr == ADDR_NULL){
-		int32_t out = reg[3] & 0x000000FF;
+		int32_t out = reg[2] & 0x000000FF;
 		std::exit(out);
 	}
 }
@@ -25,11 +25,6 @@ void checkWrite(uint32_t addr){
 	}
 }
 
-void checkDiv4(uint32_t addr){
-	if(addr % 4 != 0){
-		std::exit(-11);
-	}
-}
 
 char readChar(){
 	char c;

@@ -5,7 +5,7 @@ void setUp(State& s, const std::string& fileName){
 	//Set all the state elements to the correct value
 	s.ram.resize(MEM_SIZE);
 	s.pc = ADDR_INSTR;
-	s.reg.resize(32, 5);
+	s.reg.resize(32, 0);
 	s.Hi = 0;
 	s.Lo = 0;
 
@@ -13,6 +13,7 @@ void setUp(State& s, const std::string& fileName){
 
 	if(!fileIn.is_open()){
 		std::cout << "E: Could not open file" << std::endl;
+		std::exit(2);
 	}
 	else{
 		MBlock m;

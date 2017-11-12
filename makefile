@@ -36,7 +36,7 @@ MIPS_LDFLAGS += -Wl,--build-id=none
 ## Simulator
 
 IDIR = include
-SIM_DEP = src/main.cpp src/setUp.cpp src/R_functions.cpp src/error.cpp src/J_functions.cpp ##src/I_functions.cpp
+SIM_DEP = src/main.cpp src/setUp.cpp src/R_functions.cpp src/error.cpp src/J_functions.cpp src/I_functions.cpp
 G++_FLAGS = -w -Wall -std=c++11 -I $(IDIR)
 
 # Build the simulation binary
