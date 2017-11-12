@@ -2,7 +2,7 @@
 using namespace std;
 
 bool r_type(State& mips_state){
-	int32_t instr = mips_state.pc;
+	int32_t instr = mips_state.ram[mips_state.pc];
 	uint32_t funct_field = instr & 0x0000003F;
 	uint32_t shamt_field = (instr & 0x000007C0) >> 6;
 	uint32_t index = (instr & 0x0000F800) >> 11; //rd
@@ -60,9 +60,20 @@ bool r_type(State& mips_state){
 			mult(mips_state, source2_field, source1_field);
 	else if(funct_field == 0x00000019)
 			multu(mips_state, source2_field, source1_field);
-	else if(funct_field == (0x00000003)){
+	else if(funct_field == 0x00000003)
 			mips_state.reg[index] = sra(mips_state, source2_field, shamt_field);
+	else if(funct_field == 0x00000011)
+			mthi(mips_state,source1_field);
+	else if(funct_field == 0x00000013)
+			mtlo(mips_state,source1_field);
+	else if(funct_field == 0x00000004)
+			mips_state.reg[index] = sllv(mips_state,source2_field,source1_field);
+	else if(funct_field == 0x00000007)
+			mips_state.reg[index] = srav(mips_state,source2_field,source1_field);
+	else if(funct_field == 0x00000006){
+			mips_state.reg[index] = srlv(mips_state,source2_field,source1_field);
 	}
+
 return false;
 	}
 
@@ -169,12 +180,12 @@ void divu(State& mips_state, uint32_t source2_field, uint32_t source1_field){
 	mips_state.Lo = rs / rt;
 }
 
-void mfhi(State& mips_state, uint32_t dest_field){
-	mips_state.reg[dest_field] = mips_state.Hi;
+void mfhi(State& mips_state, uint32_t index){
+	mips_state.reg[index] = mips_state.Hi;
 }
 
-void mflo(State& mips_state, uint32_t dest_field){
-	mips_state.reg[dest_field] = mips_state.Lo;
+void mflo(State& mips_state, uint32_t index){
+	mips_state.reg[index] = mips_state.Lo;
 }
 
 void mult(State& mips_state, uint32_t source2_field, uint32_t source1_field){
@@ -196,4 +207,25 @@ void multu(State& mips_state, uint32_t source2_field, uint32_t source1_field){
 int32_t sra(State& mips_state, uint32_t source2_field, uint32_t shamt_field){
 	int32_t result = mips_state.reg[source2_field];
 	return (result >> shamt_field);
+}
+
+void mthi(State& mips_state,uint32_t source1_field){
+	mips_state.Hi = mips_state.reg[source1_field];
+}
+
+void mtlo(State& mips_state,uint32_t source1_field){
+	mips_state.Lo = mips_state.reg[source1_field];
+}
+
+int32_t sllv(State& mips_state,uint32_t source2_field,uint32_t source1_field){
+	return (mips_state.reg[source2_field] << (uint32_t)mips_state.reg[source1_field]);
+}
+
+int32_t srav(State& mips_state,uint32_t source2_field,uint32_t source1_field){
+	return (mips_state.reg[source2_field] >> (uint32_t)mips_state.reg[source1_field]);
+}
+
+uint32_t srlv(State& mips_state,uint32_t source2_field,uint32_t source1_field){
+	uint32_t temp = mips_state.reg[source2_field];
+	return temp >> (uint32_t)mips_state.reg[source1_field];
 }

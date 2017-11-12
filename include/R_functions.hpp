@@ -24,10 +24,15 @@ int32_t sub(State& mips_state,uint32_t source1_field,uint32_t source2_field, boo
 uint32_t subu(State& mips_state,uint32_t source1_field,uint32_t source2_field);
 void div(State& mips_state,uint32_t source2_field,uint32_t source1_field);
 void divu(State& mips_state,uint32_t source2_field,uint32_t source1_field);
-void mfhi(State& mips_state,uint32_t dest_field);
-void mflo(State& mips_state,uint32_t dest_field);
+void mfhi(State& mips_state,uint32_t index);
+void mflo(State& mips_state,uint32_t index);
 void mult(State& mips_state,uint32_t source2_field,uint32_t source1_field);
 void multu(State& mips_state,uint32_t source2_field,uint32_t source1_field);
 int32_t sra(State& mips_state,uint32_t source2_field,uint32_t shamt_field);
+void mthi(State& mips_state,uint32_t source1_field);
+void mtlo(State& mips_state,uint32_t source1_field);
+int32_t sllv(State& mips_state,uint32_t source2_field,uint32_t source1_field);
+int32_t srav(State& mips_state,uint32_t source2_field,uint32_t source1_field);
+uint32_t srlv(State& mips_state,uint32_t source2_field,uint32_t source1_field);
 
 #endif
