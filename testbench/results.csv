@@ -1,2 +1,3 @@
-jr1,jr,PASS,vgr16,No message
-overflow,add,,vgr16,Testing add overflow
+jr1,jr,PASS,vgr16,A single JR instruction to Address 0x0
+addi1,addi,FAIL,vgr16,Adding a constant to $2 followed be a jr insturction
+addiu1,addiu,FAIL,vgr16,Adding 0xFFFF to $2 followed be a jr

@@ -3,7 +3,7 @@
 #include <iostream>
 #include "mips.hpp"
 #include "error.hpp"
-#include <stdint.h>
+#include <cstdint>
 using namespace std;
 
 

@@ -28,23 +28,26 @@ int main(int argc, char* argv[]){
 	}
 
 
-
 	input.close();
 
 
-	//First test
-	const char* command = (simulator + " " + v[0].getBin()).c_str();
+	for(int i(0); i < v.size(); i++){
 
-	//This will run a command on the bash and return the exit-code of that command
-	int s = std::system(command);
-	if (s == 0){
-		v[0].setResult("PASS");
-	}
-	else{
-		v[0].setResult("FAIL");
-	}
+		std::string command = (simulator + " " + v[i].getBin()).c_str();
 
-	std::cout << v[0] << std::endl;
+		//This will run a command on the bash and return the exit-code of that command
+		int s = std::system(command.c_str());
+
+		std::cout << "out " << s << std::endl;
+		if (s == v[i].getExitCode()){
+			v[i].setResult("PASS");
+		}
+		else{
+			v[i].setResult("FAIL");
+		}
+
+		std::cout << v[i] << std::endl;
+	}
 
 	std::ofstream output("testbench/results.csv");
 
