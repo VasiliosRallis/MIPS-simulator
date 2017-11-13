@@ -7,11 +7,16 @@ void j_type(State& mips_state){
 	int32_t address = instr & 0x03FFFFFF;
 	int32_t opcode = (instr & 0xFC000000) >> 26;
 
-	if(opcode == 0x00000002)
+
+	switch(opcode) {
+
+	case 0x00000002:
 		j(mips_state, address);
-	else if(opcode == 0x00000003)
+		break;
+	case 0x00000003:
 		jal(mips_state, address);
-	else
+		break;
+	default:
 		std::exit(static_cast<int>(Exception::INSTRUCTION));
 }
 

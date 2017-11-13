@@ -38,7 +38,7 @@ int main(int argc, char* argv[]){
 		opcode = opcode & 0x0000003F;
 
 		if(opcode == 0x00000000){
-			overflow = r_type(mips_state);
+			r_type(mips_state);
 		}
 		else if(opcode == 0x00000020 || opcode == 0x00000021 || opcode == 0x00000022 || opcode == 0x00000023 || opcode == 0x00000024 ||
 				opcode == 0x00000025 || opcode == 0x00000026 || opcode == 0x00000028 || opcode == 0x00000029 || opcode == 0x0000002B ||
