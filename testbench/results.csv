@@ -6,4 +6,7 @@ addiu1,addiu,PASS,vgr16,Adding 0xFFFF to $2 followed be a jr
 andi1,andi,PASS,vgr16,No Message
 beq1,beq,PASS,vgr16,Branching to INSTR_ADDR - 1 (Expect memory exception)
 bgez1,bgez,PASS,vgr16,Branching to INSTR_ADDR - 1 (Expect memory exception)
-bgezal1,bgezal,FAIL,vgr16,No Message
+bgezal1,bgezal,PASS,vgr16,No Message
+bgtz1,bgtz,PASS,vgr16,No Message
+blez1,blez,PASS,vgr16,No Message
+lb1,lb,PASS,vgr16,No Message

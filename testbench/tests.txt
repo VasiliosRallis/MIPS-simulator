@@ -8,3 +8,6 @@ andi1,andi,vgr16,test5.mips.bin,No Message,6,0
 beq1,beq,vgr16,test6.mips.bin,Branching to INSTR_ADDR - 1 (Expect memory exception),245,0
 bgez1,bgez,vgr16,test7.mips.bin,Branching to INSTR_ADDR - 1 (Expect memory exception),245,0
 bgezal1,bgezal,vgr16,test8.mips.bin,No Message,8,0
+bgtz1,bgtz,vgr16,test9.mips.bin,No Message,245,0
+blez1,blez,vgr16,test10.mips.bin,No Message,245,0
+lb1,lb,vgr16,test11.mips.bin,No Message,8,0

@@ -9,7 +9,6 @@ void j_type(State& mips_state){
 
 
 	switch(opcode) {
-
 	case 0x00000002:
 		j(mips_state, address);
 		break;
@@ -18,6 +17,8 @@ void j_type(State& mips_state){
 		break;
 	default:
 		std::exit(static_cast<int>(Exception::INSTRUCTION));
+		break;
+	}
 }
 
 

@@ -83,18 +83,22 @@ void r_type(State& mips_state){
 	case 0x00000006:
 			srlv(mips_state,rt,rs,rd);
 			break;
+	default:
+			std::exit(static_cast<int>(Exception::INSTRUCTION));
+			break;
 	}
 }
 
 void add(State& mips_state, uint32_t rs, uint32_t rt, uint32_t rd){
 	 int32_t temp1 = mips_state.reg[rs];
 	 int32_t temp2 = mips_state.reg[rt];
-	 if (((rs<0)&&(rt<0)&&(rs+rt>0)) || ((rs>0)&&(rt>0)&&(rs+rt<0))){
+	 if (((temp1 < 0 ) && (temp2 < 0) && (temp1 + temp2 > 0)) || ((temp1 > 0) && (temp2 > 0) && (temp1 + temp2 < 0))){
 		std::exit(static_cast<int>(Exception::ARITHMETIC));
 	}
 	else {
 		mips_state.reg[rd] = temp1 + temp2;
 	}
+	 ++mips_state.pc;
 }
 
 
@@ -159,7 +163,7 @@ void srl(State& mips_state, uint32_t rt, uint32_t shamt_field, uint32_t rd){
 void sub(State& mips_state, uint32_t rs, uint32_t rt, uint32_t rd){
 	int32_t temp1 = mips_state.reg[rs];
 	int32_t temp2 = mips_state.reg[rt];
-	if(((temp1-temp2) < temp1) != (temp2 > 0)){
+	if(((temp1 - temp2) < temp1) != (temp2 > 0)){
 		std::exit(static_cast<int>(Exception::ARITHMETIC));
 	}
 	else {

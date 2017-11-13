@@ -150,9 +150,9 @@ void lbu(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 	int32_t temp;
 
 	if(addr % 4 != 0){
-		int32_t temp = mips_state.ram[static_cast<int>(addr / 4)];
+		temp = mips_state.ram[static_cast<int>(addr / 4)];
 		temp = temp << (8 * (addr % 4));
-		temp = temp >> (32 - (8 * (addr % 4)));
+		temp = temp >> 24;
 	}
 	else{
 		temp = mips_state.ram[addr / 4];
@@ -171,9 +171,9 @@ void lb(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 	int32_t temp;
 
 	if(addr % 4 != 0){
-		int32_t temp = mips_state.ram[static_cast<int>(addr / 4)];
+		temp = mips_state.ram[static_cast<int>(addr / 4)];
 		temp = temp << (8 * (addr % 4));
-		temp = temp >> (32 - (8 * (addr % 4)));
+		temp = temp >> 24;
 	}
 	else{
 		temp = mips_state.ram[addr / 4];
@@ -200,9 +200,9 @@ void lhu(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 	}
 	else{
 		if(addr % 4 != 0){
-			int32_t temp = mips_state.ram[static_cast<int>(addr / 4)];
+			temp = mips_state.ram[static_cast<int>(addr / 4)];
 			temp = temp << (8 * (addr % 4));
-			temp = temp >> (24 - (8 * (addr % 4)));
+			temp = temp >> 16;
 		}
 		else{
 			temp = mips_state.ram[addr / 4];
@@ -225,9 +225,9 @@ void lh(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 	}
 	else{
 		if(addr % 4 != 0){
-			int32_t temp = mips_state.ram[static_cast<int>(addr / 4)];
+			temp = mips_state.ram[static_cast<int>(addr / 4)];
 			temp = temp << (8 * (addr % 4));
-			temp = temp >> (24 - (8 * (addr % 4)));
+			temp = temp >> 16;
 		}
 		else{
 			temp = mips_state.ram[addr / 4];
@@ -272,11 +272,11 @@ void lw(State& mips_state , int32_t rs, int32_t rt, int32_t SignExtImm){
 
 void lwl(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 
-	uint32_t word;
+	uint32_t word, temp;
 	uint32_t addr = SignExtImm + mips_state.reg[rs];
 
 	if(addr % 4 != 0){
-		uint32_t temp = mips_state.ram[static_cast<int>(addr / 4)];
+		temp = mips_state.ram[static_cast<int>(addr / 4)];
 		temp = temp << 8 * (addr % 4);
 		word = temp | (mips_state.ram[static_cast<int>(addr / 4) + 1] >> (8 * (addr % 4)));
 	}
@@ -293,11 +293,11 @@ void lwl(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 
 void lwr(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 
-	uint32_t word;
+	uint32_t word, temp;
 	uint32_t addr = SignExtImm + mips_state.reg[rs];
 
 	if(addr % 4 != 0){
-		uint32_t temp = mips_state.ram[static_cast<int>(addr / 4)];
+		temp = mips_state.ram[static_cast<int>(addr / 4)];
 		temp = temp << 8 * (addr % 4);
 		word = temp | (mips_state.ram[static_cast<int>(addr / 4) + 1] >> (8 * (addr % 4)));
 	}
@@ -398,7 +398,7 @@ void sw(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 
 void bgez(State& mips_state, int32_t rs, int32_t SignExtImm){
 	if(rs >= 0){
-		mips_state.pc =+ 1 + SignExtImm;
+		mips_state.pc += 1 + SignExtImm;
 	}
 	else{
 		++mips_state.pc;
@@ -407,8 +407,9 @@ void bgez(State& mips_state, int32_t rs, int32_t SignExtImm){
 
 void bgezal(State& mips_state, int32_t rs, int32_t SignExtImm){
 	if(rs >= 0){
-		mips_state.reg[31] = mips_state.pc + 1;
-		mips_state.pc =+ 1 + SignExtImm;
+		//We have to give the REAL Address here (i.e. multiple "our" address by 4 and add 8)
+		mips_state.reg[31] = (mips_state.pc * 4) + 8;
+		mips_state.pc += 1 + SignExtImm;
 	}
 	else{
 		++mips_state.pc;
@@ -421,7 +422,7 @@ void bgtz(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 	}
 	else{
 		if(rs > 0){
-			mips_state.pc =+ 1 + SignExtImm;
+			mips_state.pc += 1 + SignExtImm;
 		}
 		else{
 			++mips_state.pc;
@@ -436,7 +437,7 @@ void blez(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 
 	else{
 		if(rs <= 0x00000000){
-			mips_state.pc =+ 1 + SignExtImm;
+			mips_state.pc += 1 + SignExtImm;
 		}
 		else{
 			++mips_state.pc;
@@ -446,7 +447,7 @@ void blez(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 
 void bltz(State& mips_state, int32_t rs, int32_t SignExtImm){
 	if(rs < 0){
-		mips_state.pc =+ 1 + SignExtImm;
+		mips_state.pc += 1 + SignExtImm;
 	}
 	else{
 		++mips_state.pc;
@@ -456,8 +457,8 @@ void bltz(State& mips_state, int32_t rs, int32_t SignExtImm){
 void bltzal(State& mips_state, int32_t rs, int32_t SignExtImm){
 
 	if(rs < 0){
-		mips_state.reg[31] = mips_state.pc + 1;
-		mips_state.pc =+ 1 + SignExtImm;
+		mips_state.reg[31] = (mips_state.pc * 4) + 8;
+		mips_state.pc += 1 + SignExtImm;
 	}
 	else{
 		++mips_state.pc;
