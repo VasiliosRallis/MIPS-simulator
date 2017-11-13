@@ -9,7 +9,7 @@ using namespace std;
 
 void r_type(State& mips_state);
 
-void add(State& mips_state, uint32_t rt, uint32_t rs, bool& overflow, uint32_t rd);
+void add(State& mips_state, uint32_t rt, uint32_t rs, uint32_t rd);
 void addu(State& mips_state, uint32_t rt, uint32_t rs, uint32_t rd);
 void And(State& mips_state,uint32_t rt,uint32_t rs, uint32_t rd);
 void jr(State& mips_state, uint32_t rt);
@@ -19,7 +19,7 @@ void slt(State& mips_state, uint32_t rt, uint32_t rs, uint32_t rd);
 void sltu(State& mips_state, uint32_t rt, uint32_t rs, uint32_t rd);
 void sll(State& mips_state, uint32_t rs, uint32_t shamt_field, uint32_t rd);
 void srl(State& mips_state, uint32_t rs, uint32_t shamt_field, uint32_t rd);
-void sub(State& mips_state, uint32_t rt, uint32_t rs, bool& overflow, uint32_t rd);
+void sub(State& mips_state, uint32_t rt, uint32_t rs, uint32_t rd);
 void subu(State& mips_state, uint32_t rt, uint32_t rs, uint32_t rd);
 void div(State& mips_state, uint32_t rs, uint32_t rt);
 void divu(State& mips_state, uint32_t rs, uint32_t rt);
