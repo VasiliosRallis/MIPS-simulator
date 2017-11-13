@@ -1,4 +1,8 @@
 ID,Instruction,Author,Bin,Message,ExitCode, outputs
 jr1,jr,vgr16,test0.mips.bin,A single JR instruction to Address 0x0,0
 addi1,addi,vgr16,test1.mips.bin,Adding a constant to $2 followed be a jr insturction,6,0
+addi2,addi,vgr16,test3.mips.bin,Adding 1024 to $2 in an infinite loop (Expect overflow),246,0
+addi3,addi,vgr16,test4.mips.bin,Adding 0x8000(-32768) from $2 in an infinite loop (Expect overflow),246,0
 addiu1,addiu,vgr16,test2.mips.bin,Adding 0xFFFF to $2 followed be a jr,255,0
+andi1,andi,vgr16,test5.mips.bin,No Message,6,0
+beq1,beq,vgr16,test6.mips.bin,Branching to INSTR_ADDR - 1 (Expect memory exception),245,0

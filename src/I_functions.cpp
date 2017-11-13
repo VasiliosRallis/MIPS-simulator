@@ -101,7 +101,7 @@ void i_type(State& mips_state){
 void addi(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 	rs = mips_state.reg[rs];
 
-	if (((rs < 0) && (SignExtImm < 0) && (rs + SignExtImm > 0)) || ((rs > 0) && (SignExtImm > 0) && (rs + SignExtImm <0))){
+	if (((rs < 0) && (SignExtImm < 0) && (rs + SignExtImm > 0)) || ((rs > 0) && (SignExtImm > 0) && (rs + SignExtImm < 0))){
 		std::exit(static_cast<int>(Exception::ARITHMETIC));
 	}
 	else {

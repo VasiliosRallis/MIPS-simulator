@@ -34,7 +34,7 @@ int main(int argc, char* argv[]){
 
 	for(int i(0); i < v.size(); i++){
 
-		std::string command = (simulator + " " + v[i].getBin()).c_str();
+		std::string command = (simulator + " " + "testbench/tests/bin/" + v[i].getBin()).c_str();
 
 		//This will run a command on the bash and return the exit-code of that command
 		int s = std::system(command.c_str());
