@@ -89,7 +89,7 @@ void i_type(State& mips_state){
 		blez(mips_state, rs, rt, SignExtImm);
 		break;
 	case 0x00000001:
-		bdecoder(mips_state, rs, rt, immediate);
+		bdecoder(mips_state, rs, rt, SignExtImm);
 		break;
 	default:
 		std::exit(static_cast<int>(Exception::INSTRUCTION));
@@ -464,7 +464,7 @@ void bltzal(State& mips_state, int32_t rs, int32_t SignExtImm){
 	}
 }
 	
-void bdecoder(State& mips_state, int32_t rt, int32_t rs, int32_t SignExtImm){
+void bdecoder(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 	switch(rt){
 	case 0x00000001:
 		bgez(mips_state, rs, SignExtImm);

@@ -6,3 +6,5 @@ addi3,addi,vgr16,test4.mips.bin,Adding 0x8000(-32768) from $2 in an infinite loo
 addiu1,addiu,vgr16,test2.mips.bin,Adding 0xFFFF to $2 followed be a jr,255,0
 andi1,andi,vgr16,test5.mips.bin,No Message,6,0
 beq1,beq,vgr16,test6.mips.bin,Branching to INSTR_ADDR - 1 (Expect memory exception),245,0
+bgez1,bgez,vgr16,test7.mips.bin,Branching to INSTR_ADDR - 1 (Expect memory exception),245,0
+bgezal1,bgezal,vgr16,test8.mips.bin,No Message,8,0

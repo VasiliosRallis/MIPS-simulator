@@ -5,3 +5,5 @@ addi3,addi,PASS,vgr16,Adding 0x8000(-32768) from $2 in an infinite loop (Expect 
 addiu1,addiu,PASS,vgr16,Adding 0xFFFF to $2 followed be a jr
 andi1,andi,PASS,vgr16,No Message
 beq1,beq,PASS,vgr16,Branching to INSTR_ADDR - 1 (Expect memory exception)
+bgez1,bgez,PASS,vgr16,Branching to INSTR_ADDR - 1 (Expect memory exception)
+bgezal1,bgezal,FAIL,vgr16,No Message
