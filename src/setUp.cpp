@@ -5,6 +5,7 @@ void setUp(State& s, const std::string& fileName){
 	//Set all the state elements to the correct value
 	s.ram.resize(MEM_SIZE);
 	s.pc = ADDR_INSTR;
+	s.npc = ADDR_INSTR + 1;
 	s.reg.resize(32, 0);
 	s.Hi = 0;
 	s.Lo = 0;

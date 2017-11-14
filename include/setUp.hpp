@@ -21,6 +21,7 @@ const int32_t MEM_SIZE(0x0C000002);
 struct State{
 	std::vector<int32_t> ram;
 	int32_t pc;
+	int32_t npc;
 	std::vector<int32_t> reg;
 	int32_t Hi;
 	int32_t Lo;

@@ -29,10 +29,12 @@ int main(int argc, char* argv[]){
 	//Passes the instructions to the vector
 	setUp(mips_state, fileName);
 
-	bool overflow;
 	do{
 		checkExec(mips_state.reg, mips_state.pc);
 		mips_state.reg[0] = 0;
+
+		//Since the instruction that will be executed will change the npc we need to store it somewhere
+		int32_t tempNPC = mips_state.npc;
 
 		int32_t opcode = mips_state.ram[mips_state.pc] >> 26;
 		opcode = opcode & 0x0000003F;
@@ -54,7 +56,14 @@ int main(int argc, char* argv[]){
 			std::exit(static_cast<int>(Exception::INSTRUCTION));
 
 		}
+
+		//Set the value of pc(the address of the next instruction that we are going to execute) to the
+		//original value of npc
+		mips_state.pc = tempNPC;
+
+
 	}while(1);
 
 	return 0;
 }
+

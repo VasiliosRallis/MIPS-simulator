@@ -108,38 +108,38 @@ void addi(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 		mips_state.reg[rt] = rs + SignExtImm;
 	}
 
-	++mips_state.pc;
+	++mips_state.npc;
 }
 
 void addiu(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 	rs = mips_state.reg[rs];
 	mips_state.reg[rt] = rs + SignExtImm;
 
-	++mips_state.pc;
+	++mips_state.npc;
 }
 	
 void andi(State& mips_state, int32_t rs, int32_t rt, int32_t immediate){
 	rs = mips_state.reg[rs];
 	mips_state.reg[rt] = rs & immediate;
 
-	++mips_state.pc;
+	++mips_state.npc;
 }
 
 void beq(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 	if(mips_state.reg[rt] == mips_state.reg[rs]){
-		mips_state.pc += 1 + SignExtImm;
+		mips_state.npc += SignExtImm;
 	}
 	else{
-		++mips_state.pc;
+		++mips_state.npc;
 	}
 }
 
 void bne(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 	if(mips_state.reg[rt] != mips_state.reg[rs]){
-		mips_state.pc += 1 + SignExtImm;
+		mips_state.npc += SignExtImm;
 	}
 	else{
-		++mips_state.pc;
+		++mips_state.npc;
 	}
 }
 
@@ -160,7 +160,7 @@ void lbu(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 	}
 
 	mips_state.reg[rt] = temp;
-	++mips_state.pc;
+	++mips_state.npc;
 
 }
 
@@ -185,7 +185,7 @@ void lb(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 	}
 
 	mips_state.reg[rt] = temp;
-	++mips_state.pc;
+	++mips_state.npc;
 
 }
 
@@ -211,7 +211,7 @@ void lhu(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 		mips_state.reg[rt] = temp;
 	}
 
-	++mips_state.pc;
+	++mips_state.npc;
 }
 	
 void lh(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
@@ -241,7 +241,7 @@ void lh(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 		mips_state.reg[rt] = temp;
 	}
 
-	++mips_state.pc;
+	++mips_state.npc;
 }
 
 
@@ -254,7 +254,7 @@ void lui(State& mips_state, int32_t rs, int32_t rt, int32_t immediate){
 		mips_state.reg[rt] = immediate;
 	}
 
-	++mips_state.pc;
+	++mips_state.npc;
 }
 
 void lw(State& mips_state , int32_t rs, int32_t rt, int32_t SignExtImm){
@@ -267,7 +267,7 @@ void lw(State& mips_state , int32_t rs, int32_t rt, int32_t SignExtImm){
 		mips_state.reg[rt] = mips_state.ram[addr / 4];
 	}
 
-	++mips_state.pc;
+	++mips_state.npc;
 }
 
 void lwl(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
@@ -287,7 +287,7 @@ void lwl(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 	mips_state.reg[rt] = mips_state.reg[rt] & 0x0000FFFF;
 	mips_state.reg[rt] = mips_state.reg[rt] | (word & 0xFFFF0000);
 
-	++mips_state.pc;
+	++mips_state.npc;
 
 }
 
@@ -308,20 +308,20 @@ void lwr(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 	mips_state.reg[rt] = mips_state.reg[rt] & 0xFFFF0000;
 	mips_state.reg[rt] = mips_state.reg[rt] | (word & 0x0000FFFF);
 
-	++mips_state.pc;
+	++mips_state.npc;
 
 }
 
 void ori(State& mips_state, int32_t rs, int32_t rt, int32_t immediate){
 	mips_state.reg[rt] = mips_state.reg[rs] | immediate;
 
-	++mips_state.pc;
+	++mips_state.npc;
 }
 
 void xori(State& mips_state, int32_t rs, int32_t rt, int32_t immediate){
 	mips_state.reg[rt] = mips_state.reg[rs] ^ immediate;
 
-	++mips_state.pc;
+	++mips_state.npc;
 }
 
 void slti(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
@@ -332,7 +332,7 @@ void slti(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 		mips_state.reg[rt] = 0;
 	}
 
-	++mips_state.pc;
+	++mips_state.npc;
 }
 
 void sltiu(State& mips_state, int32_t rs, int32_t rt, int32_t immediate){
@@ -343,7 +343,7 @@ void sltiu(State& mips_state, int32_t rs, int32_t rt, int32_t immediate){
 		mips_state.reg[rt] = 0;
 	}
 
-	++mips_state.pc;
+	++mips_state.npc;
 }
 
 void sb(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
@@ -357,7 +357,7 @@ void sb(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 	mips_state.ram[static_cast<int>(addr / 4)] = mips_state.ram[static_cast<int>(addr / 4)] & (0x00FFFFFF >> (8 * (addr % 4)));
 	mips_state.ram[static_cast<int>(addr / 4)] = mips_state.ram[static_cast<int>(addr / 4)] | (temp >> (8 * (addr % 4)));
 
-	++mips_state.pc;
+	++mips_state.npc;
 }
 
 void sh(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
@@ -378,7 +378,7 @@ void sh(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 
 	}
 
-	++mips_state.pc;
+	++mips_state.npc;
 }
 
 void sw(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
@@ -393,23 +393,24 @@ void sw(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 		mips_state.ram[addr] = mips_state.reg[rt];
 	}
 
-	++mips_state.pc;
+	++mips_state.npc;
 }
 
 void bgez(State& mips_state, int32_t rs, int32_t SignExtImm){
 	if(rs >= 0){
-		mips_state.pc += 1 + SignExtImm;
+		mips_state.npc += SignExtImm;
 	}
 	else{
-		++mips_state.pc;
+		++mips_state.npc;
 	}
 }
 
 void bgezal(State& mips_state, int32_t rs, int32_t SignExtImm){
+	std::cout << "Did the bgezal" << std::endl;
 	if(rs >= 0){
 		//We have to give the REAL Address here (i.e. multiple "our" address by 4 and add 8)
 		mips_state.reg[31] = (mips_state.pc * 4) + 8;
-		mips_state.pc += 1 + SignExtImm;
+		mips_state.npc += SignExtImm;
 	}
 	else{
 		++mips_state.pc;
@@ -422,10 +423,10 @@ void bgtz(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 	}
 	else{
 		if(rs > 0){
-			mips_state.pc += 1 + SignExtImm;
+			mips_state.npc += SignExtImm;
 		}
 		else{
-			++mips_state.pc;
+			++mips_state.npc;
 		}
 	}
 }
@@ -437,20 +438,20 @@ void blez(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 
 	else{
 		if(rs <= 0x00000000){
-			mips_state.pc += 1 + SignExtImm;
+			mips_state.pc += SignExtImm;
 		}
 		else{
-			++mips_state.pc;
+			++mips_state.npc;
 		}
 	}
 }
 
 void bltz(State& mips_state, int32_t rs, int32_t SignExtImm){
 	if(rs < 0){
-		mips_state.pc += 1 + SignExtImm;
+		mips_state.pc += SignExtImm;
 	}
 	else{
-		++mips_state.pc;
+		++mips_state.npc;
 	}
 }
 
@@ -458,10 +459,10 @@ void bltzal(State& mips_state, int32_t rs, int32_t SignExtImm){
 
 	if(rs < 0){
 		mips_state.reg[31] = (mips_state.pc * 4) + 8;
-		mips_state.pc += 1 + SignExtImm;
+		mips_state.npc += SignExtImm;
 	}
 	else{
-		++mips_state.pc;
+		++mips_state.npc;
 	}
 }
 	
