@@ -15,28 +15,29 @@ void checkRead(uint32_t addr){
 	if(((addr < ADDR_INSTR) || (addr > (ADDR_INSTR + ADDR_INSTR_L - 1)))
 		&& ((addr < ADDR_DATA) || (addr > (ADDR_DATA + ADDR_DATA_L - 1)))
 		&& (addr != ADDR_GETC)){
-			std::exit(-11);
+			std::exit(static_cast<int>(Exception::MEMORY));
 		}
 }
 
 void checkWrite(uint32_t addr){
 	if(((addr < ADDR_DATA || (addr > (ADDR_DATA + ADDR_DATA_L - 1)))) && (addr != ADDR_PUTC)){
-		std::exit(-11);
+		std::exit(static_cast<int>(Exception::MEMORY));
 	}
 }
 
 
 char readChar(){
 	char c;
-	std::cin.get(c);
+	c = std::getchar();
 	if(!std::cin.good()){
-		std::exit(-21);
+		std::exit(static_cast<int>(Exception::IO));
 	}
+	return c;
 }
 
 void writeChar(char c){
-	std::cout.put(c);
+	std::putchar(c);
 	if(!std::cout.good()){
-		std::exit(-21);
+		std::exit(static_cast<int>(Exception::IO));
 	}
 }

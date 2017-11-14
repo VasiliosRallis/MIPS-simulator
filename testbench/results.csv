@@ -10,3 +10,8 @@ bgezal1,bgezal,PASS,vgr16,No Message
 bgtz1,bgtz,PASS,vgr16,No Message
 blez1,blez,PASS,vgr16,No Message
 lb1,lb,PASS,vgr16,No Message
+lb2,lb,PASS,vgr16,Checking for SignExtension
+lh1,lh,PASS,vg16,Checking for Address Validation
+lh2,lh,PASS,vgr16,Checking for Sign Extension
+slti1,slti,PASS,vgr16,Checking basic functionality
+slti2,slti,PASS,vgr16,Checking for signed functionality

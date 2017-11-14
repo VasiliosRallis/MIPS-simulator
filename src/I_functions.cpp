@@ -100,7 +100,6 @@ void i_type(State& mips_state){
 
 void addi(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 	rs = mips_state.reg[rs];
-
 	if (((rs < 0) && (SignExtImm < 0) && (rs + SignExtImm > 0)) || ((rs > 0) && (SignExtImm > 0) && (rs + SignExtImm < 0))){
 		std::exit(static_cast<int>(Exception::ARITHMETIC));
 	}
@@ -264,7 +263,13 @@ void lw(State& mips_state , int32_t rs, int32_t rt, int32_t SignExtImm){
 		std::exit(static_cast<int>(Exception::MEMORY));
 	}
 	else {
-		mips_state.reg[rt] = mips_state.ram[addr / 4];
+		if(addr / 4 == ADDR_GETC){
+			char temp = readChar();
+			mips_state.reg[rt] = static_cast<int32_t>(temp) & 0x000000FF;
+		}
+		else{
+			mips_state.reg[rt] = mips_state.ram[addr / 4];
+		}
 	}
 
 	++mips_state.npc;
@@ -351,6 +356,10 @@ void sb(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 	uint32_t addr = SignExtImm + mips_state.reg[rs];
 	checkWrite(static_cast<uint32_t>(addr / 4));
 
+	if(addr / 4 == ADDR_PUTC){
+		writeChar(static_cast<char>(0x000000FF & mips_state.reg[rt]));
+	}
+
 	int32_t temp = mips_state.reg[rt] & 0x000000FF;
 	temp = temp << 24;
 
@@ -373,6 +382,10 @@ void sh(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 		int32_t temp = mips_state.reg[rt] & 0x0000FFFF;
 		temp = temp << 16;
 
+		if(addr / 4 == ADDR_PUTC){
+			writeChar(static_cast<char>(0x000000FF & mips_state.reg[rt]));
+		}
+
 		mips_state.ram[static_cast<int>(addr / 4)] = mips_state.ram[static_cast<int>(addr / 4)] & (0x0000FFFF >> (8 * (addr % 4)));
 		mips_state.ram[static_cast<int>(addr / 4)] = mips_state.ram[static_cast<int>(addr / 4)] | (temp >> (8 * (addr % 4)));
 
@@ -390,7 +403,10 @@ void sw(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 		std::exit(static_cast<int>(Exception::MEMORY));
 	}
 	else{
-		mips_state.ram[addr] = mips_state.reg[rt];
+		if(addr / 4 == ADDR_PUTC){
+			writeChar(static_cast<char>(0x000000FF & mips_state.reg[rt]));
+		}
+		mips_state.ram[addr / 4] = mips_state.reg[rt];
 	}
 
 	++mips_state.npc;
@@ -406,7 +422,6 @@ void bgez(State& mips_state, int32_t rs, int32_t SignExtImm){
 }
 
 void bgezal(State& mips_state, int32_t rs, int32_t SignExtImm){
-	std::cout << "Did the bgezal" << std::endl;
 	if(rs >= 0){
 		//We have to give the REAL Address here (i.e. multiple "our" address by 4 and add 8)
 		mips_state.reg[31] = (mips_state.pc * 4) + 8;

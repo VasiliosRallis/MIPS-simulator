@@ -11,3 +11,8 @@ bgezal1,bgezal,vgr16,test8.mips.bin,No Message,8,0
 bgtz1,bgtz,vgr16,test9.mips.bin,No Message,245,0
 blez1,blez,vgr16,test10.mips.bin,No Message,245,0
 lb1,lb,vgr16,test11.mips.bin,No Message,8,0
+lb2,lb,vgr16,test12.mips.bin,Checking for SignExtension,255,0
+lh1,lh,vg16,test13.mips.bin,Checking for Address Validation,245,0
+lh2,lh,vgr16,test14.mips.bin,Checking for Sign Extension,255,0
+slti1,slti,vgr16,test15.mips.bin,Checking basic functionality,1,0
+slti2,slti,vgr16,test16.mips.bin,Checking for signed functionality,1,0
