@@ -1,5 +1,5 @@
 ID,Instruction,Author,Bin,Message,ExitCode, outputs
-jr1,jr,vgr16,test0.mips.bin,A single JR instruction to Address 0x0,0
+jr1,jr,vgr16,test0.mips.bin,A single JR instruction to Address 0x0,0,0
 addi1,addi,vgr16,test1.mips.bin,Adding a constant to $2 followed be a jr insturction,6,0
 addi2,addi,vgr16,test3.mips.bin,Adding 1024 to $2 in an infinite loop (Expect overflow),246,0
 addi3,addi,vgr16,test4.mips.bin,Adding 0x8000(-32768) from $2 in an infinite loop (Expect overflow),246,0
@@ -16,3 +16,6 @@ lh1,lh,vg16,test13.mips.bin,Checking for Address Validation,245,0
 lh2,lh,vgr16,test14.mips.bin,Checking for Sign Extension,255,0
 slti1,slti,vgr16,test15.mips.bin,Checking basic functionality,1,0
 slti2,slti,vgr16,test16.mips.bin,Checking for signed functionality,1,0
+lwr1,lwr,vgr16,test19.mips.bin,No message,9,0
+lwr2,lwr,vgr16,test20.mips.bin,Reading from last byte of Data Address space,245,0
+sw1,sw,cgr16,test17.mips.bin,Trying to output the character 'A',0,A

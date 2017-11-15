@@ -199,6 +199,10 @@ void subu(State& mips_state, uint32_t rs, uint32_t rt, uint32_t rd){
 void div(State& mips_state, uint32_t rt, uint32_t rs){
 	int32_t temp1 = mips_state.reg[rs];
 	int32_t temp2 = mips_state.reg[rt];
+	//Dividing by zero shouldn't do anything
+	if(temp2 == 0){
+		return;
+	}
 	mips_state.Hi = temp1 % temp2;
 	mips_state.Lo = temp1 / temp2;
 
@@ -208,6 +212,10 @@ void div(State& mips_state, uint32_t rt, uint32_t rs){
 void divu(State& mips_state, uint32_t rt, uint32_t rs){
 	uint32_t temp1 = mips_state.reg[rs];
 	uint32_t temp2 = mips_state.reg[rt];
+	if(temp2 == 0){
+		return;
+	}
+
 	mips_state.Hi = temp1 % temp2;
 	mips_state.Lo = temp1 / temp2;
 
@@ -261,17 +269,25 @@ void mthi(State& mips_state,uint32_t rs){
 
 void mtlo(State& mips_state,uint32_t rs){
 	mips_state.Lo = mips_state.reg[rs];
+
+	++mips_state.npc;
 }
 
 void sllv(State& mips_state,uint32_t rt,uint32_t rs, uint32_t rd){
 	mips_state.reg[rd] = (mips_state.reg[rt] << mips_state.reg[rs]);
+
+	++mips_state.npc;
 }
 
 void srav(State& mips_state,uint32_t rt,uint32_t rs, uint32_t rd){
 	mips_state.reg[rd] = ((int32_t)mips_state.reg[rt] >> mips_state.reg[rs]);
+
+	++mips_state.npc;
 }
 
 void srlv(State& mips_state,uint32_t rt,uint32_t rs, uint32_t rd){
 	uint32_t temp = mips_state.reg[rt];
 	mips_state.reg[rd]  = temp >> mips_state.reg[rs];
+
+	++mips_state.npc;
 }

@@ -25,7 +25,7 @@ void setUp(State& s, const std::string& fileName){
 	    fileIn.read (m.data, m.size);
 	    fileIn.close();
 
-
+/*
 	    std::cout << "Bit read: " << std::endl;
 	    for(int i = 0; i < m.size; i++){
 	    	std::bitset<8> temp(m.data[i]);
@@ -34,8 +34,11 @@ void setUp(State& s, const std::string& fileName){
 	    		std::cout << std::endl;
 	    	}
 	    }
-
+*/
 	    memToVector(m, s.ram);
+
+	    //Remember to delete the dynamically allocated memory
+	    delete[] m.data;
 
 	}
 }

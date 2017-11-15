@@ -41,12 +41,24 @@ int main(int argc, char* argv[]){
 
 		s = WEXITSTATUS(s);
 
-		std::cout << "out " << s << std::endl;
-		if (s == v[i].getExitCode()){
-			v[i].setResult("PASS");
+		//std::cout << "out " << s << std::endl;
+
+		if(v[i].getOutput() == "0"){
+			if (s == v[i].getExitCode()){
+				v[i].setResult("PASS");
+			}
+			else{
+				v[i].setResult("FAIL");
+			}
 		}
 		else{
-			v[i].setResult("FAIL");
+			std::string output = exec(command.c_str());
+			if(s == v[i].getExitCode() && output == v[i].getOutput()){
+				v[i].setResult("PASS");
+			}
+			else{
+				v[i].setResult("FAIL");
+			}
 		}
 
 		std::cout << v[i] << std::endl;
@@ -70,4 +82,3 @@ int main(int argc, char* argv[]){
 
 	return 0;
 }
-

@@ -29,6 +29,9 @@ void checkWrite(uint32_t addr){
 char readChar(){
 	char c;
 	c = std::getchar();
+	if(std::cin.eof()){
+		return 0xFF;
+	}
 	if(!std::cin.good()){
 		std::exit(static_cast<int>(Exception::IO));
 	}

@@ -53,7 +53,7 @@ simulator : bin/mips_simulator
 
 TIDIR = testbench/include
 TEST_DEP = testbench/src/testbench.cpp testbench/src/test.cpp testbench/src/io.cpp
-SG++_FLAGS = -w -Wall -std=c++11 -I $(TIDIR)
+SG++_FLAGS = -w -Wall -std=c++11 -O0 -g3 -I $(TIDIR)
 
 bin/testbench : $(TEST_DEP)
 	mkdir -p bin

@@ -1,5 +1,6 @@
 #include "io.hpp"
 
+
 std::string exec(const char* cmd) {
     char buffer[128];
     std::string result = "";
@@ -17,6 +18,7 @@ std::string exec(const char* cmd) {
     pclose(pipe);
     return result;
 }
+
 
 void toVector(std::ifstream& input, std::vector<Test>& v){
 
@@ -45,7 +47,7 @@ Test toTest(const std::string& line){
     //Add the last string which is the message
     temp.push_back(line.substr(initialP, (line.size() - initialP)));
     														//Convert the last par to an int
-    Test tempt(temp[0], temp[1], temp[2], temp[3], temp[4], std::stoi(temp[5]));
+    Test tempt(temp[0], temp[1], temp[2], temp[3], temp[4], std::stoi(temp[5]), temp[6]);
     return tempt;
 }
 
