@@ -64,6 +64,7 @@ int main(int argc, char* argv[]){
 		std::cout << v[i] << std::endl;
 	}
 
+	/*
 	std::ofstream output("testbench/results.csv");
 
 	if(!output.is_open()){
@@ -74,6 +75,7 @@ int main(int argc, char* argv[]){
 	}
 
 	output.close();
+	*/
 
 	//std::string output = exec((simulator + " " + testBin).c_str());
 

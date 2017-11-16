@@ -18,4 +18,6 @@ slti1,slti,vgr16,test15.mips.bin,Checking basic functionality,1,0
 slti2,slti,vgr16,test16.mips.bin,Checking for signed functionality,1,0
 lwr1,lwr,vgr16,test19.mips.bin,No message,9,0
 lwr2,lwr,vgr16,test20.mips.bin,Reading from last byte of Data Address space,245,0
-sw1,sw,cgr16,test17.mips.bin,Trying to output the character 'A',0,A
+sw1,sw,vgr16,test17.mips.bin,Trying to output the character 'A',0,A
+add1,add,vgr16,test21.mips.bin,Basic ADD test,5,0
+add2,add,vgr16,test22.mips.bin,Checking Overflow,246,0

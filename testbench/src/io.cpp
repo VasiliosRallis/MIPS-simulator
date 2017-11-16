@@ -1,22 +1,20 @@
 #include "io.hpp"
 
-
 std::string exec(const char* cmd) {
-    char buffer[128];
-    std::string result = "";
+    char buffer[64];
     FILE* pipe = popen(cmd, "r");
-    if (!pipe) throw std::runtime_error("popen() failed!");
-    try {
-        while (!feof(pipe)) {
-            if (fgets(buffer, 128, pipe) != NULL)
-                result += buffer;
-        }
-    } catch (...) {
-        pclose(pipe);
-        throw;
+    std::string output = "";
+    if (!pipe){
+    	std:exit(1);
     }
+    else{
+    	while(fgets(buffer, sizeof(buffer), pipe) != NULL){
+    		output += buffer;
+    	}
+    }
+
     pclose(pipe);
-    return result;
+    return output;
 }
 
 
@@ -51,8 +49,10 @@ Test toTest(const std::string& line){
     return tempt;
 }
 
+/*
 void toCSV(std::ofstream& output, const std::vector<Test>& v){
 	for(int i(0); i < v.size(); i++){
 		output << v[i].getId() << "," << v[i].getInstruction() << "," << v[i].getResult() << "," << v[i].getAuthor() << "," << v[i].getMessage() << std::endl;
 	}
 }
+*/

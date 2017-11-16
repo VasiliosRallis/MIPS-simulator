@@ -17,4 +17,6 @@ slti1,slti,PASS,vgr16,Checking basic functionality
 slti2,slti,PASS,vgr16,Checking for signed functionality
 lwr1,lwr,PASS,vgr16,No message
 lwr2,lwr,PASS,vgr16,Reading from last byte of Data Address space
-sw1,sw,PASS,cgr16,Trying to output the character 'A'
+sw1,sw,PASS,vgr16,Trying to output the character 'A'
+add1,add,PASS,vgr16,Basic ADD test
+add2,add,FAIL,vgr16,Checking Overflow
