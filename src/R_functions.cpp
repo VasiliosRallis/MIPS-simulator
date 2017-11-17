@@ -4,84 +4,84 @@ using namespace std;
 void r_type(State& mips_state){
 
 	int32_t instr = mips_state.ram[mips_state.pc];
-	uint32_t funct_field = instr & 0x0000003F;
-	uint32_t shamt_field = (instr & 0x000007C0) >> 6;
-	uint32_t rd = (instr & 0x0000F800) >> 11;
-	uint32_t rt = (instr & 0x001F0000) >> 16; 
-	uint32_t rs = (instr & 0x03E00000) >> 21; 
+	int32_t funct_field = instr & 0x0000003F;
+	int32_t shamt_field = (instr & 0x000007C0) >> 6;
+	int32_t rd = (instr & 0x0000F800) >> 11;
+	int32_t rt = (instr & 0x001F0000) >> 16; 
+	int32_t rs = (instr & 0x03E00000) >> 21; 
 	
 	switch(funct_field){
 	case 0x00000020:
-			add(mips_state, rs, rt, rd); 
+			add(mips_state, rs, rt, rd); //checked
 			break;			
 	case 0x00000021:
-			addu(mips_state, rs, rt, rd);
+			addu(mips_state, rs, rt, rd); //checked
 			break;
 	case 0x00000024:
-			And(mips_state, rs, rt, rd);
+			And(mips_state, rs, rt, rd); //checked
 			break;
 	case 0x00000008:
-			jr(mips_state,rs);
+			jr(mips_state,rs); //checked
 			break;
 	case 0x00000027:
-			nor(mips_state, rs, rt, rd);
+			nor(mips_state, rs, rt, rd); //checked
 			break;
 	case 0x00000025:
-			Or(mips_state, rs, rt, rd);
+			Or(mips_state, rs, rt, rd); //checked
 			break;
 	case 0x0000002A:
-			slt(mips_state, rs, rt, rd);
+			slt(mips_state, rs, rt, rd); //checked
 			break;
 	case 0x0000002B:
-			sltu(mips_state, rs, rt, rd);
+			sltu(mips_state, rs, rt, rd); //checked
 			break;
 	case 0x00000000:
-			sll(mips_state, rt, shamt_field, rd);
+			sll(mips_state, rt, shamt_field, rd); //checked
 			break;
 	case 0x00000002:
-			srl(mips_state, rt, shamt_field, rd);
+			srl(mips_state, rt, shamt_field, rd); //checked
 			break;
 	case 0x00000022:
-			sub(mips_state, rs, rt, rd); 
+			sub(mips_state, rs, rt, rd); //checked
 			break;
 	case 0x00000023:
-			subu(mips_state, rs, rt, rd);
+			subu(mips_state, rs, rt, rd); //checked
 			break;
 	case 0x0000001A:
-			div(mips_state, rt, rs);
+			div(mips_state, rt, rs); // doesnt enter the function
 			break;
 	case 0x0000001B:
-			divu(mips_state, rt, rs);
+			divu(mips_state, rt, rs); // doesnt enter the function
 			break;
 	case 0x00000010:
-			mfhi(mips_state, rd);
+			mfhi(mips_state, rd); // fails
 			break;
 	case 0x00000012:
-			mflo(mips_state, rd);
+			mflo(mips_state, rd); // fails
 			break;
 	case 0x00000018:
-			mult(mips_state, rt, rs);
+			mult(mips_state, rt, rs); // checked
 			break;
 	case 0x00000019:
-			multu(mips_state, rt, rs);
+			multu(mips_state, rt, rs); //checked
 			break;
 	case 0x00000003:
-			sra(mips_state, rt, shamt_field, rd);
+			sra(mips_state, rt, shamt_field, rd); //checked
 			break;
 	case 0x00000011:
-			mthi(mips_state,rs);
+			mthi(mips_state,rs); //fails
 			break;
 	case 0x00000013:
-			mtlo(mips_state,rs);
+			mtlo(mips_state,rs); //fails
 			break;
 	case 0x00000004:
-			sllv(mips_state,rt,rs,rd);
+			sllv(mips_state,rt,rs,rd); //checked
 			break;
 	case 0x00000007:
-			srav(mips_state,rt,rs,rd);
+			srav(mips_state,rt,rs,rd); //checked
 			break;
 	case 0x00000006:
-			srlv(mips_state,rt,rs,rd);
+			srlv(mips_state,rt,rs,rd); //checked
 			break;
 	default:
 			std::exit(static_cast<int>(Exception::INSTRUCTION));
@@ -89,21 +89,22 @@ void r_type(State& mips_state){
 	}
 }
 
-void add(State& mips_state, uint32_t rs, uint32_t rt, uint32_t rd){
-	 int32_t temp1 = mips_state.reg[rs];
-	 int32_t temp2 = mips_state.reg[rt];
-	 if (((temp1 < 0 ) && (temp2 < 0) && (temp1 + temp2 > 0)) || ((temp1 > 0) && (temp2 > 0) && (temp1 + temp2 < 0))){
+void add(State& mips_state, int32_t rs, int32_t rt, int32_t rd){
+	 rs = mips_state.reg[rs];
+	 rt = mips_state.reg[rt];
+	 int32_t result = rs + rt;
+	 if (((rs < 0 ) && (rt < 0) && (result >= 0)) || ((rs > 0) && (rt > 0) && (result <= 0))){
 		std::exit(static_cast<int>(Exception::ARITHMETIC));
 	}
 	else {
-		mips_state.reg[rd] = temp1 + temp2;
+		mips_state.reg[rd] = rs + rt;
 	}
 
 	 ++mips_state.npc;
 }
 
 
-void addu(State& mips_state, uint32_t rs, uint32_t rt, uint32_t rd){
+void addu(State& mips_state, int32_t rs, int32_t rt, int32_t rd){
 	uint32_t  temp1 = mips_state.reg[rs];
 	uint32_t  temp2 = mips_state.reg[rt];
 	mips_state.reg[rd] = temp1+temp2 ;
@@ -111,11 +112,11 @@ void addu(State& mips_state, uint32_t rs, uint32_t rt, uint32_t rd){
 	++mips_state.npc;
 }
 
-void And(State& mips_state, uint32_t rs, uint32_t rt, uint32_t rd){
+void And(State& mips_state, int32_t rs, int32_t rt, int32_t rd){
 	mips_state.reg[rd] = mips_state.reg[rs] & mips_state.reg[rt];
 }
 
-void jr(State& mips_state, uint32_t rs){
+void jr(State& mips_state, int32_t rs){
 	if(mips_state.reg[rs] % 4 != 0){
 		std::exit(static_cast<int>(Exception::MEMORY));
 	}
@@ -124,36 +125,35 @@ void jr(State& mips_state, uint32_t rs){
 	}
 }
 
-void nor(State& mips_state, uint32_t rs, uint32_t rt, uint32_t rd){
+void nor(State& mips_state, int32_t rs, int32_t rt, int32_t rd){
 	mips_state.reg[rd] = ~(mips_state.reg[rs] | mips_state.reg[rt]);
 
 	++mips_state.npc;
 }
 
-void Or(State& mips_state, uint32_t rs, uint32_t rt, uint32_t rd){
+void Or(State& mips_state, int32_t rs, int32_t rt, int32_t rd){
 	mips_state.reg[rd] = (mips_state.reg[rs] | mips_state.reg[rt]);
 
 	++mips_state.npc;
 }
 
-void slt(State& mips_state, uint32_t rs, uint32_t rt, uint32_t rd){
+void slt(State& mips_state, int32_t rs, int32_t rt, int32_t rd){
 	int32_t temp1 = mips_state.reg[rs];
 	int32_t temp2 = mips_state.reg[rt];
-	if( (temp1 - temp2) < 0) {
-		mips_state.reg[rd] = 1;
+	if(temp1 < temp2){
+		mips_state.reg[rd] = !(temp1 < temp2);
 	}
-	else {
+	else{
 		mips_state.reg[rd] = 0;
 	}
-
 	++mips_state.npc;
 }
 
-void sltu(State& mips_state, uint32_t rs, uint32_t rt, uint32_t rd){
+void sltu(State& mips_state, int32_t rs, int32_t rt, int32_t rd){
 	uint32_t temp1 = mips_state.reg[rs];
 	uint32_t temp2 = mips_state.reg[rt];
-	if(temp1 < temp2) {
-		mips_state.reg[rd] = 1;
+	if((0|temp1) < (0|temp2)) {
+		mips_state.reg[rd] = ((0|temp1) < (0|temp2)) | 1;
 	}
 	else {
 		mips_state.reg[rd] = 0;
@@ -162,33 +162,34 @@ void sltu(State& mips_state, uint32_t rs, uint32_t rt, uint32_t rd){
 	++mips_state.npc;
 }
 
-void sll(State& mips_state, uint32_t rt, uint32_t shamt_field, uint32_t rd){
+void sll(State& mips_state, int32_t rt, int32_t shamt_field, int32_t rd){
 	mips_state.reg[rd] = (mips_state.reg[rt] << shamt_field);
 
 	++mips_state.npc;
 }
 
-void srl(State& mips_state, uint32_t rt, uint32_t shamt_field, uint32_t rd){
+void srl(State& mips_state, int32_t rt, int32_t shamt_field, int32_t rd){
 	uint32_t result = mips_state.reg[rt];
 	mips_state.reg[rd] = (result >> shamt_field);
 
 	++mips_state.npc;
 }
 
-void sub(State& mips_state, uint32_t rs, uint32_t rt, uint32_t rd){
-	int32_t temp1 = mips_state.reg[rs];
-	int32_t temp2 = mips_state.reg[rt];
-	if(((temp1 - temp2) < temp1) != (temp2 > 0)){
+void sub(State& mips_state, int32_t rs, int32_t rt, int32_t rd){
+	rs = mips_state.reg[rs];
+	rt = mips_state.reg[rt];
+	int32_t result = rs - rt;
+	if (((rs < 0 ) && (rt > 0) && (result >= 0)) || ((rs > 0) && (rt < 0) && (result <= 0))){
 		std::exit(static_cast<int>(Exception::ARITHMETIC));
 	}
 	else {
-		mips_state.reg[rd] =  temp1-temp2;
+		mips_state.reg[rd] =  rs - rt;
 	}
 
 	++mips_state.npc;
 }
 
-void subu(State& mips_state, uint32_t rs, uint32_t rt, uint32_t rd){
+void subu(State& mips_state, int32_t rs, int32_t rt, int32_t rd){
 	uint32_t temp1 = mips_state.reg[rs];
 	uint32_t temp2 = mips_state.reg[rt];
 	mips_state.reg[rd] =  temp1 - temp2;
@@ -196,23 +197,25 @@ void subu(State& mips_state, uint32_t rs, uint32_t rt, uint32_t rd){
 	++mips_state.npc;
 }
 
-void div(State& mips_state, uint32_t rt, uint32_t rs){
-	int32_t temp1 = mips_state.reg[rs];
-	int32_t temp2 = mips_state.reg[rt];
+void div(State& mips_state, int32_t rt, int32_t rs){
+	rs = mips_state.reg[rs];
+	rt = mips_state.reg[rt];
 	//Dividing by zero shouldn't do anything
-	if(temp2 == 0){
+	if(rt == 0){
+		++mips_state.npc;
 		return;
 	}
-	mips_state.Hi = temp1 % temp2;
-	mips_state.Lo = temp1 / temp2;
+	mips_state.Hi = rs % rt;
+	mips_state.Lo = rs / rt;
 
 	++mips_state.npc;
 }
 
-void divu(State& mips_state, uint32_t rt, uint32_t rs){
+void divu(State& mips_state, int32_t rt, int32_t rs){
 	uint32_t temp1 = mips_state.reg[rs];
 	uint32_t temp2 = mips_state.reg[rt];
 	if(temp2 == 0){
+		++mips_state.npc;
 		return;
 	}
 
@@ -222,29 +225,29 @@ void divu(State& mips_state, uint32_t rt, uint32_t rs){
 	++mips_state.npc;
 }
 
-void mfhi(State& mips_state, uint32_t rd){
+void mfhi(State& mips_state, int32_t rd){
 	mips_state.reg[rd] = mips_state.Hi;
 
 	++mips_state.npc;
 }
 
-void mflo(State& mips_state, uint32_t rd){
+void mflo(State& mips_state, int32_t rd){
 	mips_state.reg[rd] = mips_state.Lo;
 
 	++mips_state.npc;
 }
 
-void mult(State& mips_state, uint32_t rt, uint32_t rs){
-	int32_t temp1 = mips_state.reg[rs];
-	int32_t temp2 = mips_state.reg[rt];
-	int64_t result  = temp1 * temp2;
+void mult(State& mips_state, int32_t rt, int32_t rs){
+	rs = mips_state.reg[rs];
+	rt = mips_state.reg[rt];
+	int64_t result  = rs * rt;
 	mips_state.Hi = (result >> 32);
 	mips_state.Lo = (result << 32) >> 32;
 
 	++mips_state.npc;
 }
 
-void multu(State& mips_state, uint32_t rt, uint32_t rs){
+void multu(State& mips_state, int32_t rt, int32_t rs){
 	uint32_t temp1 = mips_state.reg[rs];
 	uint32_t temp2 = mips_state.reg[rt];
 	uint64_t result = temp1 * temp2;
@@ -254,38 +257,37 @@ void multu(State& mips_state, uint32_t rt, uint32_t rs){
 	++mips_state.npc;
 }
 
-void sra(State& mips_state, uint32_t rt, uint32_t shamt_field, uint32_t rd){
-	int32_t result = mips_state.reg[rt];
-	mips_state.reg[rd] = (result >> shamt_field);
-
+void sra(State& mips_state, int32_t rt, int32_t shamt_field, int32_t rd){
+	rt = mips_state.reg[rt];
+	mips_state.reg[rd] = (rt >> shamt_field);
 	++mips_state.npc;
 }
 
-void mthi(State& mips_state,uint32_t rs){
+void mthi(State& mips_state,int32_t rs){
 	mips_state.Hi = mips_state.reg[rs];
 
 	++mips_state.npc;
 }
 
-void mtlo(State& mips_state,uint32_t rs){
+void mtlo(State& mips_state,int32_t rs){
 	mips_state.Lo = mips_state.reg[rs];
 
 	++mips_state.npc;
 }
 
-void sllv(State& mips_state,uint32_t rt,uint32_t rs, uint32_t rd){
+void sllv(State& mips_state,int32_t rt,int32_t rs, int32_t rd){
 	mips_state.reg[rd] = (mips_state.reg[rt] << mips_state.reg[rs]);
 
 	++mips_state.npc;
 }
 
-void srav(State& mips_state,uint32_t rt,uint32_t rs, uint32_t rd){
+void srav(State& mips_state,int32_t rt,int32_t rs, int32_t rd){
 	mips_state.reg[rd] = ((int32_t)mips_state.reg[rt] >> mips_state.reg[rs]);
 
 	++mips_state.npc;
 }
 
-void srlv(State& mips_state,uint32_t rt,uint32_t rs, uint32_t rd){
+void srlv(State& mips_state,int32_t rt,int32_t rs, int32_t rd){
 	uint32_t temp = mips_state.reg[rt];
 	mips_state.reg[rd]  = temp >> mips_state.reg[rs];
 
