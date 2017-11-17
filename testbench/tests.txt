@@ -20,4 +20,24 @@ lwr1,lwr,vgr16,test19.mips.bin,No message,9,0
 lwr2,lwr,vgr16,test20.mips.bin,Reading from last byte of Data Address space,245,0
 sw1,sw,vgr16,test17.mips.bin,Trying to output the character 'A',0,A
 add1,add,vgr16,test21.mips.bin,Basic ADD test,5,0
-add2,add,vgr16,test22.mips.bin,Checking Overflow,246,0
+add,add,gi316,test100.mips.bin,Checking overflow,246,0
+addu1,addu,gi316,test101.mips.bin,Checking that overflow is ignored,0,0
+and,and,gi316,test102.mips.bin,AND $2 (0xFFFFFFFF) with 0xFFFF,255,0
+nor,nor,gi316,test103.mips.bin,NOR $2 (0xFFFFFFFF) with 0,0,0
+or,or,gi316,test104.mips.bin,OR $2 (0xFFFFFFFF) with 0,255,0
+slt,slt,gi316,test105.mips.bin,see code,1,0
+sltu,sltu,gi316,test106.mips.bin, see code,0,0
+sll,sll,gi316,test107.mips.bin,multiply 1 by 128,128,0
+srl,srl,gi316,test108.mips.bin,divide 128 by 128,1,0
+sub,sub,gi316,test109.mips.bin,subtract 1-1, 0,0
+sub,sub,gi316,test110.mips.bin,subtract 0x7FFFFFFF-0xFFFFFFFF (Overflow),246,0
+subu,subu,gi316,test111.mips.bin,subtract 0x7FFFFFFF-0xFFFFFFFF (Must NOT Overflow),0,0
+div,div,gi316,test112.mips.bin,Assebler generate a Breeak instruction here...,5,0
+sra,sra,gi316,test113.mips.bin,divide -1/2^31 (Must remain -1 in $2),255,0
+mult,mult,gi316,test114.mips.bin,multiply (-1)*(1),255,0
+multu,multu,gi316,test115.mips.bin,multiply (-1)*(1),1,0
+Hi,Hi,gi316,test116.mips.bin,move a value from HI,1,0
+sllv,sllv,gi316,test117.mips.bin,see code,2,0
+srav,srav,gi316,test118.mips.bin,see code,255,0
+srlv,srlv,gi316,test119.mips.bin,see code,1,0
+j1,j,vgr16,test23.mips.bin,ADDI forllowed by JUMP,246,0

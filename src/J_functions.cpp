@@ -23,10 +23,10 @@ void j_type(State& mips_state){
 
 
 void j(State& mips_state, int32_t address){
-	mips_state.pc = ((mips_state.pc & 0x3F000000) | address);
+	mips_state.npc = ((mips_state.pc & 0x3F000000) | address);
 }
 
 void jal(State& mips_state, int32_t address){
-	mips_state.reg[31] = (mips_state.pc) + 2;
-	mips_state.pc = ((mips_state.pc & 0x3F000000) | address);
+	mips_state.reg[31] = (mips_state.npc) + 1;
+	mips_state.npc = ((mips_state.pc & 0x3F000000) | address);
 }
