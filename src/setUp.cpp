@@ -9,6 +9,7 @@ void setUp(State& s, const std::string& fileName){
 	s.reg.resize(32, 0);
 	s.Hi = 0;
 	s.Lo = 0;
+	s.reg[29] = 0x23FFFFFC; // 0x20000000 + 0x4000000 - 4
 
 	std::ifstream fileIn(fileName, std::ios::binary | std::ios::ate);
 
@@ -57,7 +58,7 @@ void memToVector(const MBlock& m, std::vector<int32_t >& v){
 }
 
 int32_t convTo32B(char* in){
-		int32_t out, temp;
+		uint32_t out(0), temp(0);
 
 		for(int i = 0; i < 4; i++){
 			out <<= 8;

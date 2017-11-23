@@ -32,7 +32,7 @@ int main(int argc, char* argv[]){
 	input.close();
 
 
-	for(int i(0); i < v.size(); i++){
+	for(unsigned int i(0); i < v.size(); i++){
 
 		std::string command = (simulator + " " + "testbench/tests/bin/" + v[i].getBin()).c_str();
 

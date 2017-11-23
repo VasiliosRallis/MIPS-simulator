@@ -111,6 +111,7 @@ void addi(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 }
 
 void addiu(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
+	//std::cout << "Did ADDI" << std::endl;
 	rs = mips_state.reg[rs];
 	mips_state.reg[rt] = rs + SignExtImm;
 
@@ -495,7 +496,7 @@ void sh(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 void sw(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 	//THINK ABOUT OVERFLOW HERE
 	uint32_t addr = SignExtImm + mips_state.reg[rs];
-	checkWrite(static_cast<int32_t>(addr / 4));
+	checkWrite(static_cast<uint32_t>(addr / 4));
 
 	if(addr % 4 != 0){
 		std::exit(static_cast<int>(Exception::MEMORY));
@@ -507,12 +508,12 @@ void sw(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 		mips_state.ram[addr / 4] = mips_state.reg[rt];
 	}
 
-
+	//std::cout << "DID SW" << std::endl;
 	++mips_state.npc;
 }
 
 void bgez(State& mips_state, int32_t rs, int32_t SignExtImm){
-	if(rs >= 0){
+	if(mips_state.reg[rs] >= 0){
 		mips_state.npc += SignExtImm;
 	}
 	else{
@@ -536,7 +537,7 @@ void bgtz(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 		std::exit(static_cast<int>(Exception::INSTRUCTION));
 	}
 	else{
-		if(rs > 0){
+		if(mips_state.reg[rs] > 0){
 			mips_state.npc += SignExtImm;
 		}
 		else{

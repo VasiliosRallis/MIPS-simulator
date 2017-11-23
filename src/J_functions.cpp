@@ -27,6 +27,6 @@ void j(State& mips_state, int32_t address){
 }
 
 void jal(State& mips_state, int32_t address){
-	mips_state.reg[31] = (mips_state.npc) + 1;
+	mips_state.reg[31] = (mips_state.npc) * 4 + 4;
 	mips_state.npc = ((mips_state.pc & 0x3F000000) | address);
 }

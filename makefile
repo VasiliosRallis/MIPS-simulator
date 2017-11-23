@@ -5,11 +5,16 @@ MIPS_CC = mips-linux-gnu-gcc
 MIPS_OBJCOPY = mips-linux-gnu-objcopy
 
 # Turn on all warnings, and enable optimisations
-MIPS_CPPFLAGS = -W -Wall -O3 -fno-builtin
+MIPS_CPPFLAGS = -W -Wall -O0 -fno-builtin -march=mips1 -mfp32
 
 # Avoid standard libraries etc. being brought in, and link statically
 MIPS_LDFLAGS = -nostdlib -Wl,-melf32btsmip -march=mips1 -nostartfiles -mno-check-zero-division -Wl,--gpsize=0 -static -Wl,-Bstatic
-MIPS_LDFLAGS += -Wl,--build-id=none
+MIPS_LDFLAGS += -Wl,--build-id=none -fno-stack-protector
+
+
+# Compile a s file into a c file (added by vgr16)
+%.mips.s : %.c
+	$(MIPS_CC) $(MIPS_CPPFLAGS) -S $< -o $@
 
 # Compile a c file into a MIPS object file
 %.mips.o : %.c
@@ -37,7 +42,7 @@ MIPS_LDFLAGS += -Wl,--build-id=none
 
 IDIR = include
 SIM_DEP = src/main.cpp src/setUp.cpp src/R_functions.cpp src/error.cpp src/J_functions.cpp src/I_functions.cpp
-G++_FLAGS = -w -Wall -std=c++11 -I $(IDIR)
+G++_FLAGS = -Wall -std=c++11 -O1 -I $(IDIR)
 
 # Build the simulation binary
 bin/mips_simulator : $(SIM_DEP)
@@ -53,7 +58,7 @@ simulator : bin/mips_simulator
 
 TIDIR = testbench/include
 TEST_DEP = testbench/src/testbench.cpp testbench/src/test.cpp testbench/src/io.cpp
-SG++_FLAGS = -w -Wall -std=c++11 -O0 -g3 -I $(TIDIR)
+SG++_FLAGS = -Wall -std=c++11 -O1 -I $(TIDIR)
 
 bin/testbench : $(TEST_DEP)
 	mkdir -p bin

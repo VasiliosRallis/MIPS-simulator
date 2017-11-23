@@ -5,7 +5,7 @@ std::string exec(const char* cmd) {
     FILE* pipe = popen(cmd, "r");
     std::string output = "";
     if (!pipe){
-    	std:exit(1);
+    	std::exit(1);
     }
     else{
     	while(fgets(buffer, sizeof(buffer), pipe) != NULL){

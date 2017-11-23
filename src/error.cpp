@@ -3,7 +3,7 @@
 
 void checkExec(const std::vector<int32_t>& reg, uint32_t addr){
 	if(((addr < ADDR_INSTR) || (addr > (ADDR_INSTR + ADDR_INSTR_L - 1))) && (addr != ADDR_NULL)){
-		std::exit(-11);
+		std::exit(static_cast<int>(Exception::MEMORY));
 	}
 	if(addr == ADDR_NULL){
 		int32_t out = reg[2] & 0x000000FF;

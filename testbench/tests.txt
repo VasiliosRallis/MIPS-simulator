@@ -41,3 +41,4 @@ sllv,sllv,gi316,test117.mips.bin,see code,2,0
 srav,srav,gi316,test118.mips.bin,see code,255,0
 srlv,srlv,gi316,test119.mips.bin,see code,1,0
 j1,j,vgr16,test23.mips.bin,ADDI forllowed by JUMP,246,0
+fact(5),stack,vgr16,test24.mips.bin,C test that calculates 5! recursively,120,0
