@@ -171,7 +171,6 @@ void lbu(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 	//THINK ABOUT OVERLFOW HERE
 	uint32_t addr = SignExtImm + mips_state.reg[rs];
 	checkRead(static_cast<int>(addr / 4));
-	int32_t temp;
 
 	if((addr / 4) == ADDR_GETC){
 		if((addr % 4) != 3){
@@ -191,18 +190,18 @@ void lbu(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 	}
 
 
-	if(addr % 4 != 0){
-		temp = mips_state.ram[static_cast<int>(addr / 4)];
-		temp = temp << (8 * (addr % 4));
-		temp = temp >> 24;
+	switch(addr % 4){
+		case 0: mips_state.reg[rt] = ((mips_state.ram[static_cast<int>(addr /4)] & 0xFF000000) >> 24) & 0x000000FF;
+				break;
+		case 1: mips_state.reg[rt] = (mips_state.ram[static_cast<int>(addr /4)] & 0x00FF0000) >> 16;
+				break;
+		case 2: mips_state.reg[rt] = (mips_state.ram[static_cast<int>(addr /4)] & 0x0000FF00) >> 8;
+				break;
+		case 3: mips_state.reg[rt] = (mips_state.ram[static_cast<int>(addr /4)] & 0x000000FF);
+				break;
+		default: break;
 	}
-	else{
 
-		temp = mips_state.ram[addr / 4];
-		temp = temp >> 24;
-	}
-
-	mips_state.reg[rt] = temp;
 	++mips_state.npc;
 
 }
@@ -211,7 +210,6 @@ void lb(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 	//THINK ABOUT OVERLFOW HERE
 	uint32_t addr = SignExtImm + mips_state.reg[rs];
 	checkRead(static_cast<int>(addr / 4));
-	int32_t temp;
 
 	if((addr / 4) == ADDR_GETC){
 		if((addr % 4) != 3){
@@ -230,21 +228,22 @@ void lb(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 		}
 	}
 
-	if(addr % 4 != 0){
-		temp = mips_state.ram[static_cast<int>(addr / 4)];
-		temp = temp << (8 * (addr % 4));
-		temp = temp >> 24;
-	}
-	else{
-		temp = mips_state.ram[addr / 4];
-		temp = temp >> 24;
-	}
-
-	if(temp >> 7){
-		temp = temp | 0xFFFFFF00;
+	switch(addr % 4){
+		case 0: mips_state.reg[rt] = ((mips_state.ram[static_cast<int>(addr /4)] & 0xFF000000) >> 24) & 0x000000FF;
+				break;
+		case 1: mips_state.reg[rt] = (mips_state.ram[static_cast<int>(addr / 4)] & 0x00FF0000) >> 16;
+				break;
+		case 2: mips_state.reg[rt] = (mips_state.ram[static_cast<int>(addr / 4)] & 0x0000FF00) >> 8;
+				break;
+		case 3: mips_state.reg[rt] = (mips_state.ram[static_cast<int>(addr / 4)] & 0x000000FF);
+				break;
+		default: break;
 	}
 
-	mips_state.reg[rt] = temp;
+	if(mips_state.reg[rt] >> 7 == 1){
+		mips_state.reg[rt] = mips_state.reg[rt] | 0xFFFFFF00;
+	}
+
 	++mips_state.npc;
 
 }
@@ -253,7 +252,6 @@ void lhu(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 	//THINK ABOUT OVERLFOW HERE
 	uint32_t addr = SignExtImm + mips_state.reg[rs];
 	checkRead(static_cast<int>(addr / 4));
-	int32_t temp;
 
 	if((addr / 4) == ADDR_GETC){
 		if((addr % 4) != 2){
@@ -276,18 +274,13 @@ void lhu(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 		std::exit(static_cast<int>(Exception::MEMORY));
 	}
 	else{
-		if(addr % 4 != 0){
-			temp = mips_state.ram[static_cast<int>(addr / 4)];
-			temp = temp << (8 * (addr % 4));
-			temp = temp >> 16;
+		switch(addr % 2){
+			case 0: mips_state.reg[rt] = ((mips_state.ram[static_cast<int>(addr / 4)] & 0xFFFF0000) >> 16) & 0x0000FFFF;
+					break;
+			case 1: mips_state.reg[rt] = (mips_state.ram[static_cast<int>(addr / 4)] & 0x0000FFFF);
+					break;
 		}
-		else{
-			temp = mips_state.ram[addr / 4];
-			temp = temp >> 16;
-		}
-		mips_state.reg[rt] = temp;
 	}
-
 	++mips_state.npc;
 }
 	
@@ -295,7 +288,6 @@ void lh(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 	//THINK ABOUT OVERLFOW HERE
 	uint32_t addr = SignExtImm + mips_state.reg[rs];
 	checkRead(static_cast<int>(addr / 4));
-	int32_t temp;
 
 	if((addr / 4) == ADDR_GETC){
 		if((addr % 4) != 2){
@@ -318,21 +310,15 @@ void lh(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 		std::exit(static_cast<int>(Exception::MEMORY));
 	}
 	else{
-		if(addr % 4 != 0){
-			temp = mips_state.ram[static_cast<int>(addr / 4)];
-			temp = temp << (8 * (addr % 4));
-			temp = temp >> 16;
+		switch(addr % 2){
+			case 0: mips_state.reg[rt] = ((mips_state.ram[static_cast<int>(addr / 4)] & 0xFFFF0000) >> 16) & 0x0000FFFF;
+					break;
+			case 1: mips_state.reg[rt] = (mips_state.ram[static_cast<int>(addr / 4)] & 0x0000FFFF);
+					break;
 		}
-		else{
-			temp = mips_state.ram[addr / 4];
-			temp = temp >> 16;
+		if(mips_state.reg[rt] >> 15 == 1){
+			mips_state.reg[rt] = mips_state.reg[rt] | 0xFFFF0000;
 		}
-
-		if(temp >> 15){
-			temp = temp | 0xFFFF0000;
-		}
-
-		mips_state.reg[rt] = temp;
 	}
 
 	++mips_state.npc;
@@ -382,23 +368,29 @@ void lw(State& mips_state , int32_t rs, int32_t rt, int32_t SignExtImm){
 
 void lwl(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 	//Haven't implemented readChar() for this instruction yet;
-	uint32_t word, temp;
 	uint32_t addr = SignExtImm + mips_state.reg[rs];
+	uint32_t temp1(0);
+	uint32_t temp2(0);
 
 	checkRead(addr / 4);
 	checkRead((addr + 3) / 4);
 
-	if(addr % 4 != 0){
-		temp = mips_state.ram[static_cast<int>(addr / 4)];
-		temp = temp << 8 * (addr % 4);
-		word = temp | (mips_state.ram[static_cast<int>(addr / 4) + 1] >> (8 * (addr % 4)));
+	switch(addr % 4){
+		case 0: temp1 = mips_state.ram[static_cast<int>(addr / 4)] & 0xFFFF0000;
+				mips_state.reg[rt] = (mips_state.reg[rt] & 0x0000FFFF) | temp1;
+				break;
+		case 1: temp1 = mips_state.ram[static_cast<int>(addr / 4)] & 0x00FFFF00;
+				mips_state.reg[rt] = (mips_state.reg[rt] & 0x0000FFFF) | (temp1 << 8);
+				break;
+		case 2: temp1 = mips_state.ram[static_cast<int>(addr / 4)] & 0x0000FFFF;
+				mips_state.reg[rt] = (mips_state.reg[rt] & 0x0000FFFF) | (temp1 << 16);
+				break;
+		case 3: temp1 = mips_state.ram[static_cast<int>(addr / 4)] & 0x000000FF;
+				temp2 = mips_state.ram[static_cast<int>(addr / 4) + 1] & 0XFF000000;
+				mips_state.reg[rt] = ((mips_state.reg[rt] & 0x0000FFFF) | temp1 << 24) | temp2 >> 8;
+				break;
+		default: break;
 	}
-	else{
-		word = mips_state.ram[static_cast<int>(addr / 4)];
-	}
-
-	mips_state.reg[rt] = mips_state.reg[rt] & 0x0000FFFF;
-	mips_state.reg[rt] = mips_state.reg[rt] | (word & 0xFFFF0000);
 
 	++mips_state.npc;
 
@@ -406,23 +398,30 @@ void lwl(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 
 void lwr(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 	//Haven't implemented readChar() for this instruction yet;
-	uint32_t word, temp;
 	uint32_t addr = SignExtImm + mips_state.reg[rs];
+	uint32_t temp1(0);
+	uint32_t temp2(0);
 
 	checkRead(addr / 4);
 	checkRead((addr + 3) / 4);
 
-	if(addr % 4 != 0){
-		temp = mips_state.ram[static_cast<int>(addr / 4)];
-		temp = temp << 8 * (addr % 4);
-		word = temp | (mips_state.ram[static_cast<int>(addr / 4) + 1] >> (8 * (addr % 4)));
+	switch(addr % 4){
+		case 0: temp1 = mips_state.ram[static_cast<int>(addr / 4)] & 0x0000FFFF;
+				mips_state.reg[rt] = (mips_state.reg[rt] & 0xFFFF0000) | temp1;
+				break;
+		case 1: temp1 = mips_state.ram[static_cast<int>(addr / 4)] & 0x000000FF;
+				temp2 = mips_state.ram[static_cast<int>(addr / 4) + 1] & 0xFF000000;
+				mips_state.reg[rt] = (mips_state.reg[rt] & 0xFFFF0000) | (temp1 << 8);
+				mips_state.reg[rt] = (mips_state.reg[rt] & 0xFFFF0000) | (temp2 >> 16);
+				break;
+		case 2: temp1 = mips_state.ram[static_cast<int>(addr / 4) + 1] & 0xFFFF0000;
+				mips_state.reg[rt] = (mips_state.reg[rt] & 0xFFFF0000) | (temp1 >> 16);
+				break;
+		case 3: temp1 = mips_state.ram[static_cast<int>(addr / 4) + 1] & 0x00FFFF00;
+				mips_state.reg[rt] = ((mips_state.reg[rt] & 0xFFFF0000) | temp1 >> 8);
+				break;
+		default: break;
 	}
-	else{
-		word = mips_state.ram[static_cast<int>(addr / 4)];
-	}
-
-	mips_state.reg[rt] = mips_state.reg[rt] & 0xFFFF0000;
-	mips_state.reg[rt] = mips_state.reg[rt] | (word & 0x0000FFFF);
 
 	++mips_state.npc;
 
@@ -478,10 +477,20 @@ void sb(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 	}
 
 	int32_t temp = mips_state.reg[rt] & 0x000000FF;
-	temp = temp << 24;
 
-	mips_state.ram[static_cast<int>(addr / 4)] = mips_state.ram[static_cast<int>(addr / 4)] & (0x00FFFFFF >> (8 * (addr % 4)));
-	mips_state.ram[static_cast<int>(addr / 4)] = mips_state.ram[static_cast<int>(addr / 4)] | (temp >> (8 * (addr % 4)));
+	//Brute force cause algorithm was hard
+	uint32_t index = addr % 4;
+	switch(index){
+		case 0: mips_state.ram[static_cast<int>(addr / 4)] = (mips_state.ram[static_cast<int>(addr / 4)] & 0x00FFFFFF) | (temp << 24);
+				break;
+		case 1: mips_state.ram[static_cast<int>(addr / 4)] = (mips_state.ram[static_cast<int>(addr / 4)] & 0xFF00FFFF) | (temp << 16);
+				break;
+		case 2: mips_state.ram[static_cast<int>(addr / 4)] = (mips_state.ram[static_cast<int>(addr / 4)] & 0xFFFF00FF) | (temp << 8);
+				break;
+		case 3: mips_state.ram[static_cast<int>(addr / 4)] = (mips_state.ram[static_cast<int>(addr / 4)] & 0xFFFFFF00) | temp;
+				break;
+		default: break;
+	}
 
 	++mips_state.npc;
 }
@@ -506,12 +515,13 @@ void sh(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 	}
 
 	else{
-		int32_t temp = mips_state.reg[rt] & 0x0000FFFF;
-		temp = temp << 16;
 
-		mips_state.ram[static_cast<int>(addr / 4)] = mips_state.ram[static_cast<int>(addr / 4)] & (0x0000FFFF >> (8 * (addr % 4)));
-		mips_state.ram[static_cast<int>(addr / 4)] = mips_state.ram[static_cast<int>(addr / 4)] | (temp >> (8 * (addr % 4)));
-
+		switch(addr % 2){
+			case 0: mips_state.ram[static_cast<int>(addr / 4)] = (mips_state.reg[rt] & 0x0000FFFF) << 16;
+					break;
+			case 1: mips_state.ram[static_cast<int>(addr / 4)] = mips_state.reg[rt] & 0x0000FFFF;
+					break;
+		}
 	}
 
 	++mips_state.npc;

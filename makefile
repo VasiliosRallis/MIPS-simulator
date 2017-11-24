@@ -5,11 +5,11 @@ MIPS_CC = mips-linux-gnu-gcc
 MIPS_OBJCOPY = mips-linux-gnu-objcopy
 
 # Turn on all warnings, and enable optimisations
-MIPS_CPPFLAGS = -W -Wall -O0 -fno-builtin -march=mips1 -mfp32
+MIPS_CPPFLAGS = -W -Wall -O0 -fno-builtin -march=mips1 -mfp32 -fno-stack-protector
 
 # Avoid standard libraries etc. being brought in, and link statically
 MIPS_LDFLAGS = -nostdlib -Wl,-melf32btsmip -march=mips1 -nostartfiles -mno-check-zero-division -Wl,--gpsize=0 -static -Wl,-Bstatic
-MIPS_LDFLAGS += -Wl,--build-id=none -fno-stack-protector
+MIPS_LDFLAGS += -Wl,--build-id=none
 
 
 # Compile a s file into a c file (added by vgr16)
