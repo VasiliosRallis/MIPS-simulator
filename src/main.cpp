@@ -18,52 +18,35 @@ int main(int argc, char* argv[]){
 		exit(1);
 	}
 
-	string fileName = argv[1];
+	string fileName(argv[1]);
+	int32_t tempNPC;
+	bool executed;				//this flag is turned on, when an instruction of one of the 3 types has been executed
+	State mips_state;	
+	mips_state.ram.resize(MEM_SIZE);	//This will allocate memory for the whole RAM
+						//used hex so that it is easier to relate to the Specification on GitHub
 
-	State mips_state;
+	
+	setUp(mips_state, fileName);		//Passes the instructions to the vector
 
-	//This will allocate memory for the whole RAM
-	//I used hex so that it is easier to relate to the Specification on GitHub
-	mips_state.ram.resize(MEM_SIZE);
+	for(;;){
 
-	//Passes the instructions to the vector
-	setUp(mips_state, fileName);
-
-	do{
 		checkExec(mips_state.reg, mips_state.pc);
-		mips_state.reg[0] = 0;
+		mips_state.reg[0] = 0;		//register $0 must retain the value zero every new clock cycle of the processor
+		executed = false;		//every new clock cycle the flag is turned off since no instruction has yet been executed!
+		tempNPC = mips_state.npc;	//Since the instruction that will be executed will change the npc it needs to be stored
 
-		//Since the instruction that will be executed will change the npc we need to store it somewhere
-		int32_t tempNPC = mips_state.npc;
+		r_type(mips_state,executed);
+		i_type(mips_state,executed);
+		j_type(mips_state,executed);
 
-		int32_t opcode = mips_state.ram[mips_state.pc] >> 26;
-		opcode = opcode & 0x0000003F;
-
-		if(opcode == 0x00000000){
-			r_type(mips_state);
-		}
-		else if(opcode == 0x00000020 || opcode == 0x00000021 || opcode == 0x00000022 || opcode == 0x00000023 || opcode == 0x00000024 ||
-				opcode == 0x00000025 || opcode == 0x00000026 || opcode == 0x00000028 || opcode == 0x00000029 || opcode == 0x0000002B ||
-				opcode == 0x00000008 || opcode == 0x00000009 || opcode == 0x0000000A || opcode == 0x0000000B || opcode == 0x0000000C ||
-				opcode == 0x0000000D || opcode == 0x0000000E || opcode == 0x0000000F || opcode == 0x00000001 || opcode == 0x00000004 ||
-				opcode == 0x00000005 || opcode == 0x00000006 || opcode == 0x00000007){
-			i_type(mips_state);
-		}
-		else if(opcode == 0x00000002 || opcode == 0x00000003){
-			j_type(mips_state);
-		}
-		else{
+		if(!executed){			//if no instruction from the 3 types executed at this stage (ie.false), then the binary must be invalid
 			std::exit(static_cast<int>(Exception::INSTRUCTION));
+		}		
+		
+		mips_state.pc = tempNPC;	//Set the value of pc (the address of the next instruction that is going to execute) to the
+						//original value of npc
 
-		}
-
-		//Set the value of pc(the address of the next instruction that we are going to execute) to the
-		//original value of npc
-		mips_state.pc = tempNPC;
-
-
-	}while(1);
+	};
 
 	return 0;
 }
-

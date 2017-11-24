@@ -6,7 +6,7 @@
 #include "setUp.hpp"
 #include "error.hpp"
 
-void i_type(State& mips_state);
+void i_type(State& mips_state, bool& executed);
 
 void addi(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm);
 void addiu(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm);

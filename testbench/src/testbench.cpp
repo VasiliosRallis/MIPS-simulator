@@ -61,7 +61,7 @@ int main(int argc, char* argv[]){
 			}
 		}
 
-		std::cout << v[i] << std::endl;
+		std::cout << v[i] << " Actual ExitCode: " << s << std::endl;
 	}
 
 	/*

@@ -1,100 +1,124 @@
 #include "I_functions.hpp"
 using namespace std;
 
-void i_type(State& mips_state){
-	int32_t instr = mips_state.ram[mips_state.pc];
+void i_type(State& mips_state, bool& executed){
+	if(!executed){
+		int32_t instr = mips_state.ram[mips_state.pc];
 
-	int32_t opcode = (instr & 0xFC000000) >> 26;
-	int32_t rs = (instr & 0x03E00000) >> 21;
-	int32_t rt= (instr & 0x001F0000) >> 16;
-	int32_t immediate = instr & 0x0000FFFF;
+		int32_t opcode = (instr & 0xFC000000) >> 26;
+		int32_t rs = (instr & 0x03E00000) >> 21;
+		int32_t rt= (instr & 0x001F0000) >> 16;
+		int32_t immediate = instr & 0x0000FFFF;
 
-	//In our case BranchAddr = SignExtImm;
+		//In our case BranchAddr = SignExtImm;
 
-	int32_t SignExtImm;
+		int32_t SignExtImm;
 
-	if(immediate >> 15){
-		SignExtImm = immediate | 0xFFFF0000;
-	}
-	else{
-		SignExtImm = immediate;
-	}
+		if(immediate >> 15){
+			SignExtImm = immediate | 0xFFFF0000;
+		}
+		else{
+			SignExtImm = immediate;
+		}
 
-
-	switch(opcode){
-	case 0x00000008:
-		addi(mips_state, rs, rt, SignExtImm);
-		break;
-	case 0x00000009:
-		addiu(mips_state, rs, rt, SignExtImm);
-		break;
-	case 0x0000000C:
-		andi(mips_state, rs, rt, immediate);
-		break;
-	case 0x00000004:
-		beq(mips_state, rs, rt, SignExtImm);
-		break;
-	case 0x00000005:
-		bne(mips_state, rs, rt, SignExtImm);
-		break;
-	case 0x00000024:
-		lbu(mips_state, rs, rt, SignExtImm);
-		break;
-	case 0x00000020:
-		lb(mips_state, rs, rt, SignExtImm);
-		break;
-	case 0x00000025:
-		lhu(mips_state, rs, rt, SignExtImm);
-		break;
-	case 0x00000021:
-		lh(mips_state, rs, rt, SignExtImm);
-		break;
-	case 0x0000000F:
-		lui(mips_state, rs, rt, immediate);
-		break;
-	case 0x00000023:
-		lw(mips_state, rs, rt, SignExtImm);
-		break;
-	case 0x00000022:
-		lwl(mips_state, rs, rt, SignExtImm);
-		break;
-	case 0x00000026:
-		lwr(mips_state, rs, rt, SignExtImm);
-		break;
-	case 0x00000028:
-		sb(mips_state, rs, rt, SignExtImm);
-		break;
-	case 0x00000029:
-		sh(mips_state, rs, rt, SignExtImm);
-		break;
-	case 0x0000002B:
-		sw(mips_state, rs, rt, SignExtImm);
-		break;
-	case 0x0000000A:
-		slti(mips_state, rs, rt, SignExtImm);
-		break;
-	case 0x0000000B:
-		sltiu(mips_state, rs, rt, immediate);
-		break;
-	case 0x0000000E:
-		xori(mips_state, rs, rt, immediate);
-		break;
-	case 0x0000000D:
-		ori(mips_state, rs, rt, immediate);
-		break;
-	case 0x00000007:
-		bgtz(mips_state, rs, rt, SignExtImm);
-		break;
-	case 0x00000006:
-		blez(mips_state, rs, rt, SignExtImm);
-		break;
-	case 0x00000001:
-		bdecoder(mips_state, rs, rt, SignExtImm);
-		break;
-	default:
-		std::exit(static_cast<int>(Exception::INSTRUCTION));
-		break;
-	}
+ 
+		switch(opcode){
+			case 0x00000008:
+				addi(mips_state, rs, rt, SignExtImm);
+				executed = true;
+				return;
+			case 0x00000009:
+				addiu(mips_state, rs, rt, SignExtImm);
+				executed = true;
+				return;
+			case 0x0000000C:
+				andi(mips_state, rs, rt, immediate);
+				executed = true;
+				return;
+			case 0x00000004:
+				beq(mips_state, rs, rt, SignExtImm);
+				executed = true;
+				return;
+			case 0x00000005:
+				bne(mips_state, rs, rt, SignExtImm);
+				executed = true;
+				return;
+			case 0x00000024:
+				lbu(mips_state, rs, rt, SignExtImm);
+				executed = true;
+				return;
+			case 0x00000020:
+				lb(mips_state, rs, rt, SignExtImm);
+				executed = true;
+				return;
+			case 0x00000025:
+				lhu(mips_state, rs, rt, SignExtImm);
+				executed = true;
+				return;
+			case 0x00000021:
+				lh(mips_state, rs, rt, SignExtImm);
+				executed = true;
+				return;
+			case 0x0000000F:
+				lui(mips_state, rs, rt, immediate);
+				executed = true;
+				return;
+			case 0x00000023:
+				lw(mips_state, rs, rt, SignExtImm);
+				executed = true;
+				return;
+			case 0x00000022:
+				lwl(mips_state, rs, rt, SignExtImm);
+				executed = true;
+				return;
+			case 0x00000026:
+				lwr(mips_state, rs, rt, SignExtImm);
+				executed = true;
+				return;
+			case 0x00000028:
+				sb(mips_state, rs, rt, SignExtImm);
+				executed = true;
+				return;
+			case 0x00000029:
+				sh(mips_state, rs, rt, SignExtImm);
+				return;
+			case 0x0000002B:
+				sw(mips_state, rs, rt, SignExtImm);
+				executed = true;
+				return;
+			case 0x0000000A:
+				slti(mips_state, rs, rt, SignExtImm);
+				executed = true;
+				return;
+			case 0x0000000B:
+				sltiu(mips_state, rs, rt, immediate);
+				executed = true;
+				return;
+			case 0x0000000E:
+				xori(mips_state, rs, rt, immediate);
+				executed = true;
+				return;
+			case 0x0000000D:
+				ori(mips_state, rs, rt, immediate);
+				executed = true;
+				return;
+			case 0x00000007:
+				bgtz(mips_state, rs, rt, SignExtImm);
+				executed = true;
+				return;
+			case 0x00000006:
+				blez(mips_state, rs, rt, SignExtImm);
+				executed = true;
+				return;
+			case 0x00000001:
+				bdecoder(mips_state, rs, rt, SignExtImm);
+				executed = true;
+				return;
+			default:
+				executed = false;
+				return;
+		}
+	}	
 }
 
 
@@ -585,19 +609,19 @@ void bdecoder(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 	switch(rt){
 	case 0x00000001:
 		bgez(mips_state, rs, SignExtImm);
-		break;
+		return;
 	case 0x00000011:
 		bgezal(mips_state, rs, SignExtImm);
-		break;
+		return;
 	case 0x00000000:
 		bltz(mips_state, rs, SignExtImm);
-		break;
+		return;
 	case 0x00000010:
 		bltzal(mips_state, rs, SignExtImm);
-		break;
+		return;
 	default:
 		std::exit(static_cast<int>(Exception::INSTRUCTION));
-		break;
+		return;
 	}
 }
 			

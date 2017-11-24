@@ -1,91 +1,118 @@
 #include "R_functions.hpp"
 using namespace std;
 
-void r_type(State& mips_state){
+void r_type(State& mips_state, bool& executed){
 
 	int32_t instr = mips_state.ram[mips_state.pc];
+	int32_t opcode = (mips_state.ram[mips_state.pc] >> 26) & 0x0000003F;
 	int32_t funct_field = instr & 0x0000003F;
 	int32_t shamt_field = (instr & 0x000007C0) >> 6;
 	int32_t rd = (instr & 0x0000F800) >> 11;
 	int32_t rt = (instr & 0x001F0000) >> 16; 
 	int32_t rs = (instr & 0x03E00000) >> 21; 
 	
-	switch(funct_field){
-	case 0x00000020:
-			add(mips_state, rs, rt, rd); //checked
-			break;			
-	case 0x00000021:
-			addu(mips_state, rs, rt, rd); //checked
-			break;
-	case 0x00000024:
-			And(mips_state, rs, rt, rd); //checked
-			break;
-	case 0x00000008:
-			jr(mips_state,rs); //checked
-			break;
-	case 0x00000027:
-			nor(mips_state, rs, rt, rd); //checked
-			break;
-	case 0x00000025:
-			Or(mips_state, rs, rt, rd); //checked
-			break;
-	case 0x0000002A:
-			slt(mips_state, rs, rt, rd); //checked
-			break;
-	case 0x0000002B:
-			sltu(mips_state, rs, rt, rd); //checked
-			break;
-	case 0x00000000:
-			sll(mips_state, rt, shamt_field, rd); //checked
-			break;
-	case 0x00000002:
-			srl(mips_state, rt, shamt_field, rd); //checked
-			break;
-	case 0x00000022:
-			sub(mips_state, rs, rt, rd); //checked
-			break;
-	case 0x00000023:
-			subu(mips_state, rs, rt, rd); //checked
-			break;
-	case 0x0000001A:
-			div(mips_state, rt, rs); // doesnt enter the function
-			break;
-	case 0x0000001B:
-			divu(mips_state, rt, rs); // doesnt enter the function
-			break;
-	case 0x00000010:
-			mfhi(mips_state, rd); // fails
-			break;
-	case 0x00000012:
-			mflo(mips_state, rd); // fails
-			break;
-	case 0x00000018:
-			mult(mips_state, rt, rs); // checked
-			break;
-	case 0x00000019:
-			multu(mips_state, rt, rs); //checked
-			break;
-	case 0x00000003:
-			sra(mips_state, rt, shamt_field, rd); //checked
-			break;
-	case 0x00000011:
-			mthi(mips_state,rs); //fails
-			break;
-	case 0x00000013:
-			mtlo(mips_state,rs); //fails
-			break;
-	case 0x00000004:
-			sllv(mips_state,rt,rs,rd); //checked
-			break;
-	case 0x00000007:
-			srav(mips_state,rt,rs,rd); //checked
-			break;
-	case 0x00000006:
-			srlv(mips_state,rt,rs,rd); //checked
-			break;
-	default:
-			std::exit(static_cast<int>(Exception::INSTRUCTION));
-			break;
+
+	if(!executed && opcode == 0x00000000){
+		switch(funct_field){
+			case 0x00000020:
+					add(mips_state, rs, rt, rd); //checked
+					executed = true;
+					return;			
+			case 0x00000021:
+					addu(mips_state, rs, rt, rd); //checked
+					executed = true;
+					return;
+			case 0x00000024:
+					And(mips_state, rs, rt, rd); //checked
+					executed = true;
+					return;
+			case 0x00000008:
+					jr(mips_state,rs); //checked
+					executed = true;
+					return;
+			case 0x00000027:
+					nor(mips_state, rs, rt, rd); //checked
+					executed = true;
+					return;
+			case 0x00000025:
+					Or(mips_state, rs, rt, rd); //checked
+					executed = true;
+					return;
+			case 0x0000002A:
+					slt(mips_state, rs, rt, rd); //checked
+					executed = true;
+					return;
+			case 0x0000002B:
+					sltu(mips_state, rs, rt, rd); //checked
+					executed = true;
+					return;
+			case 0x00000000:
+					sll(mips_state, rt, shamt_field, rd); //checked
+					executed = true;
+					return;
+			case 0x00000002:
+					srl(mips_state, rt, shamt_field, rd); //checked
+					executed = true;
+					return;
+			case 0x00000022:
+					sub(mips_state, rs, rt, rd); //checked
+					executed = true;
+					return;
+			case 0x00000023:
+					subu(mips_state, rs, rt, rd); //checked
+					executed = true;
+					return;
+			case 0x0000001A:
+					div(mips_state, rt, rs); // doesnt enter the function
+					executed = true;
+					return;
+			case 0x0000001B:
+					divu(mips_state, rt, rs); // doesnt enter the function
+					executed = true;
+					return;
+			case 0x00000010:
+					mfhi(mips_state, rd); // fails
+					executed = true;
+					return;
+			case 0x00000012:
+					mflo(mips_state, rd); // fails
+					executed = true;
+					return;
+			case 0x00000018:
+					mult(mips_state, rt, rs); // checked
+					executed = true;
+					return;
+			case 0x00000019:
+					multu(mips_state, rt, rs); //checked
+					executed = true;
+					return;
+			case 0x00000003:
+					sra(mips_state, rt, shamt_field, rd); //checked
+					executed = true;
+					return;
+			case 0x00000011:
+					mthi(mips_state,rs); //fails
+					executed = true;
+					return;
+			case 0x00000013:
+					mtlo(mips_state,rs); //fails
+					executed = true;
+					return;
+			case 0x00000004:
+					sllv(mips_state,rt,rs,rd); //checked
+					executed = true;
+					return;
+			case 0x00000007:
+					srav(mips_state,rt,rs,rd); //checked
+					executed = true;
+					return;
+			case 0x00000006:
+					srlv(mips_state,rt,rs,rd); //checked
+					executed = true;
+					return;
+			default:
+					return;
+		}
 	}
 }
 
