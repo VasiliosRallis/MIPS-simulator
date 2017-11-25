@@ -3,11 +3,11 @@ using namespace std;
 
 void i_type(State& mips_state, bool& executed){
 	if(!executed){
-		int32_t instr = mips_state.ram[mips_state.pc];
+		uint32_t instr = mips_state.ram[mips_state.pc];
 
-		int32_t opcode = (instr & 0xFC000000) >> 26;
-		int32_t rs = (instr & 0x03E00000) >> 21;
-		int32_t rt= (instr & 0x001F0000) >> 16;
+		uint32_t opcode = (instr & 0xFC000000) >> 26;
+		uint32_t rs = (instr & 0x03E00000) >> 21;
+		uint32_t rt= (instr & 0x001F0000) >> 16;
 		int32_t immediate = instr & 0x0000FFFF;
 
 		//In our case BranchAddr = SignExtImm;
@@ -122,34 +122,34 @@ void i_type(State& mips_state, bool& executed){
 }
 
 
-void addi(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
-	rs = mips_state.reg[rs];
-	if (((rs < 0) && (SignExtImm < 0) && (rs + SignExtImm >= 0)) || ((rs > 0) && (SignExtImm > 0) && (rs + SignExtImm <= 0))){
+void addi(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
+	int32_t temp = mips_state.reg[rs];
+	if (((temp < 0) && (SignExtImm < 0) && (temp + SignExtImm >= 0)) || ((temp > 0) && (SignExtImm > 0) && (temp + SignExtImm <= 0))){
 		std::exit(static_cast<int>(Exception::ARITHMETIC));
 	}
 	else {
-		mips_state.reg[rt] = rs + SignExtImm;
+		mips_state.reg[rt] = temp + SignExtImm;
 	}
 
 	++mips_state.npc;
 }
 
-void addiu(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
+void addiu(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
 	//std::cout << "Did ADDI" << std::endl;
-	rs = mips_state.reg[rs];
-	mips_state.reg[rt] = rs + SignExtImm;
+	int32_t temp = mips_state.reg[rs];
+	mips_state.reg[rt] = temp + SignExtImm;
 
 	++mips_state.npc;
 }
 	
-void andi(State& mips_state, int32_t rs, int32_t rt, int32_t immediate){
-	rs = mips_state.reg[rs];
-	mips_state.reg[rt] = rs & immediate;
+void andi(State& mips_state, uint32_t rs, uint32_t rt, int32_t immediate){
+	int32_t temp = mips_state.reg[rs];
+	mips_state.reg[rt] = temp & immediate;
 
 	++mips_state.npc;
 }
 
-void beq(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
+void beq(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
 	if(mips_state.reg[rt] == mips_state.reg[rs]){
 		mips_state.npc += SignExtImm;
 	}
@@ -158,7 +158,7 @@ void beq(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 	}
 }
 
-void bne(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
+void bne(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
 	if(mips_state.reg[rt] != mips_state.reg[rs]){
 		mips_state.npc += SignExtImm;
 	}
@@ -167,7 +167,7 @@ void bne(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 	}
 }
 
-void lbu(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
+void lbu(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
 	//THINK ABOUT OVERLFOW HERE
 	uint32_t addr = SignExtImm + mips_state.reg[rs];
 	checkRead(static_cast<int>(addr / 4));
@@ -206,7 +206,7 @@ void lbu(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 
 }
 
-void lb(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
+void lb(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
 	//THINK ABOUT OVERLFOW HERE
 	uint32_t addr = SignExtImm + mips_state.reg[rs];
 	checkRead(static_cast<int>(addr / 4));
@@ -248,7 +248,7 @@ void lb(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 
 }
 
-void lhu(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
+void lhu(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
 	//THINK ABOUT OVERLFOW HERE
 	uint32_t addr = SignExtImm + mips_state.reg[rs];
 	checkRead(static_cast<int>(addr / 4));
@@ -284,7 +284,7 @@ void lhu(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 	++mips_state.npc;
 }
 	
-void lh(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
+/*void lh(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
 	//THINK ABOUT OVERLFOW HERE
 	uint32_t addr = SignExtImm + mips_state.reg[rs];
 	checkRead(static_cast<int>(addr / 4));
@@ -322,10 +322,58 @@ void lh(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 	}
 
 	++mips_state.npc;
+}*/
+
+void lh(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
+	//THINK ABOUT OVERLFOW HERE
+	uint32_t addr = SignExtImm + mips_state.reg[rs];
+	checkRead(static_cast<int>(addr / 4));
+	int32_t temp;
+
+	if((addr / 4) == ADDR_GETC){
+		if((addr % 4) != 2){
+			std::exit(static_cast<int>(Exception::MEMORY));
+		}
+		else{
+			char c = readChar();
+			if(c == -1){
+				mips_state.reg[rt] = 0xFFFFFFFF; //If we have EOF set rt to -1
+				return;
+			}
+			else{
+				mips_state.reg[rt] = c & 0x000000FF;
+				return;
+			}
+		}
+	}
+
+	if(addr % 2 != 0){
+		std::exit(static_cast<int>(Exception::MEMORY));
+	}
+	else{
+		if(addr % 4 != 0){
+			temp = mips_state.ram[static_cast<int>(addr / 4)];
+			temp = temp << (8 * (addr % 4));
+			temp = temp >> 16;
+		}
+		else{
+			temp = mips_state.ram[addr / 4];
+			temp = temp >> 16;
+		}
+
+		if(temp >> 15){
+			temp = temp | 0xFFFF0000;
+		}
+
+		mips_state.reg[rt] = temp;
+	}
+
+	++mips_state.npc;
 }
 
 
-void lui(State& mips_state, int32_t rs, int32_t rt, int32_t immediate){
+
+void lui(State& mips_state, uint32_t rs, uint32_t rt, int32_t immediate){
 	if(rs != 0x00000000){
 		std::exit(static_cast<int>(Exception::INSTRUCTION));
 	}
@@ -337,7 +385,7 @@ void lui(State& mips_state, int32_t rs, int32_t rt, int32_t immediate){
 	++mips_state.npc;
 }
 
-void lw(State& mips_state , int32_t rs, int32_t rt, int32_t SignExtImm){
+void lw(State& mips_state , uint32_t rs, uint32_t rt, int32_t SignExtImm){
 	//THINK ABOUT OVERFLOW HERE
 	uint32_t addr = SignExtImm + mips_state.reg[rs];
 
@@ -366,7 +414,7 @@ void lw(State& mips_state , int32_t rs, int32_t rt, int32_t SignExtImm){
 	++mips_state.npc;
 }
 
-void lwl(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
+void lwl(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
 	//Haven't implemented readChar() for this instruction yet;
 	uint32_t addr = SignExtImm + mips_state.reg[rs];
 	uint32_t temp1(0);
@@ -393,10 +441,9 @@ void lwl(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 	}
 
 	++mips_state.npc;
-
 }
 
-void lwr(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
+void lwr(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
 	//Haven't implemented readChar() for this instruction yet;
 	uint32_t addr = SignExtImm + mips_state.reg[rs];
 	uint32_t temp1(0);
@@ -427,19 +474,19 @@ void lwr(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 
 }
 
-void ori(State& mips_state, int32_t rs, int32_t rt, int32_t immediate){
+void ori(State& mips_state, uint32_t rs, uint32_t rt, int32_t immediate){
 	mips_state.reg[rt] = mips_state.reg[rs] | immediate;
 
 	++mips_state.npc;
 }
 
-void xori(State& mips_state, int32_t rs, int32_t rt, int32_t immediate){
+void xori(State& mips_state, uint32_t rs, uint32_t rt, int32_t immediate){
 	mips_state.reg[rt] = mips_state.reg[rs] ^ immediate;
 
 	++mips_state.npc;
 }
 
-void slti(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
+void slti(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
 	if(mips_state.reg[rs] < SignExtImm){
 		mips_state.reg[rt] = 1;
 	}
@@ -450,7 +497,7 @@ void slti(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 	++mips_state.npc;
 }
 
-void sltiu(State& mips_state, int32_t rs, int32_t rt, int32_t immediate){
+void sltiu(State& mips_state, uint32_t rs, uint32_t rt, int32_t immediate){
 	if(mips_state.reg[rs] < immediate){
 		mips_state.reg[rt] = 1;
 	}
@@ -461,7 +508,7 @@ void sltiu(State& mips_state, int32_t rs, int32_t rt, int32_t immediate){
 	++mips_state.npc;
 }
 
-void sb(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
+void sb(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
 	//THINK ABOUT OVERLFOW HERE
 	uint32_t addr = SignExtImm + mips_state.reg[rs];
 	checkWrite(static_cast<uint32_t>(addr / 4));
@@ -495,7 +542,7 @@ void sb(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 	++mips_state.npc;
 }
 
-void sh(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
+void sh(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
 	//THINK ABOUT OVERLFOW HERE
 	uint32_t addr = SignExtImm + mips_state.reg[rs];
 	checkWrite(static_cast<uint32_t>(addr / 4));
@@ -527,7 +574,7 @@ void sh(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 	++mips_state.npc;
 }
 
-void sw(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
+void sw(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
 	//THINK ABOUT OVERFLOW HERE
 	uint32_t addr = SignExtImm + mips_state.reg[rs];
 	checkWrite(static_cast<uint32_t>(addr / 4));
@@ -546,7 +593,7 @@ void sw(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 	++mips_state.npc;
 }
 
-void bgez(State& mips_state, int32_t rs, int32_t SignExtImm){
+void bgez(State& mips_state, uint32_t rs, int32_t SignExtImm){
 	if(mips_state.reg[rs] >= 0){
 		mips_state.npc += SignExtImm;
 	}
@@ -555,8 +602,9 @@ void bgez(State& mips_state, int32_t rs, int32_t SignExtImm){
 	}
 }
 
-void bgezal(State& mips_state, int32_t rs, int32_t SignExtImm){
-	if(rs >= 0){
+void bgezal(State& mips_state, uint32_t rs, int32_t SignExtImm){
+	int32_t temp = rs;
+	if(temp >= 0){
 		//We have to give the REAL Address here (i.e. multiple "our" address by 4 and add 8)
 		mips_state.reg[31] = (mips_state.pc * 4) + 8;
 		mips_state.npc += SignExtImm;
@@ -566,7 +614,7 @@ void bgezal(State& mips_state, int32_t rs, int32_t SignExtImm){
 	}
 }
 
-void bgtz(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
+void bgtz(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
 	if(rt != 0x00000000){
 		std::exit(static_cast<int>(Exception::INSTRUCTION));
 	}
@@ -580,13 +628,14 @@ void bgtz(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 	}
 }
 
-void blez(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
+void blez(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
+	int32_t temp = rs;
 	if(rt != 0){
 		std::exit(static_cast<int>(Exception::INSTRUCTION));
 	}
 
 	else{
-		if(rs <= 0x00000000){
+		if(temp <= 0x00000000){
 			mips_state.pc += SignExtImm;
 		}
 		else{
@@ -595,8 +644,9 @@ void blez(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 	}
 }
 
-void bltz(State& mips_state, int32_t rs, int32_t SignExtImm){
-	if(rs < 0){
+void bltz(State& mips_state, uint32_t rs, int32_t SignExtImm){
+	int32_t temp = rs;
+	if(temp < 0){
 		mips_state.pc += SignExtImm;
 	}
 	else{
@@ -604,9 +654,9 @@ void bltz(State& mips_state, int32_t rs, int32_t SignExtImm){
 	}
 }
 
-void bltzal(State& mips_state, int32_t rs, int32_t SignExtImm){
-
-	if(rs < 0){
+void bltzal(State& mips_state, uint32_t rs, int32_t SignExtImm){
+	int32_t temp = rs;
+	if(temp < 0){
 		mips_state.reg[31] = (mips_state.pc * 4) + 8;
 		mips_state.npc += SignExtImm;
 	}
@@ -615,7 +665,7 @@ void bltzal(State& mips_state, int32_t rs, int32_t SignExtImm){
 	}
 }
 	
-void bdecoder(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
+void bdecoder(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
 	switch(rt){
 	case 0x00000001:
 		bgez(mips_state, rs, SignExtImm);
@@ -633,5 +683,4 @@ void bdecoder(State& mips_state, int32_t rs, int32_t rt, int32_t SignExtImm){
 		std::exit(static_cast<int>(Exception::INSTRUCTION));
 		return;
 	}
-}
-			
+}			
