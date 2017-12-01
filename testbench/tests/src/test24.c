@@ -1,7 +1,7 @@
 int fact(int n);
 
 int entry(){
-	int n = 5;
+	int n = 8;
 	return fact(n);
 }
 
