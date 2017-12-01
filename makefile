@@ -31,7 +31,8 @@ MIPS_LDFLAGS += -Wl,--build-id=none
 
 # Extract just the binary instructions from the object file
 %.mips.bin : %.mips.elf
-	$(MIPS_OBJCOPY) -O binary --only-section=.text $< $@
+	#$(MIPS_OBJCOPY) -O binary --only-section=.text $< $@
+	$(MIPS_OBJCOPY) -O binary $< $@
 
 # For example, if you have testbench/test.c, you can do:
 #
