@@ -15,99 +15,99 @@ void r_type(State& mips_state, bool& executed){
 	if(!executed && opcode == 0x00000000){
 		switch(funct_field){
 			case 0x00000020:
-					add(mips_state, rs, rt, rd); //checked
+					add(mips_state, rs, rt, rd);
 					executed = true;
 					return;			
 			case 0x00000021:
-					addu(mips_state, rs, rt, rd); //checked
+					addu(mips_state, rs, rt, rd);
 					executed = true;
 					return;
 			case 0x00000024:
-					And(mips_state, rs, rt, rd); //checked
+					And(mips_state, rs, rt, rd);
 					executed = true;
 					return;
 			case 0x00000008:
-					jr(mips_state,rs); //checked
+					jr(mips_state,rs);
 					executed = true;
 					return;
 			case 0x00000027:
-					nor(mips_state, rs, rt, rd); //checked
+					nor(mips_state, rs, rt, rd);
 					executed = true;
 					return;
 			case 0x00000025:
-					Or(mips_state, rs, rt, rd); //checked
+					Or(mips_state, rs, rt, rd);
 					executed = true;
 					return;
 			case 0x0000002A:
-					slt(mips_state, rs, rt, rd); //checked
+					slt(mips_state, rs, rt, rd);
 					executed = true;
 					return;
 			case 0x0000002B:
-					sltu(mips_state, rs, rt, rd); //checked
+					sltu(mips_state, rs, rt, rd);
 					executed = true;
 					return;
 			case 0x00000000:
-					sll(mips_state, rt, shamt_field, rd); //checked
+					sll(mips_state, rt, shamt_field, rd);
 					executed = true;
 					return;
 			case 0x00000002:
-					srl(mips_state, rt, shamt_field, rd); //checked
+					srl(mips_state, rt, shamt_field, rd);
 					executed = true;
 					return;
 			case 0x00000022:
-					sub(mips_state, rs, rt, rd); //checked
+					sub(mips_state, rs, rt, rd);
 					executed = true;
 					return;
 			case 0x00000023:
-					subu(mips_state, rs, rt, rd); //checked
+					subu(mips_state, rs, rt, rd);
 					executed = true;
 					return;
 			case 0x0000001A:
-					div(mips_state, rt, rs); // doesnt enter the function
+					div(mips_state, rt, rs);
 					executed = true;
 					return;
 			case 0x0000001B:
-					divu(mips_state, rt, rs); // doesnt enter the function
+					divu(mips_state, rt, rs);
 					executed = true;
 					return;
 			case 0x00000010:
-					mfhi(mips_state, rd); // fails
+					mfhi(mips_state, rd);
 					executed = true;
 					return;
 			case 0x00000012:
-					mflo(mips_state, rd); // fails
+					mflo(mips_state, rd);
 					executed = true;
 					return;
 			case 0x00000018:
-					mult(mips_state, rt, rs); // checked
+					mult(mips_state, rt, rs);
 					executed = true;
 					return;
 			case 0x00000019:
-					multu(mips_state, rt, rs); //checked
+					multu(mips_state, rt, rs);
 					executed = true;
 					return;
 			case 0x00000003:
-					sra(mips_state, rt, shamt_field, rd); //checked
+					sra(mips_state, rt, shamt_field, rd);
 					executed = true;
 					return;
 			case 0x00000011:
-					mthi(mips_state,rs); //fails
+					mthi(mips_state,rs);
 					executed = true;
 					return;
 			case 0x00000013:
-					mtlo(mips_state,rs); //fails
+					mtlo(mips_state,rs);
 					executed = true;
 					return;
 			case 0x00000004:
-					sllv(mips_state,rt,rs,rd); //checked
+					sllv(mips_state,rt,rs,rd);
 					executed = true;
 					return;
 			case 0x00000007:
-					srav(mips_state,rt,rs,rd); //checked
+					srav(mips_state,rt,rs,rd);
 					executed = true;
 					return;
 			case 0x00000006:
-					srlv(mips_state,rt,rs,rd); //checked
+					srlv(mips_state,rt,rs,rd);
 					executed = true;
 					return;
 			default:
@@ -227,6 +227,7 @@ void subu(State& mips_state, uint32_t rs, uint32_t rt, uint32_t rd){
 void div(State& mips_state, uint32_t rt, uint32_t rs){
 	int32_t dividend = mips_state.reg[rs];
 	int32_t divisor = mips_state.reg[rt];
+
 	//Dividing by zero shouldn't do anything
 	if(divisor == 0){
 		++mips_state.npc;

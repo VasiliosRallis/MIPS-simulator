@@ -44,11 +44,13 @@ Test toTest(const std::string& line){
 
     //Add the last string which is the message
     temp.push_back(line.substr(initialP, (line.size() - initialP)));
-    														//Convert the last par to an int
+    														//Convert the last part to an int
     Test tempt(temp[0], temp[1], temp[2], temp[3], temp[4], std::stoi(temp[5]), temp[6]);
     return tempt;
 }
 
+
+//Initially, we also added this function to output a .CSV file. Might be useful in the future when we fully implement MIPS IV (LOL)
 /*
 void toCSV(std::ofstream& output, const std::vector<Test>& v){
 	for(int i(0); i < v.size(); i++){

@@ -5,6 +5,7 @@
 #include "setUp.hpp"
 #include "R_functions.hpp"
 #include "J_functions.hpp"
+#include "I_functions.hpp"
 #include "error.hpp"
 
 #endif

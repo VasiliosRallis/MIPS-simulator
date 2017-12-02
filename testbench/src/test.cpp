@@ -18,8 +18,8 @@ std::string Test::getOutput() const {return m_output;}
 void Test::setResult(const std::string& result){m_result = result;}
 
 
-//Weird Error here so I had to use ghetto fix
 std::ostream& operator<<(std::ostream& out, const Test& test){
+	//2 Ways to output the results of testbench (select one)
 	//out << test.m_id << '\t' << test.m_instruction << '\t' << test.m_result << '\t' << test.m_message << '\t' << "Expected ExitCode:" << test.m_exitCode;
 	out << test.m_id << '\t' << test.m_instruction << '\t' << test.m_result << '\t' << "Expected ExitCode: " << test.m_exitCode << '\t';
 	return out;
