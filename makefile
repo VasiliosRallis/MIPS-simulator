@@ -5,14 +5,14 @@ MIPS_CC = mips-linux-gnu-gcc
 MIPS_OBJCOPY = mips-linux-gnu-objcopy
 
 # Turn on all warnings, and enable optimisations
-MIPS_CPPFLAGS = -W -Wall -O0 -fno-builtin -march=mips1 -mfp32 -fno-stack-protector
+MIPS_CPPFLAGS = -Wall -O0 -fno-builtin -march=mips1 -mfp32 -fno-stack-protector
 
 # Avoid standard libraries etc. being brought in, and link statically
 MIPS_LDFLAGS = -nostdlib -Wl,-melf32btsmip -march=mips1 -nostartfiles -mno-check-zero-division -Wl,--gpsize=0 -static -Wl,-Bstatic
 MIPS_LDFLAGS += -Wl,--build-id=none
 
 
-# Compile a s file into a c file (added by vgr16)
+# Compile a c file into a s file (added by vgr16)
 %.mips.s : %.c
 	$(MIPS_CC) $(MIPS_CPPFLAGS) -S $< -o $@
 
@@ -65,3 +65,6 @@ bin/testbench : $(TEST_DEP)
 	g++ $(SG++_FLAGS) $(TEST_DEP) -o bin/testbench
 
 testbench : bin/testbench
+
+%.dump: %.mips.elf
+	mips-linux-gnu-objdump -d $<
