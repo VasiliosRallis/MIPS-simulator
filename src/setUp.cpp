@@ -47,7 +47,7 @@ void setUp(State& s, const std::string& fileName){
 
 
 void memToVector(const MBlock& m, std::vector<int32_t >& v){
-	int32_t addr = ADDR_INSTR;
+	uint32_t addr = ADDR_INSTR;
 	for(int i = 0; i < m.size; i+=4){
 		v[addr] = convTo32B(&m.data[i]);
 		//The commented lines are useful for debugging
@@ -57,8 +57,8 @@ void memToVector(const MBlock& m, std::vector<int32_t >& v){
 	}
 }
 
-int32_t convTo32B(char* in){
-		uint32_t out(0), temp(0);
+uint32_t convTo32B(char* in){
+		int32_t out(0), temp(0);
 
 		for(int i = 0; i < 4; i++){
 			out <<= 8;
