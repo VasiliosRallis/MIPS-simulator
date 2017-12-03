@@ -110,10 +110,19 @@ void r_type(State& mips_state, bool& executed){
 					srlv(mips_state,rt,rs,rd);
 					executed = true;
 					return;
+			case 0x00000026:
+					Xor(mips_state,rt,rs,rd);
+					executed = true;
+					return;
 			default:
 					return;
 		}
 	}
+}
+
+void Xor(State& mips_state,uint32_t rt,uint32_t rs,uint32_t rd){
+	mips_state.reg[rd] = ~(mips_state.reg[rs] | mips_state.reg[rt]);
+	++mips_state.npc;
 }
 
 void add(State& mips_state, uint32_t rs, uint32_t rt, uint32_t rd){

@@ -33,5 +33,6 @@ void mtlo(State& mips_state, uint32_t rt);
 void sllv(State& mips_state, uint32_t rs, uint32_t rt, uint32_t rd);
 void srav(State& mips_state, uint32_t rs, uint32_t rt, uint32_t rd);
 void srlv(State& mips_state, uint32_t rs, uint32_t rt, uint32_t rd);
+void Xor(State& mips_state,  uint32_t rt, uint32_t rs, uint32_t rd);
 
 #endif
