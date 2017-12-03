@@ -1,13 +1,7 @@
 #include <iostream>
 #include "mips.hpp"
-#include <fstream>
 #include <string>
-#include <bitset>
 #include <cstdint>
-#include "error.hpp"
-#include "J_functions.hpp"
-#include "R_functions.hpp"
-#include "I_functions.hpp"
 
 using namespace std;
 

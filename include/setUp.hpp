@@ -6,16 +6,16 @@
 #include <fstream>
 #include <iostream>
 
-//These are some GLOBAL VARIABLES that we will need
+//These are some GLOBAL CONSTANTS that we will need
 //All of these have to be divided by 4 since we are using 32 bits instead of 8.
-const uint32_t ADDR_NULL(0x00000000);
-const uint32_t ADDR_INSTR(0x04000000); //0x10000000 / 4 = 0x4000000
-const uint32_t ADDR_INSTR_L(0x00400000);
-const uint32_t ADDR_DATA(0x08000000);
-const uint32_t ADDR_DATA_L(0x01000000);
-const uint32_t ADDR_GETC(0x0C000000);
-const uint32_t ADDR_PUTC(0x0C000001);
-const uint32_t MEM_SIZE(0x0C000002);
+#define ADDR_NULL 0x00000000
+#define ADDR_INSTR 0x04000000 //0x10000000 / 4 = 0x4000000
+#define ADDR_INSTR_L 0x00400000
+#define ADDR_DATA 0x08000000
+#define ADDR_DATA_L 0x01000000
+#define ADDR_GETC 0x0C000000
+#define ADDR_PUTC 0x0C000001
+#define MEM_SIZE 0x0C000002
 
 //This Data Structure represents the current state of the processors "memory"
 struct State{
