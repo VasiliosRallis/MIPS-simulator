@@ -334,7 +334,7 @@ void lui(State& mips_state, uint32_t rs, uint32_t rt, int32_t immediate){
 		immediate = immediate << 16;
 		mips_state.reg[rt] = immediate;
 	}
-
+	std::cout << "Did LUI " << std::hex << mips_state.reg[rt] << std::endl;
 	++mips_state.npc;
 }
 
@@ -429,6 +429,7 @@ void ori(State& mips_state, uint32_t rs, uint32_t rt, int32_t immediate){
 	mips_state.reg[rt] = mips_state.reg[rs] | immediate;
 
 	++mips_state.npc;
+	std::cout << "Did ORI " << std::hex << mips_state.reg[rt] << std::endl;
 }
 
 void xori(State& mips_state, uint32_t rs, uint32_t rt, int32_t immediate){
