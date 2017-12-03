@@ -121,7 +121,7 @@ void r_type(State& mips_state, bool& executed){
 }
 
 void Xor(State& mips_state,uint32_t rt,uint32_t rs,uint32_t rd){
-	mips_state.reg[rd] = ~(mips_state.reg[rs] | mips_state.reg[rt]);
+	mips_state.reg[rd] = (mips_state.reg[rs] ^ mips_state.reg[rt]);
 	++mips_state.npc;
 }
 
