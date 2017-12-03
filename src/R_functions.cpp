@@ -143,7 +143,6 @@ void add(State& mips_state, uint32_t rs, uint32_t rt, uint32_t rd){
 	else {
 		mips_state.reg[rd] = temp1 + temp2;
 	}
-	 std::cout << "Did AND " << std::hex << mips_state.reg[rd] << std::endl;
 	 ++mips_state.npc;
 }
 
@@ -151,7 +150,6 @@ void add(State& mips_state, uint32_t rs, uint32_t rt, uint32_t rd){
 void And(State& mips_state, uint32_t rs, uint32_t rt, uint32_t rd){
 	mips_state.reg[rd] = mips_state.reg[rs] & mips_state.reg[rt];
 
-	std::cout << "Did AND " << std::hex << mips_state.reg[rd] << std::endl;
 	++mips_state.npc;
 }
 
@@ -174,8 +172,6 @@ void Or(State& mips_state, uint32_t rs, uint32_t rt, uint32_t rd){
 	mips_state.reg[rd] = (mips_state.reg[rs] | mips_state.reg[rt]);
 
 	++mips_state.npc;
-
-	std::cout << "Did OR " << std::hex << mips_state.reg[rd] << std::endl;
 }
 
 void slt(State& mips_state, uint32_t rs, uint32_t rt, uint32_t rd){
@@ -204,11 +200,9 @@ void sltu(State& mips_state, uint32_t rs, uint32_t rt, uint32_t rd){
 }
 
 void sll(State& mips_state, uint32_t rt, uint32_t shamt_field, uint32_t rd){
-	std::cout << "Entered SLL" << std::endl;
 	mips_state.reg[rd] = (mips_state.reg[rt] << shamt_field);
 
 	++mips_state.npc;
-	std::cout << "Did SLL " << std::hex << mips_state.reg[rd] << std::endl;
 }
 
 void srl(State& mips_state, uint32_t rt, uint32_t shamt_field, uint32_t rd){
@@ -305,8 +299,6 @@ void sra(State& mips_state, uint32_t rt, uint32_t shamt_field, uint32_t rd){
 	int32_t temp = mips_state.reg[rt];
 	mips_state.reg[rd] = (temp >> shamt_field);
 	++mips_state.npc;
-
-	std::cout << "DID SRA " << std::hex << mips_state.reg[rd] << std::endl;
 }
 
 void mthi(State& mips_state,uint32_t rs){

@@ -167,7 +167,6 @@ void bne(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
 }
 
 void lbu(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
-	//THINK ABOUT OVERLFOW HERE
 	uint32_t addr = SignExtImm + mips_state.reg[rs];
 	checkRead(static_cast<int>(addr / 4));
 
@@ -206,7 +205,6 @@ void lbu(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
 }
 
 void lb(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
-	//THINK ABOUT OVERLFOW HERE
 	uint32_t addr = SignExtImm + mips_state.reg[rs];
 	checkRead(static_cast<int>(addr / 4));
 
@@ -248,7 +246,6 @@ void lb(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
 }
 
 void lhu(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
-	//THINK ABOUT OVERLFOW HERE
 	uint32_t addr = SignExtImm + mips_state.reg[rs];
 	checkRead(static_cast<int>(addr / 4));
 
@@ -284,7 +281,6 @@ void lhu(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
 }
 	
 void lh(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
-	//THINK ABOUT OVERLFOW HERE
 	uint32_t addr = SignExtImm + mips_state.reg[rs];
 	checkRead(static_cast<int>(addr / 4));
 
@@ -334,12 +330,10 @@ void lui(State& mips_state, uint32_t rs, uint32_t rt, int32_t immediate){
 		immediate = immediate << 16;
 		mips_state.reg[rt] = immediate;
 	}
-	std::cout << "Did LUI " << std::hex << mips_state.reg[rt] << std::endl;
 	++mips_state.npc;
 }
 
 void lw(State& mips_state , uint32_t rs, uint32_t rt, int32_t SignExtImm){
-	//THINK ABOUT OVERFLOW HERE
 	uint32_t addr = SignExtImm + mips_state.reg[rs];
 
 	checkRead(addr / 4);
@@ -429,7 +423,6 @@ void ori(State& mips_state, uint32_t rs, uint32_t rt, int32_t immediate){
 	mips_state.reg[rt] = mips_state.reg[rs] | immediate;
 
 	++mips_state.npc;
-	std::cout << "Did ORI " << std::hex << mips_state.reg[rt] << std::endl;
 }
 
 void xori(State& mips_state, uint32_t rs, uint32_t rt, int32_t immediate){
@@ -461,7 +454,6 @@ void sltiu(State& mips_state, uint32_t rs, uint32_t rt, int32_t immediate){
 }
 
 void sb(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
-	//THINK ABOUT OVERLFOW HERE
 	uint32_t addr = SignExtImm + mips_state.reg[rs];
 	checkWrite(static_cast<uint32_t>(addr / 4));
 
@@ -494,7 +486,6 @@ void sb(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
 }
 
 void sh(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
-	//THINK ABOUT OVERLFOW HERE
 	uint32_t addr = SignExtImm + mips_state.reg[rs];
 	checkWrite(static_cast<uint32_t>(addr / 4));
 
@@ -526,7 +517,6 @@ void sh(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
 }
 
 void sw(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
-	//THINK ABOUT OVERFLOW HERE
 	uint32_t addr = SignExtImm + mips_state.reg[rs];
 	checkWrite(static_cast<uint32_t>(addr / 4));
 
