@@ -91,7 +91,7 @@ void i_type(State& mips_state, bool& executed){
 				executed = true;
 				return;
 			case 0x0000000B:
-				sltiu(mips_state, rs, rt, immediate);
+				sltiu(mips_state, rs, rt, SignExtImm);
 				executed = true;
 				return;
 			case 0x0000000E:
@@ -364,24 +364,20 @@ void lw(State& mips_state , uint32_t rs, uint32_t rt, int32_t SignExtImm){
 void lwl(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
 	uint32_t addr = SignExtImm + mips_state.reg[rs];
 	uint32_t temp1(0);
-	uint32_t temp2(0);
 
 	checkRead(addr / 4);
-	checkRead((addr + 3) / 4);
 
 	switch(addr % 4){
-		case 0: temp1 = mips_state.ram[static_cast<int>(addr / 4)] & 0xFFFF0000;
-				mips_state.reg[rt] = (mips_state.reg[rt] & 0x0000FFFF) | temp1;
+		case 0: 	mips_state.reg[rt] = mips_state.ram[static_cast<int>(addr / 4)];
 				break;
-		case 1: temp1 = mips_state.ram[static_cast<int>(addr / 4)] & 0x00FFFF00;
-				mips_state.reg[rt] = (mips_state.reg[rt] & 0x0000FFFF) | (temp1 << 8);
+		case 1: temp1 = (mips_state.ram[static_cast<int>(addr / 4)] & 0x00FFFFFF) << 2;
+				mips_state.reg[rt] = ((mips_state.reg[rt] & 0x000000FF)| temp1);
 				break;
-		case 2: temp1 = mips_state.ram[static_cast<int>(addr / 4)] & 0x0000FFFF;
-				mips_state.reg[rt] = (mips_state.reg[rt] & 0x0000FFFF) | (temp1 << 16);
+		case 2: temp1 = (mips_state.ram[static_cast<int>(addr / 4)] & 0x0000FFFF) << 16;
+				mips_state.reg[rt] = ((mips_state.reg[rt] & 0x0000FFFF)| temp1);
 				break;
-		case 3: temp1 = mips_state.ram[static_cast<int>(addr / 4)] & 0x000000FF;
-				temp2 = mips_state.ram[static_cast<int>(addr / 4) + 1] & 0XFF000000;
-				mips_state.reg[rt] = ((mips_state.reg[rt] & 0x0000FFFF) | temp1 << 24) | temp2 >> 8;
+		case 3: temp1 = (mips_state.ram[static_cast<int>(addr / 4)] & 0x000000FF) << 24;
+				mips_state.reg[rt] = ((mips_state.reg[rt] & 0x00FFFFFF)| temp1);
 				break;
 		default: break;
 	}
@@ -392,25 +388,20 @@ void lwl(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
 void lwr(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
 	uint32_t addr = SignExtImm + mips_state.reg[rs];
 	uint32_t temp1(0);
-	uint32_t temp2(0);
 
 	checkRead(addr / 4);
-	checkRead((addr + 3) / 4);
 
 	switch(addr % 4){
-		case 0: temp1 = mips_state.ram[static_cast<int>(addr / 4)] & 0x0000FFFF;
+		case 0: temp1 = (mips_state.ram[static_cast<int>(addr / 4)] & 0xFF000000) >> 24;
+				mips_state.reg[rt] = (mips_state.reg[rt] & 0xFFFFFF00) | temp1;
+				break;
+		case 1: temp1 = (mips_state.ram[static_cast<int>(addr / 4)] & 0xFFFF0000) >> 16;
 				mips_state.reg[rt] = (mips_state.reg[rt] & 0xFFFF0000) | temp1;
 				break;
-		case 1: temp1 = mips_state.ram[static_cast<int>(addr / 4)] & 0x000000FF;
-				temp2 = mips_state.ram[static_cast<int>(addr / 4) + 1] & 0xFF000000;
-				mips_state.reg[rt] = (mips_state.reg[rt] & 0xFFFF0000) | (temp1 << 8);
-				mips_state.reg[rt] = (mips_state.reg[rt] & 0xFFFF0000) | (temp2 >> 16);
+		case 2: temp1 = mips_state.ram[static_cast<int>(addr / 4)] & 0xFFFFFF00;
+				mips_state.reg[rt] = (mips_state.reg[rt] & 0xFF000000) | temp1;
 				break;
-		case 2: temp1 = mips_state.ram[static_cast<int>(addr / 4) + 1] & 0xFFFF0000;
-				mips_state.reg[rt] = (mips_state.reg[rt] & 0xFFFF0000) | (temp1 >> 16);
-				break;
-		case 3: temp1 = mips_state.ram[static_cast<int>(addr / 4) + 1] & 0x00FFFF00;
-				mips_state.reg[rt] = ((mips_state.reg[rt] & 0xFFFF0000) | temp1 >> 8);
+		case 3: mips_state.reg[rt] = mips_state.ram[static_cast<int>(addr / 4)];
 				break;
 		default: break;
 	}
@@ -442,8 +433,9 @@ void slti(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
 	++mips_state.npc;
 }
 
-void sltiu(State& mips_state, uint32_t rs, uint32_t rt, int32_t immediate){
-	if(mips_state.reg[rs] < immediate){
+void sltiu(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
+	uint32_t temp = immediate;
+	if(mips_state.reg[rs] < temp){
 		mips_state.reg[rt] = 1;
 	}
 	else{
@@ -506,9 +498,9 @@ void sh(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
 	else{
 
 		switch(addr % 4){
-			case 0: mips_state.ram[static_cast<int>(addr / 4)] = (mips_state.reg[rt] & 0x0000FFFF) << 16;
+			case 0: mips_state.ram[static_cast<uint32_t>(addr / 4)] = (mips_state.reg[rt] & 0x0000FFFF) << 16;
 					break;
-			case 2: mips_state.ram[static_cast<int>(addr / 4)] = mips_state.reg[rt] & 0x0000FFFF;
+			case 2: mips_state.ram[static_cast<uint32_t>(addr / 4)] = mips_state.reg[rt] & 0x0000FFFF;
 					break;
 		}
 	}

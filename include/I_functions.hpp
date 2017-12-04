@@ -24,7 +24,7 @@ void lwr(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm);
 void ori(State& mips_state, uint32_t rs, uint32_t rt, int32_t immediate);
 void xori(State& mips_state, uint32_t rs, uint32_t rt, int32_t immediate);
 void slti(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm);
-void sltiu(State& mips_state, uint32_t rs, uint32_t rt, int32_t immediate);
+void sltiu(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm);
 void sb(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm);
 void sh(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm);
 void sw(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm);

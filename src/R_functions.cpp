@@ -14,6 +14,11 @@ void r_type(State& mips_state, bool& executed){
 
 	if(!executed && opcode == 0x00000000){
 		switch(funct_field){
+			
+			case 0x00000009:
+					jalr(mips_state, rs, rt, rd);
+					executed = true;
+					return;			
 			case 0x00000020:
 					add(mips_state, rs, rt, rd);
 					executed = true;
@@ -330,4 +335,15 @@ void srlv(State& mips_state, uint32_t rt, uint32_t rs, uint32_t rd){
 	mips_state.reg[rd]  = temp >> mips_state.reg[rs];
 
 	++mips_state.npc;
+}
+
+void jalr(State& mips_state, uint32_t rt, uint32_t rs, uint32_t rd){
+	if(mips_state.reg[rs] % 4 != 0){
+		std::exit(static_cast<int>(Exception::MEMORY));
+	}
+	else{
+		uint32_t temp = mips_state.reg[rs];
+		mips_state.reg[rd] = (mips_state.pc * 4) + 8;
+		mips_state.npc = mips_state.reg[rs];
+	}
 }

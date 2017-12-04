@@ -6,9 +6,9 @@ test28.c
 8
 
 
-JALR
-LWR
-LWL
-SH
-SLTIU
+JALR //ok
+LWR //ok
+LWL //ok
+SH 
+SLTIU //ok
 
