@@ -342,7 +342,6 @@ void jalr(State& mips_state, uint32_t rt, uint32_t rs, uint32_t rd){
 		std::exit(static_cast<int>(Exception::MEMORY));
 	}
 	else{
-		uint32_t temp = mips_state.reg[rs];
 		mips_state.reg[rd] = (mips_state.pc * 4) + 8;
 		mips_state.npc = mips_state.reg[rs];
 	}

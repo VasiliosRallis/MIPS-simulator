@@ -357,7 +357,6 @@ void lw(State& mips_state , uint32_t rs, uint32_t rt, int32_t SignExtImm){
 			mips_state.reg[rt] = mips_state.ram[addr / 4];
 		}
 	}
-
 	++mips_state.npc;
 }
 
@@ -434,8 +433,8 @@ void slti(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
 }
 
 void sltiu(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
-	uint32_t temp = immediate;
-	if(mips_state.reg[rs] < temp){
+	uint32_t temp = SignExtImm;
+	if(uint32_t(mips_state.reg[rs]) < temp){
 		mips_state.reg[rt] = 1;
 	}
 	else{

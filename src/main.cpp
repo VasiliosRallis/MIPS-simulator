@@ -16,6 +16,7 @@ int main(int argc, char* argv[]){
 	int32_t tempNPC;
 	bool executed;				//this flag is turned on when an instruction of one of the 3 types has been executed
 	State mips_state;	
+
 	mips_state.ram.resize(MEM_SIZE);	//This will allocate memory for the whole RAM
 						//used hex so that it is easier to relate to the Specification on GitHub
 
