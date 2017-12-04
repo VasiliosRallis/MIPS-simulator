@@ -543,7 +543,7 @@ void bgez(State& mips_state, uint32_t rs, int32_t SignExtImm){
 }
 
 void bgezal(State& mips_state, uint32_t rs, int32_t SignExtImm){
-	int32_t temp = rs;
+	int32_t temp = mips_state.reg[rs];
 	if(temp >= 0){
 		//We have to give the REAL Address here (i.e. multiple "our" address by 4 and add 8)
 		mips_state.reg[31] = (mips_state.pc * 4) + 8;
@@ -569,14 +569,14 @@ void bgtz(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
 }
 
 void blez(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
-	int32_t temp = rs;
+	int32_t temp = mips_state.reg[rs];
 	if(rt != 0){
 		std::exit(static_cast<int>(Exception::INSTRUCTION));
 	}
 
 	else{
 		if(temp <= 0x00000000){
-			mips_state.pc += SignExtImm;
+			mips_state.npc += SignExtImm;
 		}
 		else{
 			++mips_state.npc;
@@ -585,9 +585,9 @@ void blez(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
 }
 
 void bltz(State& mips_state, uint32_t rs, int32_t SignExtImm){
-	int32_t temp = rs;
+	int32_t temp = mips_state.reg[rs];
 	if(temp < 0){
-		mips_state.pc += SignExtImm;
+		mips_state.npc += SignExtImm;
 	}
 	else{
 		++mips_state.npc;
@@ -595,7 +595,7 @@ void bltz(State& mips_state, uint32_t rs, int32_t SignExtImm){
 }
 
 void bltzal(State& mips_state, uint32_t rs, int32_t SignExtImm){
-	int32_t temp = rs;
+	int32_t temp = mips_state.reg[rs];
 	if(temp < 0){
 		mips_state.reg[31] = (mips_state.pc * 4) + 8;
 		mips_state.npc += SignExtImm;

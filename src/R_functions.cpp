@@ -276,8 +276,8 @@ void mflo(State& mips_state, uint32_t rd){
 }
 
 void mult(State& mips_state, uint32_t rt, uint32_t rs){
-	int32_t temp1 = mips_state.reg[rs];
-	int32_t temp2 = mips_state.reg[rt];
+	int64_t temp1 = mips_state.reg[rs];
+	int64_t temp2 = mips_state.reg[rt];
 	int64_t result  = temp1 * temp2;
 	mips_state.Hi = (result >> 32);
 	mips_state.Lo = (result << 32) >> 32;
@@ -286,8 +286,8 @@ void mult(State& mips_state, uint32_t rt, uint32_t rs){
 }
 
 void multu(State& mips_state, uint32_t rt, uint32_t rs){
-	uint32_t temp1 = mips_state.reg[rs];
-	uint32_t temp2 = mips_state.reg[rt];
+	uint64_t temp1 = mips_state.reg[rs];
+	uint64_t temp2 = mips_state.reg[rt];
 	uint64_t result = temp1 * temp2;
 	mips_state.Hi = (result >> 32);
 	mips_state.Lo = (result << 32) >> 32;

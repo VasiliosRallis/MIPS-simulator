@@ -48,3 +48,4 @@ ID,Instruction,Author,Bin,Message,ExitCode, outputs
 49,tort2,gi316,torture2.mips.bin,testing,1,0
 50,calc,vgr16,test27.mips.bin,No message,203,0
 51,sort,vgr16,test28.mips.bin,Merge Sort,5,0
+52,tort6,gi316,torture6.mips.bin,Testing Branches,5,0
