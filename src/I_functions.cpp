@@ -245,7 +245,6 @@ void lb(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
 	}
 
 void lhu(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
-	try{
 		uint32_t addr = SignExtImm + mips_state.reg[rs];
 		checkRead(static_cast<int>(addr / 4));
 
@@ -280,14 +279,6 @@ void lhu(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
 		++mips_state.npc;
 	}
 
-	catch (const int& MEMORY){
-		std::exit(MEMORY);
-	}
-	
-	catch(...) {
-		std::exit(static_cast<int>(Error::INTERNAL));
-	}
-}
 	
 void lh(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
 		uint32_t addr = SignExtImm + mips_state.reg[rs];
