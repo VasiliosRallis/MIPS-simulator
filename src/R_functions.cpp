@@ -337,12 +337,12 @@ void srlv(State& mips_state, uint32_t rt, uint32_t rs, uint32_t rd){
 	++mips_state.npc;
 }
 
-void jalr(State& mips_state, uint32_t rt, uint32_t rs, uint32_t rd){
+void jalr(State& mips_state, uint32_t rs, uint32_t rt, uint32_t rd){
 	if(mips_state.reg[rs] % 4 != 0){
 		throw (static_cast<int>(Exception::MEMORY));
 	}
 	else{
 		mips_state.reg[rd] = (mips_state.pc * 4) + 8;
-		mips_state.npc = mips_state.reg[rs];
+		mips_state.npc = mips_state.reg[rs] / 4;
 	}
 }
