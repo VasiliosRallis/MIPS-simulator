@@ -368,7 +368,12 @@ void lw(State& mips_state , uint32_t rs, uint32_t rt, int32_t SignExtImm){
 		}
 		++mips_state.npc;
 	}
+<<<<<<< HEAD
 	
+=======
+	++mips_state.npc;
+}
+>>>>>>> de1b2752befc417d4e791c240c7f1f1cf092cd58
 
 void lwl(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
 	uint32_t addr = SignExtImm + mips_state.reg[rs];
