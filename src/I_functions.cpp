@@ -266,7 +266,7 @@ void lhu(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
 		}
 
 		if(addr % 2 != 0){
-			std::exit(static_cast<int>(Exception::MEMORY));
+			throw (static_cast<int>(Exception::MEMORY));
 		}
 		else{
 			switch(addr % 4){
