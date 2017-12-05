@@ -123,15 +123,15 @@ void i_type(State& mips_state, bool& executed){
 
 
 void addi(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
-	int32_t temp = mips_state.reg[rs];
-	if (((temp < 0) && (SignExtImm < 0) && (temp + SignExtImm >= 0)) || ((temp > 0) && (SignExtImm > 0) && (temp + SignExtImm <= 0))){
-		std::exit(static_cast<int>(Exception::ARITHMETIC));
-	}
-	else {
-		mips_state.reg[rt] = temp + SignExtImm;
-	}
+		int32_t temp = mips_state.reg[rs];
+		if (((temp < 0) && (SignExtImm < 0) && (temp + SignExtImm >= 0)) || ((temp > 0) && (SignExtImm > 0) && (temp + SignExtImm <= 0))){
+			throw (static_cast<int>(Exception::ARITHMETIC));
+		}
+		else {
+			mips_state.reg[rt] = temp + SignExtImm;
+		}
 
-	++mips_state.npc;
+		++mips_state.npc;
 }
 
 void addiu(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
@@ -167,199 +167,208 @@ void bne(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
 }
 
 void lbu(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
-	uint32_t addr = SignExtImm + mips_state.reg[rs];
-	checkRead(static_cast<int>(addr / 4));
+		uint32_t addr = SignExtImm + mips_state.reg[rs];
+		checkRead(static_cast<int>(addr / 4));
 
-	if((addr / 4) == ADDR_GETC){
-		if((addr % 4) != 3){
-			std::exit(static_cast<int>(Exception::MEMORY));
-		}
-		else{
-			char c = readChar();
-			if(c == -1){
-				mips_state.reg[rt] = 0xFFFFFFFF; //If we have EOF set rt to -1
-				return;
+		if((addr / 4) == ADDR_GETC){
+			if((addr % 4) != 3){
+				throw (static_cast<int>(Exception::MEMORY));
 			}
 			else{
-				mips_state.reg[rt] = c & 0x000000FF;
-				return;
+				char c = readChar();
+				if(c == -1){
+					mips_state.reg[rt] = 0xFFFFFFFF; //If we have EOF set rt to -1
+					return;
+				}
+				else{
+					mips_state.reg[rt] = c & 0x000000FF;
+					return;
+				}	
 			}
 		}
-	}
 
 
-	switch(addr % 4){
-		case 0: mips_state.reg[rt] = ((mips_state.ram[static_cast<int>(addr /4)] & 0xFF000000) >> 24) & 0x000000FF;
-				break;
-		case 1: mips_state.reg[rt] = (mips_state.ram[static_cast<int>(addr /4)] & 0x00FF0000) >> 16;
-				break;
-		case 2: mips_state.reg[rt] = (mips_state.ram[static_cast<int>(addr /4)] & 0x0000FF00) >> 8;
-				break;
-		case 3: mips_state.reg[rt] = (mips_state.ram[static_cast<int>(addr /4)] & 0x000000FF);
-				break;
-		default: break;
-	}
+		switch(addr % 4){
+			case 0: mips_state.reg[rt] = ((mips_state.ram[static_cast<int>(addr /4)] & 0xFF000000) >> 24) & 0x000000FF;
+					break;
+			case 1: mips_state.reg[rt] = (mips_state.ram[static_cast<int>(addr /4)] & 0x00FF0000) >> 16;
+					break;
+			case 2: mips_state.reg[rt] = (mips_state.ram[static_cast<int>(addr /4)] & 0x0000FF00) >> 8;
+					break;
+			case 3: mips_state.reg[rt] = (mips_state.ram[static_cast<int>(addr /4)] & 0x000000FF);
+					break;
+			default: break;
+		}
 
 	++mips_state.npc;
-
 }
 
 void lb(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
-	uint32_t addr = SignExtImm + mips_state.reg[rs];
-	checkRead(static_cast<int>(addr / 4));
+		uint32_t addr = SignExtImm + mips_state.reg[rs];
+		checkRead(static_cast<int>(addr / 4));
 
-	if((addr / 4) == ADDR_GETC){
-		if((addr % 4) != 3){
-			std::exit(static_cast<int>(Exception::MEMORY));
-		}
-		else{
-			char c = readChar();
-			if(c == -1){
-				mips_state.reg[rt] = 0xFFFFFFFF; //If we have EOF set rt to -1
-				return;
+		if((addr / 4) == ADDR_GETC){
+			if((addr % 4) != 3){
+				throw (static_cast<int>(Exception::MEMORY));
 			}
 			else{
-				mips_state.reg[rt] = c & 0x000000FF;
-				return;
+				char c = readChar();
+				if(c == -1){
+					mips_state.reg[rt] = 0xFFFFFFFF; //If we have EOF set rt to -1
+					return;
+				}
+				else{
+					mips_state.reg[rt] = c & 0x000000FF;
+					return;
+				}
 			}
+		}	
+
+		switch(addr % 4){
+			case 0: mips_state.reg[rt] = ((mips_state.ram[static_cast<int>(addr /4)] & 0xFF000000) >> 24) & 0x000000FF;
+					break;
+			case 1: mips_state.reg[rt] = (mips_state.ram[static_cast<int>(addr / 4)] & 0x00FF0000) >> 16;
+					break;
+			case 2: mips_state.reg[rt] = (mips_state.ram[static_cast<int>(addr / 4)] & 0x0000FF00) >> 8;
+					break;
+			case 3: mips_state.reg[rt] = (mips_state.ram[static_cast<int>(addr / 4)] & 0x000000FF);
+					break;
+			default: break;
 		}
+
+		if(mips_state.reg[rt] >> 7 == 1){
+			mips_state.reg[rt] = mips_state.reg[rt] | 0xFFFFFF00;
+		}	
+
+		++mips_state.npc;
+
 	}
-
-	switch(addr % 4){
-		case 0: mips_state.reg[rt] = ((mips_state.ram[static_cast<int>(addr /4)] & 0xFF000000) >> 24) & 0x000000FF;
-				break;
-		case 1: mips_state.reg[rt] = (mips_state.ram[static_cast<int>(addr / 4)] & 0x00FF0000) >> 16;
-				break;
-		case 2: mips_state.reg[rt] = (mips_state.ram[static_cast<int>(addr / 4)] & 0x0000FF00) >> 8;
-				break;
-		case 3: mips_state.reg[rt] = (mips_state.ram[static_cast<int>(addr / 4)] & 0x000000FF);
-				break;
-		default: break;
-	}
-
-	if(mips_state.reg[rt] >> 7 == 1){
-		mips_state.reg[rt] = mips_state.reg[rt] | 0xFFFFFF00;
-	}
-
-	++mips_state.npc;
-
-}
 
 void lhu(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
-	uint32_t addr = SignExtImm + mips_state.reg[rs];
-	checkRead(static_cast<int>(addr / 4));
+	try{
+		uint32_t addr = SignExtImm + mips_state.reg[rs];
+		checkRead(static_cast<int>(addr / 4));
 
-	if((addr / 4) == ADDR_GETC){
-		if((addr % 4) != 2){
+		if((addr / 4) == ADDR_GETC){
+			if((addr % 4) != 2){
+				throw (static_cast<int>(Exception::MEMORY));
+			}
+			else{
+				char c = readChar();
+				if(c == -1){
+					mips_state.reg[rt] = 0xFFFFFFFF; //If we have EOF set rt to -1
+					return;
+				}
+				else{
+					mips_state.reg[rt] = c & 0x000000FF;
+					return;
+				}
+			}
+		}
+
+		if(addr % 2 != 0){
 			std::exit(static_cast<int>(Exception::MEMORY));
 		}
 		else{
-			char c = readChar();
-			if(c == -1){
-				mips_state.reg[rt] = 0xFFFFFFFF; //If we have EOF set rt to -1
-				return;
+			switch(addr % 4){
+				case 0: mips_state.reg[rt] = ((mips_state.ram[static_cast<int>(addr / 4)] & 0xFFFF0000) >> 16) & 0x0000FFFF;
+						break;
+				case 2: mips_state.reg[rt] = (mips_state.ram[static_cast<int>(addr / 4)] & 0x0000FFFF);
+						break;
 			}
-			else{
-				mips_state.reg[rt] = c & 0x000000FF;
-				return;
-			}
-		}
+		}	
+		++mips_state.npc;
 	}
 
-	if(addr % 2 != 0){
-		std::exit(static_cast<int>(Exception::MEMORY));
+	catch (const int& MEMORY){
+		std::exit(MEMORY);
 	}
-	else{
-		switch(addr % 4){
-			case 0: mips_state.reg[rt] = ((mips_state.ram[static_cast<int>(addr / 4)] & 0xFFFF0000) >> 16) & 0x0000FFFF;
-					break;
-			case 2: mips_state.reg[rt] = (mips_state.ram[static_cast<int>(addr / 4)] & 0x0000FFFF);
-					break;
-		}
+	
+	catch(...) {
+		std::exit(static_cast<int>(Error::INTERNAL));
 	}
-	++mips_state.npc;
 }
 	
 void lh(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
-	uint32_t addr = SignExtImm + mips_state.reg[rs];
-	checkRead(static_cast<int>(addr / 4));
+		uint32_t addr = SignExtImm + mips_state.reg[rs];
+		checkRead(static_cast<int>(addr / 4));
 
-	if((addr / 4) == ADDR_GETC){
-		if((addr % 4) != 2){
-			std::exit(static_cast<int>(Exception::MEMORY));
-		}
-		else{
-			char c = readChar();
-			if(c == -1){
-				mips_state.reg[rt] = 0xFFFFFFFF; //If we have EOF set rt to -1
-				return;
+		if((addr / 4) == ADDR_GETC){
+			if((addr % 4) != 2){
+				throw (static_cast<int>(Exception::MEMORY));
 			}
 			else{
-				mips_state.reg[rt] = c & 0x000000FF;
-				return;
+				char c = readChar();
+				if(c == -1){
+					mips_state.reg[rt] = 0xFFFFFFFF; //If we have EOF set rt to -1
+					return;
+				}
+				else{
+					mips_state.reg[rt] = c & 0x000000FF;
+					return;
+				}
 			}
 		}
-	}
 
-	if(addr % 2 != 0){
-		std::exit(static_cast<int>(Exception::MEMORY));
-	}
-	else{
-		switch(addr % 4){
-			case 0: mips_state.reg[rt] = ((mips_state.ram[static_cast<int>(addr / 4)] & 0xFFFF0000) >> 16) & 0x0000FFFF;
-					break;
-			case 2: mips_state.reg[rt] = (mips_state.ram[static_cast<int>(addr / 4)] & 0x0000FFFF);
-					break;
+		if(addr % 2 != 0){
+			throw (static_cast<int>(Exception::MEMORY));
+		}
+		else{
+			switch(addr % 4){
+				case 0: mips_state.reg[rt] = ((mips_state.ram[static_cast<int>(addr / 4)] & 0xFFFF0000) >> 16) & 0x0000FFFF;
+						break;
+				case 2: mips_state.reg[rt] = (mips_state.ram[static_cast<int>(addr / 4)] & 0x0000FFFF);
+						break;
+			}
+	
+			if((mips_state.reg[rt] >> 15) == 1){
+				mips_state.reg[rt] = mips_state.reg[rt] | 0xFFFF0000;
+			}
 		}
 
-		if((mips_state.reg[rt] >> 15) == 1){
-			mips_state.reg[rt] = mips_state.reg[rt] | 0xFFFF0000;
-		}
+		++mips_state.npc;
 	}
-
-	++mips_state.npc;
-}
 
 
 
 void lui(State& mips_state, uint32_t rs, uint32_t rt, int32_t immediate){
-	if(rs != 0x00000000){
-		std::exit(static_cast<int>(Exception::INSTRUCTION));
-	}
-	else{
-		immediate = immediate << 16;
-		mips_state.reg[rt] = immediate;
-	}
-	++mips_state.npc;
-}
-
-void lw(State& mips_state , uint32_t rs, uint32_t rt, int32_t SignExtImm){
-	uint32_t addr = SignExtImm + mips_state.reg[rs];
-
-	checkRead(addr / 4);
-
-	if(addr % 4 != 0){
-		std::exit(static_cast<int>(Exception::MEMORY));
-	}
-	else {
-		if(addr / 4 == ADDR_GETC){
-			char c = readChar();
-			if(c == -1){
-				mips_state.reg[rt] = 0xFFFFFFFF; //If we have EOF set rt to -1
-				return;
-			}
-			else{
-				mips_state.reg[rt] = c & 0x000000FF;
-				return;
-			}
+		if(rs != 0x00000000){
+			throw (static_cast<int>(Exception::INSTRUCTION));
 		}
 		else{
-			mips_state.reg[rt] = mips_state.ram[addr / 4];
+			immediate = immediate << 16;
+			mips_state.reg[rt] = immediate;
 		}
+		++mips_state.npc;
 	}
 
-	++mips_state.npc;
-}
+void lw(State& mips_state , uint32_t rs, uint32_t rt, int32_t SignExtImm){
+		uint32_t addr = SignExtImm + mips_state.reg[rs];
+
+		checkRead(addr / 4);
+
+		if(addr % 4 != 0){
+			throw (static_cast<int>(Exception::MEMORY));
+		}
+		else {
+			if(addr / 4 == ADDR_GETC){
+				char c = readChar();
+				if(c == -1){
+					mips_state.reg[rt] = 0xFFFFFFFF; //If we have EOF set rt to -1
+					return;
+				}
+				else{
+					mips_state.reg[rt] = c & 0x000000FF;
+					return;
+				}
+			}
+			else{
+				mips_state.reg[rt] = mips_state.ram[addr / 4];
+			}
+		}
+		++mips_state.npc;
+	}
+	
 
 void lwl(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
 	uint32_t addr = SignExtImm + mips_state.reg[rs];
@@ -434,8 +443,8 @@ void slti(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
 }
 
 void sltiu(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
-	uint32_t temp = immediate;
-	if(mips_state.reg[rs] < temp){
+	uint32_t temp = SignExtImm;
+	if(uint32_t(mips_state.reg[rs]) < temp){
 		mips_state.reg[rt] = 1;
 	}
 	else{
@@ -446,84 +455,84 @@ void sltiu(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
 }
 
 void sb(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
-	uint32_t addr = SignExtImm + mips_state.reg[rs];
-	checkWrite(static_cast<uint32_t>(addr / 4));
+		uint32_t addr = SignExtImm + mips_state.reg[rs];
+		checkWrite(static_cast<uint32_t>(addr / 4));
 
-	if((addr / 4) == ADDR_PUTC){
-		if((addr % 4) != 3){
-			std::exit(static_cast<int>(Exception::MEMORY));
+		if((addr / 4) == ADDR_PUTC){
+			if((addr % 4) != 3){
+				throw (static_cast<int>(Exception::MEMORY));
+			}
+			else{
+				writeChar(static_cast<char>(0x000000FF & mips_state.reg[rt]));
+				return;
+			}
 		}
-		else{
-			writeChar(static_cast<char>(0x000000FF & mips_state.reg[rt]));
-			return;
+
+		int32_t temp = mips_state.reg[rt] & 0x000000FF;
+
+		uint32_t index = addr % 4;
+		switch(index){
+			case 0: mips_state.ram[static_cast<int>(addr / 4)] = (mips_state.ram[static_cast<int>(addr / 4)] & 0x00FFFFFF) | (temp << 24);
+					break;
+			case 1: mips_state.ram[static_cast<int>(addr / 4)] = (mips_state.ram[static_cast<int>(addr / 4)] & 0xFF00FFFF) | (temp << 16);
+					break;
+			case 2: mips_state.ram[static_cast<int>(addr / 4)] = (mips_state.ram[static_cast<int>(addr / 4)] & 0xFFFF00FF) | (temp << 8);
+					break;
+			case 3: mips_state.ram[static_cast<int>(addr / 4)] = (mips_state.ram[static_cast<int>(addr / 4)] & 0xFFFFFF00) | temp;
+					break;
+			default: break;
 		}
+
+		++mips_state.npc;
 	}
-
-	int32_t temp = mips_state.reg[rt] & 0x000000FF;
-
-	uint32_t index = addr % 4;
-	switch(index){
-		case 0: mips_state.ram[static_cast<int>(addr / 4)] = (mips_state.ram[static_cast<int>(addr / 4)] & 0x00FFFFFF) | (temp << 24);
-				break;
-		case 1: mips_state.ram[static_cast<int>(addr / 4)] = (mips_state.ram[static_cast<int>(addr / 4)] & 0xFF00FFFF) | (temp << 16);
-				break;
-		case 2: mips_state.ram[static_cast<int>(addr / 4)] = (mips_state.ram[static_cast<int>(addr / 4)] & 0xFFFF00FF) | (temp << 8);
-				break;
-		case 3: mips_state.ram[static_cast<int>(addr / 4)] = (mips_state.ram[static_cast<int>(addr / 4)] & 0xFFFFFF00) | temp;
-				break;
-		default: break;
-	}
-
-	++mips_state.npc;
-}
 
 void sh(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
-	uint32_t addr = SignExtImm + mips_state.reg[rs];
-	checkWrite(static_cast<uint32_t>(addr / 4));
+		uint32_t addr = SignExtImm + mips_state.reg[rs];
+		checkWrite(static_cast<uint32_t>(addr / 4));
 
-	if((addr / 4) == ADDR_PUTC){
-		if((addr % 4) != 2){
-			std::exit(static_cast<int>(Exception::MEMORY));
+		if((addr / 4) == ADDR_PUTC){
+			if((addr % 4) != 2){
+				throw (static_cast<int>(Exception::MEMORY));
+			}
+			else{
+				writeChar(static_cast<char>(0x000000FF & mips_state.reg[rt]));
+				return;
+			}
 		}
+
+		if(addr % 2){
+			throw (static_cast<int>(Exception::MEMORY));
+		}
+
 		else{
-			writeChar(static_cast<char>(0x000000FF & mips_state.reg[rt]));
-			return;
+
+			switch(addr % 4){
+				case 0: mips_state.ram[static_cast<uint32_t>(addr / 4)] = (mips_state.reg[rt] & 0x0000FFFF) << 16;
+						break;
+				case 2: mips_state.ram[static_cast<uint32_t>(addr / 4)] = mips_state.reg[rt] & 0x0000FFFF;
+						break;
+			}
 		}
+
+		++mips_state.npc;
 	}
-
-	if(addr % 2){
-		std::exit(static_cast<int>(Exception::MEMORY));
-	}
-
-	else{
-
-		switch(addr % 4){
-			case 0: mips_state.ram[static_cast<uint32_t>(addr / 4)] = (mips_state.reg[rt] & 0x0000FFFF) << 16;
-					break;
-			case 2: mips_state.ram[static_cast<uint32_t>(addr / 4)] = mips_state.reg[rt] & 0x0000FFFF;
-					break;
-		}
-	}
-
-	++mips_state.npc;
-}
 
 void sw(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
-	uint32_t addr = SignExtImm + mips_state.reg[rs];
-	checkWrite(static_cast<uint32_t>(addr / 4));
+		uint32_t addr = SignExtImm + mips_state.reg[rs];
+		checkWrite(static_cast<uint32_t>(addr / 4));
 
-	if(addr % 4 != 0){
-		std::exit(static_cast<int>(Exception::MEMORY));
-	}
-	else{
-		if(addr / 4 == ADDR_PUTC){
-			writeChar(static_cast<char>(0x000000FF & mips_state.reg[rt]));
+		if(addr % 4 != 0){
+			throw (static_cast<int>(Exception::MEMORY));
 		}
-		mips_state.ram[addr / 4] = mips_state.reg[rt];
-	}
+		else{
+			if(addr / 4 == ADDR_PUTC){
+				writeChar(static_cast<char>(0x000000FF & mips_state.reg[rt]));
+			}
+			mips_state.ram[addr / 4] = mips_state.reg[rt];
+		}
 
-	++mips_state.npc;
-}
+		++mips_state.npc;
+	}
 
 void bgez(State& mips_state, uint32_t rs, int32_t SignExtImm){
 	if(mips_state.reg[rs] >= 0){
@@ -547,34 +556,34 @@ void bgezal(State& mips_state, uint32_t rs, int32_t SignExtImm){
 }
 
 void bgtz(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
-	if(rt != 0x00000000){
-		std::exit(static_cast<int>(Exception::INSTRUCTION));
-	}
-	else{
-		if(mips_state.reg[rs] > 0){
-			mips_state.npc += SignExtImm;
+		if(rt != 0x00000000){
+			throw (static_cast<int>(Exception::INSTRUCTION));
 		}
 		else{
-			++mips_state.npc;
+			if(mips_state.reg[rs] > 0){
+				mips_state.npc += SignExtImm;
+			}
+			else{
+				++mips_state.npc;
+			}
 		}
 	}
-}
 
 void blez(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
-	int32_t temp = mips_state.reg[rs];
-	if(rt != 0){
-		std::exit(static_cast<int>(Exception::INSTRUCTION));
-	}
+		int32_t temp = mips_state.reg[rs];
+		if(rt != 0){
+			throw (static_cast<int>(Exception::INSTRUCTION));
+		}
 
-	else{
-		if(temp <= 0x00000000){
-			mips_state.npc += SignExtImm;
-		}
 		else{
-			++mips_state.npc;
+			if(temp <= 0x00000000){
+				mips_state.npc += SignExtImm;
+			}
+			else{
+				++mips_state.npc;
+			}
 		}
 	}
-}
 
 void bltz(State& mips_state, uint32_t rs, int32_t SignExtImm){
 	int32_t temp = mips_state.reg[rs];
@@ -599,20 +608,20 @@ void bltzal(State& mips_state, uint32_t rs, int32_t SignExtImm){
 	
 void bdecoder(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
 	switch(rt){
-	case 0x00000001:
-		bgez(mips_state, rs, SignExtImm);
-		return;
-	case 0x00000011:
-		bgezal(mips_state, rs, SignExtImm);
-		return;
-	case 0x00000000:
-		bltz(mips_state, rs, SignExtImm);
-		return;
-	case 0x00000010:
-		bltzal(mips_state, rs, SignExtImm);
-		return;
-	default:
-		std::exit(static_cast<int>(Exception::INSTRUCTION));
-		return;
+		case 0x00000001:
+			bgez(mips_state, rs, SignExtImm);
+			return;
+		case 0x00000011:
+			bgezal(mips_state, rs, SignExtImm);
+			return;
+		case 0x00000000:
+			bltz(mips_state, rs, SignExtImm);
+			return;
+		case 0x00000010:
+			bltzal(mips_state, rs, SignExtImm);
+			return;
+		default:
+			throw (static_cast<int>(Exception::INSTRUCTION));
+			return;
 	}
 }			

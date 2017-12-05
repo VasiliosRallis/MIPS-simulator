@@ -139,16 +139,16 @@ void addu(State& mips_state, uint32_t rs, uint32_t rt, uint32_t rd){
 }
 
 void add(State& mips_state, uint32_t rs, uint32_t rt, uint32_t rd){
-	 int32_t temp1 = mips_state.reg[rs];
-	 int32_t temp2 = mips_state.reg[rt];
-	 int32_t result = temp1 + temp2;
-	 if (((temp1 < 0 ) && (temp2 < 0) && (result >= 0)) || ((temp1 > 0) && (temp2 > 0) && (result <= 0))){
-		std::exit(static_cast<int>(Exception::ARITHMETIC));
-	}
-	else {
-		mips_state.reg[rd] = temp1 + temp2;
-	}
-	 ++mips_state.npc;
+	int32_t temp1 = mips_state.reg[rs];
+	int32_t temp2 = mips_state.reg[rt];
+	int32_t result = temp1 + temp2;
+	 	if (((temp1 < 0 ) && (temp2 < 0) && (result >= 0)) || ((temp1 > 0) && (temp2 > 0) && (result <= 0))){
+			throw (static_cast<int>(Exception::ARITHMETIC));
+		}
+		else {
+			mips_state.reg[rd] = temp1 + temp2;
+		}
+	 	++mips_state.npc;
 }
 
 
@@ -160,12 +160,12 @@ void And(State& mips_state, uint32_t rs, uint32_t rt, uint32_t rd){
 
 void jr(State& mips_state, uint32_t rs){
 	if(mips_state.reg[rs] % 4 != 0){
-		std::exit(static_cast<int>(Exception::MEMORY));
+		throw (static_cast<int>(Exception::MEMORY));
 	}
 	else{
 		mips_state.npc = mips_state.reg[rs] / 4;
 	}
-}
+}	
 
 void nor(State& mips_state, uint32_t rs, uint32_t rt, uint32_t rd){
 	mips_state.reg[rd] = ~(mips_state.reg[rs] | mips_state.reg[rt]);
@@ -221,14 +221,14 @@ void sub(State& mips_state, uint32_t rs, uint32_t rt, uint32_t rd){
 	int32_t temp1 = mips_state.reg[rs];
 	int32_t temp2 = mips_state.reg[rt];
 	int32_t result = temp1 - temp2;
-	if (((temp1 < 0 ) && (temp2 > 0) && (result >= 0)) || ((temp1 > 0) && (temp2 < 0) && (result <= 0))){
-		std::exit(static_cast<int>(Exception::ARITHMETIC));
-	}
-	else {
-		mips_state.reg[rd] =  temp1 - temp2;
-	}
+		if (((temp1 < 0 ) && (temp2 > 0) && (result >= 0)) || ((temp1 > 0) && (temp2 < 0) && (result <= 0))){
+			throw (static_cast<int>(Exception::ARITHMETIC));
+		}
+		else {
+			mips_state.reg[rd] =  temp1 - temp2;
+		}
 
-	++mips_state.npc;
+		++mips_state.npc;
 }
 
 void subu(State& mips_state, uint32_t rs, uint32_t rt, uint32_t rd){
@@ -243,7 +243,7 @@ void div(State& mips_state, uint32_t rt, uint32_t rs){
 	int32_t dividend = mips_state.reg[rs];
 	int32_t divisor = mips_state.reg[rt];
 
-	//Dividing by zero shouldn't do anything
+	//Dividing by zero is undefined
 	if(divisor == 0){
 		++mips_state.npc;
 		return;
@@ -339,10 +339,9 @@ void srlv(State& mips_state, uint32_t rt, uint32_t rs, uint32_t rd){
 
 void jalr(State& mips_state, uint32_t rt, uint32_t rs, uint32_t rd){
 	if(mips_state.reg[rs] % 4 != 0){
-		std::exit(static_cast<int>(Exception::MEMORY));
+		throw (static_cast<int>(Exception::MEMORY));
 	}
 	else{
-		uint32_t temp = mips_state.reg[rs];
 		mips_state.reg[rd] = (mips_state.pc * 4) + 8;
 		mips_state.npc = mips_state.reg[rs];
 	}

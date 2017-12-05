@@ -3,25 +3,25 @@
 
 void checkExec(const std::vector<int32_t>& reg, uint32_t addr){
 	if(((addr < ADDR_INSTR) || (addr > (ADDR_INSTR + ADDR_INSTR_L - 1))) && (addr != ADDR_NULL)){
-		std::exit(static_cast<int>(Exception::MEMORY));
+		throw (static_cast<int>(Exception::MEMORY));
 	}
 	if(addr == ADDR_NULL){
 		uint32_t out = reg[2] & 0x000000FF;
 		std::exit(out);
 	}
-}
+}	
 
 void checkRead(uint32_t addr){
 	if(((addr < ADDR_INSTR) || (addr > (ADDR_INSTR + ADDR_INSTR_L - 1)))
 		&& ((addr < ADDR_DATA) || (addr > (ADDR_DATA + ADDR_DATA_L - 1)))
 		&& (addr != ADDR_GETC)){
-			std::exit(static_cast<int>(Exception::MEMORY));
+			throw (static_cast<int>(Exception::MEMORY));
 		}
-}
+   }	
 
 void checkWrite(uint32_t addr){
 	if(((addr < ADDR_DATA || (addr > (ADDR_DATA + ADDR_DATA_L - 1)))) && (addr != ADDR_PUTC)){
-		std::exit(static_cast<int>(Exception::MEMORY));
+		throw (static_cast<int>(Exception::MEMORY));
 	}
 }
 
@@ -33,14 +33,14 @@ char readChar(){
 		return 0xFF;
 	}
 	if(!std::cin.good()){
-		std::exit(static_cast<int>(Exception::IO));
+		throw (static_cast<int>(Error::IO));
 	}
 	return c;
-}
+ }	
 
 void writeChar(char c){
 	std::putchar(c);
 	if(!std::cout.good()){
-		std::exit(static_cast<int>(Exception::IO));
+		throw (static_cast<int>(Error::IO));
 	}
-}
+  }	
