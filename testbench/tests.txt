@@ -49,8 +49,3 @@ ID,Instruction,Author,Bin,Message,ExitCode, outputs
 50,calc,vgr16,test27.mips.bin,No message,203,0
 51,sort,vgr16,test28.mips.bin,Merge Sort,5,0
 52,tort6,gi316,torture6.mips.bin,Testing Branches,5,0
-53,tort8,gi316,torture8.mips.bin,Testing lb,7,0
-54,tort7,gi316,torture7.mips.bin,Testing shift,6,0
-55,tort3,gi316,torture3.mips.bin,No Message,2,0
-56,sort,vgr16,test29.mips.bin,Sorting Char,98,0
-57,charOp,vgr16,test30.mips.bin,No Message,250,0
