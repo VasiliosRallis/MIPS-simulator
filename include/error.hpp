@@ -28,10 +28,12 @@ void writeChar(char c);
 enum class Exception{
 	ARITHMETIC = -10,
 	MEMORY = -11,
-	INSTRUCTION = -12,
+	INSTRUCTION = -12,	
+};
+
+enum class Error{
 	INTERNAL = -20,
 	IO = -21
 };
-
 
 #endif
