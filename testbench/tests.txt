@@ -54,3 +54,4 @@ ID,Instruction,Author,Bin,Message,ExitCode, outputs
 55,tort3,gi316,torture3.mips.bin,No Message,2,0
 56,sort,vgr16,test29.mips.bin,Sorting Char,98,0
 57,charOp,vgr16,test30.mips.bin,No Message,250,0
+58,quiksrt,gi316,quicksort.mips.bin,no message,211,0
