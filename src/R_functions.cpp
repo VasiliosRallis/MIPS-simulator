@@ -35,10 +35,6 @@ void r_type(State& mips_state, bool& executed){
 					jr(mips_state,rs);
 					executed = true;
 					return;
-			case 0x00000027:
-					nor(mips_state, rs, rt, rd);
-					executed = true;
-					return;
 			case 0x00000025:
 					Or(mips_state, rs, rt, rd);
 					executed = true;
@@ -167,12 +163,6 @@ void jr(State& mips_state, uint32_t rs){
 	}
 }	
 
-void nor(State& mips_state, uint32_t rs, uint32_t rt, uint32_t rd){
-	mips_state.reg[rd] = ~(mips_state.reg[rs] | mips_state.reg[rt]);
-
-	++mips_state.npc;
-}
-
 void Or(State& mips_state, uint32_t rs, uint32_t rt, uint32_t rd){
 	mips_state.reg[rd] = (mips_state.reg[rs] | mips_state.reg[rt]);
 
@@ -291,8 +281,8 @@ void mult(State& mips_state, uint32_t rt, uint32_t rs){
 }
 
 void multu(State& mips_state, uint32_t rt, uint32_t rs){
-	uint64_t temp1 = mips_state.reg[rs];
-	uint64_t temp2 = mips_state.reg[rt];
+	uint64_t temp1 = (uint32_t)mips_state.reg[rs];
+	uint64_t temp2 = (uint32_t)mips_state.reg[rt];
 	uint64_t result = temp1 * temp2;
 	mips_state.Hi = (result >> 32);
 	mips_state.Lo = (result << 32) >> 32;
