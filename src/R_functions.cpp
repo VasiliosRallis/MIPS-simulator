@@ -328,11 +328,14 @@ void srlv(State& mips_state, uint32_t rt, uint32_t rs, uint32_t rd){
 }
 
 void jalr(State& mips_state, uint32_t rs, uint32_t rt, uint32_t rd){
+
+	mips_state.reg[rd] = (mips_state.pc * 4) + 8;
+	mips_state.npc = mips_state.reg[rs] / 4;
+
 	if(mips_state.reg[rs] % 4 != 0){
-		throw (static_cast<int>(Exception::MEMORY));
+		//Have to Execute the delayed instruction and then thrown the Memory
+		mips_state.npc = ADDR_DATA;
 	}
-	else{
-		mips_state.reg[rd] = (mips_state.pc * 4) + 8;
-		mips_state.npc = mips_state.reg[rs] / 4;
-	}
+
+
 }
