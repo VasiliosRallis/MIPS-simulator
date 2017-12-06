@@ -58,4 +58,3 @@ ID,Instruction,Author,Bin,Message,ExitCode, outputs
 59,quiksrt,gi316,quicksort.mips.bin,-,211,0
 60,fibonci,gi316,fibonacci.mips.bin,-,21,0
 61,char[],gi316,countChar.mips.bin,-,4,0
-62,strings,gi316,reverseString.mips.bin,-,83,0
