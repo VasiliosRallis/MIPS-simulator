@@ -367,7 +367,7 @@ void lwl(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
 	checkRead(addr / 4);
 
 	switch(addr % 4){
-		case 0: 	mips_state.reg[rt] = mips_state.ram[static_cast<int>(addr / 4)];
+		case 0: mips_state.reg[rt] = mips_state.ram[static_cast<int>(addr / 4)];
 				break;
 		case 1: temp1 = (mips_state.ram[static_cast<int>(addr / 4)] & 0x00FFFFFF) << 2;
 				mips_state.reg[rt] = ((mips_state.reg[rt] & 0x000000FF)| temp1);
@@ -497,9 +497,9 @@ void sh(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
 		else{
 
 			switch(addr % 4){
-				case 0: mips_state.ram[static_cast<uint32_t>(addr / 4)] = (mips_state.reg[rt] & 0x0000FFFF) << 16;
+				case 0: mips_state.ram[static_cast<uint32_t>(addr / 4)] = (mips_state.ram[static_cast<uint32_t>(addr / 4)] & 0x0000FFFF) |((mips_state.reg[rt] & 0x0000FFFF) << 16);
 						break;
-				case 2: mips_state.ram[static_cast<uint32_t>(addr / 4)] = mips_state.reg[rt] & 0x0000FFFF;
+				case 2: mips_state.ram[static_cast<uint32_t>(addr / 4)] = (mips_state.ram[static_cast<uint32_t>(addr / 4)] & 0xFFFF000) | (mips_state.reg[rt] & 0x0000FFFF);
 						break;
 			}
 		}
@@ -535,9 +535,9 @@ void bgez(State& mips_state, uint32_t rs, int32_t SignExtImm){
 
 void bgezal(State& mips_state, uint32_t rs, int32_t SignExtImm){
 	int32_t temp = mips_state.reg[rs];
+	//Regardless of whether the condition is true, the return address needs to be set
+	mips_state.reg[31] = (mips_state.pc * 4) + 8;
 	if(temp >= 0){
-		//We have to give the REAL Address here (i.e. multiple "our" address by 4 and add 8)
-		mips_state.reg[31] = (mips_state.pc * 4) + 8;
 		mips_state.npc += SignExtImm;
 	}
 	else{
@@ -587,8 +587,9 @@ void bltz(State& mips_state, uint32_t rs, int32_t SignExtImm){
 
 void bltzal(State& mips_state, uint32_t rs, int32_t SignExtImm){
 	int32_t temp = mips_state.reg[rs];
+	//Regardless of whether the conditions is true, the return address hars to be set
+	mips_state.reg[31] = (mips_state.pc * 4) + 8;
 	if(temp < 0){
-		mips_state.reg[31] = (mips_state.pc * 4) + 8;
 		mips_state.npc += SignExtImm;
 	}
 	else{
