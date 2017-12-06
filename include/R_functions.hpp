@@ -13,7 +13,6 @@ void add(State& mips_state, uint32_t rt, uint32_t rs, uint32_t rd);
 void addu(State& mips_state, uint32_t rt, uint32_t rs, uint32_t rd);
 void And(State& mips_state,uint32_t rt,uint32_t rs, uint32_t rd);
 void jr(State& mips_state, uint32_t rt);
-void nor(State& mips_state, uint32_t rt, uint32_t rs, uint32_t rd);
 void Or(State& mips_state, uint32_t rt, uint32_t rs, uint32_t rd);
 void slt(State& mips_state, uint32_t rt, uint32_t rs, uint32_t rd);
 void sltu(State& mips_state, uint32_t rt, uint32_t rs, uint32_t rd);

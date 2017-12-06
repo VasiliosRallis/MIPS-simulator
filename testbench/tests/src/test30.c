@@ -10,7 +10,6 @@ int main(){
 		c = c >> 3;
 		c = c % 5;
 		c = c | 5;
-		c = ~c;
 	}
 	return c;
 }

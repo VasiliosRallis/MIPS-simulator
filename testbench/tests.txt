@@ -23,7 +23,6 @@ ID,Instruction,Author,Bin,Message,ExitCode, outputs
 22,add,gi316,test100.mips.bin,Checking overflow,246,0
 23,addu,gi316,test101.mips.bin,Checking that overflow is ignored,0,0
 24,and,gi316,test102.mips.bin,AND $2 (0xFFFFFFFF) with 0xFFFF,255,0
-25,nor,gi316,test103.mips.bin,NOR $2 (0xFFFFFFFF) with 0,0,0
 26,or,gi316,test104.mips.bin,OR $2 (0xFFFFFFFF) with 0,255,0
 27,slt,gi316,test105.mips.bin,see code,1,0
 28,sltu,gi316,test106.mips.bin, see code,0,0
@@ -53,7 +52,7 @@ ID,Instruction,Author,Bin,Message,ExitCode, outputs
 54,tort7,gi316,torture7.mips.bin,Testing shift,6,0
 55,tort3,gi316,torture3.mips.bin,No Message,2,0
 56,sort,vgr16,test29.mips.bin,Sorting Char,98,0
-57,charOp,vgr16,test30.mips.bin,No Message,250,0
+57,charOp,vgr16,test30.mips.bin,No Message,5,0
 58,jalr,vgr16,test32.mips.bin,No Message,5,0
 59,quiksrt,gi316,quicksort.mips.bin,-,211,0
 60,fibonci,gi316,fibonacci.mips.bin,-,21,0

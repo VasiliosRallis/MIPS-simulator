@@ -35,10 +35,6 @@ void r_type(State& mips_state, bool& executed){
 					jr(mips_state,rs);
 					executed = true;
 					return;
-			case 0x00000027:
-					nor(mips_state, rs, rt, rd);
-					executed = true;
-					return;
 			case 0x00000025:
 					Or(mips_state, rs, rt, rd);
 					executed = true;
@@ -166,12 +162,6 @@ void jr(State& mips_state, uint32_t rs){
 		mips_state.npc = mips_state.reg[rs] / 4;
 	}
 }	
-
-void nor(State& mips_state, uint32_t rs, uint32_t rt, uint32_t rd){
-	mips_state.reg[rd] = ~(mips_state.reg[rs] | mips_state.reg[rt]);
-
-	++mips_state.npc;
-}
 
 void Or(State& mips_state, uint32_t rs, uint32_t rt, uint32_t rd){
 	mips_state.reg[rd] = (mips_state.reg[rs] | mips_state.reg[rt]);
@@ -338,11 +328,14 @@ void srlv(State& mips_state, uint32_t rt, uint32_t rs, uint32_t rd){
 }
 
 void jalr(State& mips_state, uint32_t rs, uint32_t rt, uint32_t rd){
+
+	mips_state.reg[rd] = (mips_state.pc * 4) + 8;
+	mips_state.npc = mips_state.reg[rs] / 4;
+
 	if(mips_state.reg[rs] % 4 != 0){
-		throw (static_cast<int>(Exception::MEMORY));
+		//Have to Execute the delayed instruction and then thrown the Memory
+		mips_state.npc = ADDR_DATA;
 	}
-	else{
-		mips_state.reg[rd] = (mips_state.pc * 4) + 8;
-		mips_state.npc = mips_state.reg[rs] / 4;
-	}
+
+
 }
