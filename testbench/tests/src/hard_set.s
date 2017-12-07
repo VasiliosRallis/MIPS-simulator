@@ -21,3 +21,4 @@
 	xor $9,$1,$8
 	addi $2,$9,0		# $2 = 1 is the result
 	jr $0
+	nop
