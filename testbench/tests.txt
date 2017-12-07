@@ -44,7 +44,7 @@ ID,Instruction,Author,Bin,Message,ExitCode, outputs
 45,stack,vgr16,test24.mips.bin,C test that calculates 5! recursively,120,0
 46,lw sw,vgr16,test26.mips.bin,Tests sw lw sb lb,255,0
 47,char,vgr16,test25.mips.bin,Teast loading and storting a char,72,0
-48,tort1,gi316,torture1.mips.bin,testing general,0,0
+48,stress,gi316,torture1.mips.bin,testing general,0,0
 49,stress,gi316,hard_set.mips.bin,testing,1,0
 50,calc,vgr16,test27.mips.bin,No message,203,0
 51,sort,vgr16,test28.mips.bin,Merge Sort,5,0
