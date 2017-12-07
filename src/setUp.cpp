@@ -9,7 +9,6 @@ void setUp(State& s, const std::string& fileName){
 	s.reg.resize(32, 0);
 	s.Hi = 0;
 	s.Lo = 0;
-	s.reg[29] = 0x23FFFFFC; // 0x20000000 + 0x4000000 - 4
 
 	std::ifstream fileIn(fileName, std::ios::binary | std::ios::ate);
 

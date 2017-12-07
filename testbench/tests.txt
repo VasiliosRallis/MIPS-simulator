@@ -41,7 +41,7 @@ ID,Instruction,Author,Bin,Message,ExitCode, outputs
 40,srav,gi316,test118.mips.bin,see code,255,0
 41,srlv,gi316,test119.mips.bin,see code,1,0
 42,j,vgr16,test23.mips.bin,ADDI forllowed by JUMP,246,0
-45,stack,vgr16,test24.mips.bin,C test that calculates 5! recursively,120,0
+45,stack,vgr16,test24.mips.bin,C test that calculates 5! recursively,128,0
 46,lw sw,vgr16,test26.mips.bin,Tests sw lw sb lb,255,0
 47,char,vgr16,test25.mips.bin,Teast loading and storting a char,72,0
 48,stress,gi316,torture1.mips.bin,testing general,0,0
