@@ -127,9 +127,9 @@ void Xor(State& mips_state,uint32_t rt,uint32_t rs,uint32_t rd){
 }
 
 void addu(State& mips_state, uint32_t rs, uint32_t rt, uint32_t rd){
-	rs = mips_state.reg[rs];
-	rt = mips_state.reg[rt];
-	mips_state.reg[rd] = rs + rt ;
+	rs = static_cast<uint32_t>(mips_state.reg[rs]);
+	rt = static_cast<uint32_t>(mips_state.reg[rt]);
+	mips_state.reg[rd] = static_cast<uint32_t>(rs + rt) ;
 
 	++mips_state.npc;
 }
@@ -182,8 +182,8 @@ void slt(State& mips_state, uint32_t rs, uint32_t rt, uint32_t rd){
 }
 
 void sltu(State& mips_state, uint32_t rs, uint32_t rt, uint32_t rd){
-	rs = mips_state.reg[rs];
-	rt = mips_state.reg[rt];
+	rs = static_cast<uint32_t>(mips_state.reg[rs]);
+	rt = static_cast<uint32_t>(mips_state.reg[rt]);
 	if((0|rs) < (0|rt)) {
 		mips_state.reg[rd] = ((0|rs) < (0|rt)) | 1;
 	}
@@ -201,8 +201,8 @@ void sll(State& mips_state, uint32_t rt, uint32_t shamt_field, uint32_t rd){
 }
 
 void srl(State& mips_state, uint32_t rt, uint32_t shamt_field, uint32_t rd){
-	uint32_t result = mips_state.reg[rt];
-	mips_state.reg[rd] = (result >> shamt_field);
+	uint32_t result = static_cast<uint32_t>(mips_state.reg[rt]);
+	mips_state.reg[rd] = static_cast<uint32_t>(result >> shamt_field);
 
 	++mips_state.npc;
 }
@@ -222,9 +222,7 @@ void sub(State& mips_state, uint32_t rs, uint32_t rt, uint32_t rd){
 }
 
 void subu(State& mips_state, uint32_t rs, uint32_t rt, uint32_t rd){
-	uint32_t temp1 = mips_state.reg[rs];
-	uint32_t temp2 = mips_state.reg[rt];
-	mips_state.reg[rd] =  temp1 - temp2;
+	mips_state.reg[rd] =  static_cast<uint32_t>(static_cast<uint32_t>(mips_state.reg[rs]) - static_cast<uint32_t>(mips_state.reg[rt]));
 
 	++mips_state.npc;
 }
@@ -245,15 +243,17 @@ void div(State& mips_state, uint32_t rt, uint32_t rs){
 }
 
 void divu(State& mips_state, uint32_t rt, uint32_t rs){
-	uint32_t dividend = mips_state.reg[rs];
-	uint32_t divisor = mips_state.reg[rt];
+	uint32_t dividend = static_cast<uint32_t>(mips_state.reg[rs]);
+	uint32_t divisor = static_cast<uint32_t>(mips_state.reg[rt]);
+
+	//Dividing by zero is undefined
 	if(divisor == 0){
 		++mips_state.npc;
 		return;
 	}
 
-	mips_state.Hi = dividend % divisor;
-	mips_state.Lo = dividend / divisor;
+	mips_state.Hi = static_cast<uint32_t>(dividend % divisor);
+	mips_state.Lo = static_cast<uint32_t>(dividend / divisor);
 
 	++mips_state.npc;
 }
@@ -322,7 +322,7 @@ void srav(State& mips_state, uint32_t rt, uint32_t rs, uint32_t rd){
 
 void srlv(State& mips_state, uint32_t rt, uint32_t rs, uint32_t rd){
 	uint32_t temp = mips_state.reg[rt];
-	mips_state.reg[rd]  = temp >> mips_state.reg[rs];
+	mips_state.reg[rd]  = (static_cast<uint32_t>(temp) >> mips_state.reg[rs]);
 
 	++mips_state.npc;
 }

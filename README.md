@@ -1,3 +1,5 @@
-#Simulator is Fast and Furious now!
+TESTS NOT WORKING:
 
-#Simulator int main() is better now
+
+hard_set.s
+hard_set5.s

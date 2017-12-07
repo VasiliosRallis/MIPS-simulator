@@ -135,8 +135,7 @@ void addi(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
 }
 
 void addiu(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
-	int32_t temp = mips_state.reg[rs];
-	mips_state.reg[rt] = temp + SignExtImm;
+	mips_state.reg[rt] = static_cast<uint32_t>(static_cast<uint32_t>(mips_state.reg[rs]) + SignExtImm);
 
 	++mips_state.npc;
 }
@@ -167,7 +166,7 @@ void bne(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
 }
 
 void lbu(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
-		uint32_t addr = SignExtImm + mips_state.reg[rs];
+		uint32_t addr = static_cast<uint32_t>(SignExtImm + mips_state.reg[rs]);
 		checkRead(static_cast<int>(addr / 4));
 
 		if((addr / 4) == ADDR_GETC){
@@ -204,7 +203,7 @@ void lbu(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
 }
 
 void lb(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
-		uint32_t addr = SignExtImm + mips_state.reg[rs];
+		uint32_t addr = static_cast<uint32_t>(SignExtImm + mips_state.reg[rs]);
 		checkRead(static_cast<int>(addr / 4));
 
 		if((addr / 4) == ADDR_GETC){
@@ -245,7 +244,7 @@ void lb(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
 	}
 
 void lhu(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
-		uint32_t addr = SignExtImm + mips_state.reg[rs];
+		uint32_t addr = static_cast<uint32_t>(SignExtImm + mips_state.reg[rs]);
 		checkRead(static_cast<int>(addr / 4));
 
 		if((addr / 4) == ADDR_GETC){
@@ -281,7 +280,7 @@ void lhu(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
 
 	
 void lh(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
-		uint32_t addr = SignExtImm + mips_state.reg[rs];
+		uint32_t addr = static_cast<uint32_t>(SignExtImm + mips_state.reg[rs]);
 		checkRead(static_cast<int>(addr / 4));
 
 		if((addr / 4) == ADDR_GETC){
@@ -334,7 +333,7 @@ void lui(State& mips_state, uint32_t rs, uint32_t rt, int32_t immediate){
 	}
 
 void lw(State& mips_state , uint32_t rs, uint32_t rt, int32_t SignExtImm){
-		uint32_t addr = SignExtImm + mips_state.reg[rs];
+		uint32_t addr = static_cast<uint32_t>(SignExtImm + mips_state.reg[rs]);
 
 		checkRead(addr / 4);
 
@@ -361,7 +360,7 @@ void lw(State& mips_state , uint32_t rs, uint32_t rt, int32_t SignExtImm){
 }
 
 void lwl(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
-	uint32_t addr = SignExtImm + mips_state.reg[rs];
+	uint32_t addr = static_cast<uint32_t>(SignExtImm + mips_state.reg[rs]);
 	uint32_t temp1(0);
 
 	checkRead(addr / 4);
@@ -385,7 +384,7 @@ void lwl(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
 }
 
 void lwr(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
-	uint32_t addr = SignExtImm + mips_state.reg[rs];
+	uint32_t addr = static_cast<uint32_t>(SignExtImm + mips_state.reg[rs]);
 	uint32_t temp1(0);
 
 	checkRead(addr / 4);
@@ -433,7 +432,7 @@ void slti(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
 }
 
 void sltiu(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
-	uint32_t temp = SignExtImm;
+	uint32_t temp = static_cast<uint32_t>(SignExtImm);
 	if(uint32_t(mips_state.reg[rs]) < temp){
 		mips_state.reg[rt] = 1;
 	}
@@ -445,7 +444,7 @@ void sltiu(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
 }
 
 void sb(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
-		uint32_t addr = SignExtImm + mips_state.reg[rs];
+		uint32_t addr = static_cast<uint32_t>(SignExtImm + mips_state.reg[rs]);
 		checkWrite(static_cast<uint32_t>(addr / 4));
 
 		if((addr / 4) == ADDR_PUTC){
@@ -477,7 +476,7 @@ void sb(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
 	}
 
 void sh(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
-		uint32_t addr = SignExtImm + mips_state.reg[rs];
+		uint32_t addr = static_cast<uint32_t>(SignExtImm + mips_state.reg[rs]);
 		checkWrite(static_cast<uint32_t>(addr / 4));
 
 		if((addr / 4) == ADDR_PUTC){
@@ -508,7 +507,7 @@ void sh(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
 	}
 
 void sw(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
-		uint32_t addr = SignExtImm + mips_state.reg[rs];
+		uint32_t addr = static_cast<uint32_t>(SignExtImm + mips_state.reg[rs]);
 		checkWrite(static_cast<uint32_t>(addr / 4));
 
 		if(addr % 4 != 0){
