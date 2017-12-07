@@ -173,7 +173,7 @@ void slt(State& mips_state, uint32_t rs, uint32_t rt, uint32_t rd){
 	int32_t temp1 = mips_state.reg[rs];
 	int32_t temp2 = mips_state.reg[rt];
 	if(temp1 < temp2){
-		mips_state.reg[rd] = (temp1 < temp2);
+		mips_state.reg[rd] = 1;
 	}
 	else{
 		mips_state.reg[rd] = 0;

@@ -1,4 +1,5 @@
 int calcTester(int n);
+asm("li $sp, 0x23FFFFFC");
 
 int entry(){
 	int n = 5;

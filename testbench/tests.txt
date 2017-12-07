@@ -5,13 +5,44 @@ ID,Instruction,Author,Bin,Message,ExitCode, outputs
 4,addi,vgr16,test4.mips.bin,Adding 0x8000(-32768) from $2 in an infinite loop (Expect overflow),246,0
 5,addiu,vgr16,test2.mips.bin,Adding 0xFFFF to $2 followed be a jr,255,0
 6,andi,vgr16,test5.mips.bin,No Message,6,0
-7,beq,vgr16,test6.mips.bin,Branching to INSTR_ADDR - 1 (Expect memory exception),245,0
-8,bgez,vgr16,test7.mips.bin,Branching to INSTR_ADDR - 1 (Expect memory exception),245,0
-9,bgezal,vgr16,test8.mips.bin,No Message,8,0
-10,bgtz,vgr16,test9.mips.bin,No Message,245,0
-11,blez,vgr16,test10.mips.bin,No Message,245,0
-12,lb,vgr16,test11.mips.bin,No Message,8,0
-13,lb,vgr16,test12.mips.bin,Checking for SignExtension,255,0
+7,beq,vgr16,beq01.mips.bin,No Message,1,0
+7,beq,vgr16,beq02.mips.bin,No Message,1,0
+7,beq,vgr16,beq03.mips.bin,No Message,1,0
+7,beq,vgr16,beq04.mips.bin,No Message,1,0
+7,beq,vgr16,beq05.mips.bin,No Message,1,0
+7,beq,vgr16,beq06.mips.bin,No Message,1,0
+7,beq,vgr16,beq07.mips.bin,No Message,1,0
+7,bne,vgr16,bne01.mips.bin,No Message,1,0
+7,bne,vgr16,bne02.mips.bin,No Message,1,0
+7,bne,vgr16,bne03.mips.bin,No Message,1,0
+7,bne,vgr16,bne04.mips.bin,No Message,1,0
+7,bne,vgr16,bne05.mips.bin,No Message,1,0
+7,bne,vgr16,bne06.mips.bin,No Message,1,0
+7,bne,vgr16,bne07.mips.bin,No Message,1,0
+7,bgez,vgr16,bgez01.mips.bin,No Message,1,0
+7,bgez,vgr16,bgez02.mips.bin,No Message,1,0
+7,bgez,vgr16,bgez03.mips.bin,No Message,1,0
+7,bgezal,vgr16,bgezal01.mips.bin,No Message,1,0
+7,bgezal,vgr16,bgezal02.mips.bin,No Message,8,0
+7,bgezal,vgr16,bgezal03.mips.bin,No Message,12,0
+7,bgtz,vgr16,bgtz01.mips.bin,No Message,1,0
+7,bgtz,vgr16,bgtz02.mips.bin,No Message,1,0
+7,blez,vgr16,blez01.mips.bin,No Message,1,0
+7,blez,vgr16,blez02.mips.bin,No Message,1,0
+7,bltz,vgr16,bltz01.mips.bin,No Message,1,0
+7,bltz,vgr16,bltz02.mips.bin,No Message,1,0
+7,bltz,vgr16,bltz03.mips.bin,No Message,1,0
+7,bltzal,vgr16,bltzal01.mips.bin,No Message,1,0
+7,bltzal,vgr16,bltzal02.mips.bin,No Message,8,0
+7,lbu,vgr16,lbu01.mips.bin,No Message,1,0
+7,lbu,vgr16,lbu02.mips.bin,No Message,1,0
+7,lbu,vgr16,lbu03.mips.bin,No Message,1,0
+7,lbu,vgr16,lbu04.mips.bin,No Message,245,0
+7,lb,vgr16,lb01.mips.bin,No Message,1,0
+7,lb,vgr16,lb02.mips.bin,No Message,1,0
+7,lb,vgr16,lb03.mips.bin,No Message,1,0
+7,lb,vgr16,lb04.mips.bin,No Message,245,0
+7,lb,vgr16,lb05.mips.bin,No Message,255,0
 14,lh,vg16,test13.mips.bin,Checking for Address Validation,245,0
 15,lh,vgr16,test14.mips.bin,Checking for Sign Extension,255,0
 16,slti,vgr16,test15.mips.bin,Checking basic functionality,1,0
@@ -57,8 +88,6 @@ ID,Instruction,Author,Bin,Message,ExitCode, outputs
 58,jalr,vgr16,test32.mips.bin,No Message,5,0
 59,quiksrt,gi316,quicksort.mips.bin,-,211,0
 60,fibonci,gi316,fibonacci.mips.bin,-,21,0
-61,char[],gi316,countChar.mips.bin,-,4,0
-62,multu,gi316,multu2.mips.bin,-,1,0
-61,char[],gi316,countChar.mips.bin,-,4,0
+61,multu,gi316,multu2.mips.bin,-,1,0
 62,lwl,vgr16,test33.mips.bin,No Message,33,0
 63,stress,gi316,hard_set6.mips.bin,-,3,0

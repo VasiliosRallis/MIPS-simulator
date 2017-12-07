@@ -1,5 +1,8 @@
-void quicksort(int number[],int first,int last);
+//THIS C PROGRAM WAS TAKEAN FROM: http://www.comp.dit.ie/rlawlor/Alg_DS/sorting/quickSort.c
+//WE DID NOT WRITE IT
 
+void quicksort(int number[],int first,int last);
+asm("li $sp, 0x23FFFFFC");
 int entry()
 {
    int i = 8;

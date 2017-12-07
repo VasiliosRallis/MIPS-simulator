@@ -1,6 +1,10 @@
+//THIS C PORGRAM WAS TAKEN FROM: http://www.geeksforgeeks.org/merge-sort/
+//WE DID NOT WRITE IT!!!
+
+
 void merge(char arr[], int l, int m, int r);
 void mergeSort(char arr[], int l, int r);
-
+asm("li $sp, 0x23FFFFFC");
 int entry()
 {
     char arr[] = {'f', 'b', 'e', 'n', 'k', 'q'};

@@ -1,7 +1,7 @@
 int fact(int n);
 
-//asm("lui $sp, 0x23FF");
-//asm("ori $sp, $sp, 0xFFFC");
+asm("lui $sp, 0x23FF");
+asm("ori $sp, $sp, 0xFFFC");
 
 int entry(){
 
