@@ -433,6 +433,7 @@ void slti(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
 
 void sltiu(State& mips_state, uint32_t rs, uint32_t rt, int32_t SignExtImm){
 	uint32_t temp = static_cast<uint32_t>(SignExtImm);
+
 	if(uint32_t(mips_state.reg[rs]) < temp){
 		mips_state.reg[rt] = 1;
 	}
