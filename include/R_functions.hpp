@@ -1,10 +1,7 @@
 #ifndef R_TYPE
 #define R_TYPE
-#include <iostream>
 #include "mips.hpp"
 #include "error.hpp"
-#include <cstdint>
-using namespace std;
 
 
 void r_type(State& mips_state, bool& executed);

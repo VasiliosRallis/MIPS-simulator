@@ -1,10 +1,7 @@
 #ifndef J_TYPE
 #define J_TYPE
 
-#include <iostream>
 #include "mips.hpp"
-#include <cstdint>
-using namespace std;
 
 void j_type(State& mips_state, bool& executed);
 

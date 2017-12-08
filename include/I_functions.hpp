@@ -1,8 +1,6 @@
 #ifndef I_TYPEHPP
 #define I_TYPEHPP
 
-#include <cstdint>
-#include <cmath>
 #include "setUp.hpp"
 #include "error.hpp"
 

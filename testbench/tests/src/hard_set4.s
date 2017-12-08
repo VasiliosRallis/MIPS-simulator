@@ -16,4 +16,5 @@ sltiu $8,$3,-5
 add $1,$1,$8			
 add $1,$1,$1			
 addi $2,$1,0
-jr $0			# $2 = 10 is the result 
+jr $0	
+nop		 

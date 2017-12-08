@@ -24,4 +24,5 @@ label7: bgtz $8,label8
 	addi $6,$6,-14
 label8: addi $6,$6,16
 	addi $2,$6,0
-	jr $0			# $2 = 5 is the result
+	jr $0	
+	nop		
